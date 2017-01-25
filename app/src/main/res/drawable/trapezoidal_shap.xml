@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+
+
+    <item>
+        <rotate
+            android:fromDegrees="0"
+            android:pivotX="0%"
+            android:pivotY="15000%"
+            android:toDegrees="0">
+            <selector android:shape="rectangle">
+                <item
+                    android:drawable="@color/colorBackground"
+                    android:state_pressed="true" />
+                <item
+                    android:drawable="@color/colorButton"
+                    android:state_pressed="false" />
+            </selector>
+        </rotate>
+    </item>
+
+</layer-list>

@@ -1,0 +1,116 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sunmediaeg.offers.fragment.LoginFragment">
+
+
+    <include
+        android:id="@+id/lBackground"
+        layout="@layout/sign_up_background_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include
+        android:id="@+id/lAppBar"
+        layout="@layout/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/lAppBar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
+            android:gravity="center">
+
+
+            <EditText
+                android:id="@+id/etUserName"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:background="@drawable/edittext_line"
+                android:gravity="center_vertical|right"
+                android:hint="@string/etUserName"
+                android:paddingRight="10dp"
+                android:textColor="@color/colorPrimaryDarker" />
+
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/etUserName"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/edittext_line"
+                android:gravity="center_vertical|right"
+                android:hint="@string/etPassword"
+                android:paddingRight="10dp"
+                android:textColor="@color/colorPrimaryDarker" />
+
+            <Button
+                android:id="@+id/btnForgetPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etPassword"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/transparent"
+                android:text="نسيت كلمة المرور ؟" />
+
+
+            <Button
+                android:id="@+id/btnSend"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/btnForgetPassword"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="160dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_selector"
+                android:paddingLeft="10dp"
+                android:text="@string/btnSend"
+                android:textColor="@color/colorPrimaryDarker"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnHaveAccoutn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/btnSend"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="150dp"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:text="@string/btnHaveAccoutn"
+                android:textColor="@color/colorPrimaryDarker"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvHaveAccoutn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/btnSend"
+                android:layout_marginTop="150dp"
+                android:layout_toRightOf="@+id/btnHaveAccoutn"
+                android:gravity="center"
+                android:text="@string/tvHaveAccoutn"
+                android:textColor="@color/colorPrimaryDarker"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+</RelativeLayout>
