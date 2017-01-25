@@ -5,91 +5,59 @@
     android:layout_height="match_parent"
     tools:context="com.sunmediaeg.offers.fragment.LoginChoiceFragment">
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:scaleType="centerCrop"
+        android:src="@drawable/back_logo" />
 
 
-        <ImageView
-            android:id="@+id/ivBackground"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:scaleType="fitStart"
-            android:src="@drawable/blue_background"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
-            tools:layout_constraintBottom_creator="1"
-            tools:layout_constraintRight_creator="1" />
-
-        <ImageView
-            android:id="@+id/ivCurvedlogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="false"
-            android:scaleType="centerInside"
-            android:src="@drawable/curvedlogo"
-            app:layout_constraintBottom_toBottomOf="@+id/ivBackground"
-            app:layout_constraintHorizontal_bias="0.52"
-            app:layout_constraintLeft_toLeftOf="@+id/ivBackground"
-            app:layout_constraintRight_toRightOf="@+id/ivBackground"
-            app:layout_constraintTop_toTopOf="@+id/ivBackground"
-            app:layout_constraintVertical_bias="0.187" />
-
-        <Button
-            android:id="@+id/btnSignUpAsVendor"
-            android:layout_width="180dp"
-            android:layout_height="50dp"
-            android:background="@drawable/button_selector"
-            android:paddingLeft="10dp"
-            android:text="@string/btnSignUpAsVendor"
-            android:textColor="@color/colorPrimaryDarker"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/ivBackground"
-            app:layout_constraintHorizontal_bias="0.4"
-            app:layout_constraintLeft_toLeftOf="@+id/ivBackground"
-            app:layout_constraintRight_toRightOf="@+id/ivBackground"
-            app:layout_constraintTop_toTopOf="@+id/ivBackground"
-            app:layout_constraintVertical_bias="0.45" />
+    <Button
+        android:id="@+id/btnSignUpAsVendor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="155dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="250dp"
+        android:background="@drawable/button_selector"
+        android:text="@string/btnSignUpAsVendor"
+        android:textColor="@color/colorPrimaryDarker"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 
-        <Button
-            android:id="@+id/btnSignUpAsUser"
-            android:layout_width="220dp"
-            android:layout_height="50dp"
-            android:background="@drawable/button_selector"
-            android:paddingLeft="10dp"
-            android:text="@string/btnSignUpAsUser"
-            android:textColor="@color/colorPrimaryDarker"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/ivBackground"
-            app:layout_constraintLeft_toLeftOf="@+id/ivBackground"
-            app:layout_constraintRight_toRightOf="@+id/ivBackground"
-            app:layout_constraintTop_toTopOf="@+id/ivBackground"
-            app:layout_constraintVertical_bias="0.605" />
+    <Button
+        android:id="@+id/btnSignUpAsUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="120dp"
+        android:layout_below="@+id/btnSignUpAsVendor"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/button_selector_user"
+        android:text="@string/btnSignUpAsUser"
+        android:textColor="@color/colorPrimaryDarker"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/trapezoidal_shap_red"
-            android:text="@string/btnLogin"
-            android:textColor="@color/colorPrimaryDarker"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/ivBackground"
-            app:layout_constraintHorizontal_bias="0.4"
-            app:layout_constraintLeft_toLeftOf="@+id/ivBackground"
-            app:layout_constraintRight_toRightOf="@+id/ivBackground"
-            app:layout_constraintTop_toTopOf="@+id/ivBackground"
-            app:layout_constraintVertical_bias="0.77" />
-    </android.support.constraint.ConstraintLayout>
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="82.5dp"
+        android:layout_below="@+id/btnSignUpAsUser"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/button_selector_inverse"
+        android:text="@string/btnLogin"
+        android:textColor="@color/colorPrimaryDarker"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+
 </RelativeLayout>

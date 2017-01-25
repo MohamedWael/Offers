@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     tools:context="com.sunmediaeg.offers.fragment.SignUpFragment">
 
-    <include
-        android:id="@+id/lBackground"
-        layout="@layout/sign_up_background_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/back_logo" />
 
     <include
         android:id="@+id/lAppBar"
@@ -16,120 +16,110 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <android.support.v4.widget.NestedScrollView
+
+    <RelativeLayout
+        android:id="@+id/rlEditText"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/lAppBar">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="200dp">
 
-        <RelativeLayout
+        <EditText
+            android:id="@+id/etUserName"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
+            android:layout_height="40dp"
+            android:layout_marginLeft="97dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edittext_line"
+            android:gravity="center_vertical|right"
+            android:hint="@string/etUserName"
+            android:paddingRight="10dp"
+            android:textColor="@color/colorPrimaryDarker" />
 
-            <RelativeLayout
-                android:id="@+id/rlEditText"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/etMail"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/etUserName"
+            android:layout_marginLeft="78dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edittext_line"
+            android:gravity="center_vertical|right"
+            android:hint="@string/etMail"
+            android:paddingRight="10dp"
+            android:textColor="@color/colorPrimaryDarker" />
 
-                <EditText
-                    android:id="@+id/etUserName"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/edittext_line"
-                    android:gravity="center_vertical|right"
-                    android:hint="@string/etUserName"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/colorPrimaryDarker" />
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/etMail"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edittext_line"
+            android:gravity="center_vertical|right"
+            android:hint="@string/etPassword"
+            android:paddingRight="10dp"
+            android:textColor="@color/colorPrimaryDarker" />
 
-                <EditText
-                    android:id="@+id/etMail"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_below="@id/etUserName"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/edittext_line"
-                    android:gravity="center_vertical|right"
-                    android:hint="@string/etMail"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/colorPrimaryDarker" />
+    </RelativeLayout>
 
-                <EditText
-                    android:id="@+id/etPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_below="@id/etMail"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/edittext_line"
-                    android:gravity="center_vertical|right"
-                    android:hint="@string/etPassword"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/colorPrimaryDarker" />
-
-            </RelativeLayout>
-
-            <Button
-                android:id="@+id/btnSend"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@+id/rlEditText"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="160dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/button_selector"
-                android:paddingLeft="10dp"
-                android:text="@string/btnSend"
-                android:textColor="@color/colorPrimaryDarker"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+    <Button
+        android:id="@+id/btnSend"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/rlEditText"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="160dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_selector"
+        android:paddingLeft="10dp"
+        android:text="@string/btnSend"
+        android:textColor="@color/colorPrimaryDarker"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/btnSend"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:background="@color/colorButton"
-                android:gravity="center"
-                android:padding="10dp">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnSend"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorButton"
+        android:gravity="center"
+        android:padding="10dp">
 
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:background="@drawable/shadow"
-                    android:elevation="5dp"
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/shadow"
+            android:elevation="5dp"
 
-                    android:src="@drawable/facebook" />
+            android:src="@drawable/facebook" />
 
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="@drawable/shadow"
-                    android:elevation="5dp"
-                    android:src="@drawable/twitter" />
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/shadow"
+            android:elevation="5dp"
+            android:src="@drawable/twitter" />
 
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:background="@drawable/shadow"
-                    android:elevation="5dp"
-                    android:src="@drawable/g_p" />
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/shadow"
+            android:elevation="5dp"
+            android:src="@drawable/g_p" />
 
-            </LinearLayout>
+    </LinearLayout>
 
-        </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>
