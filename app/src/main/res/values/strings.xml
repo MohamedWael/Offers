@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">أوفرز</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="btnSignUpAsUser">إنشاء حساب كمستخدم</string>
     <string name="btnSignUpAsVendor">إنشاء حساب كبائع</string>
@@ -13,4 +12,11 @@
     <string name="tvCreateAccount">إنشاء حساب</string>
     <string name="btnHaveAccoutn"><u>سجل الآن</u></string>
     <string name="tvHaveAccoutn">ليس لديك حساب؟</string>
+    <string name="onViewStuff">المعروضات</string>
+
+
+    <string name="egyptAir">مصر للطيران</string>
+    <string name="carrefour">كارفور مول</string>
+    <string name="arrabMall">مول العرب</string>
+    <string name="cityCenter">سيتي سينتر</string>
 </resources>

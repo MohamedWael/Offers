@@ -8,5 +8,6 @@
     <color name="colorPrimaryDarker">#0e2f3f</color>
     <color name="colorBackground">#efd6a2</color>
     <color name="colorButton">#b9c0a4</color>
+    <color name="colorSelected">#a2eceff1</color>
 
 </resources>

@@ -80,7 +80,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         super.onResume();
         tvTitle = (TextView) getActivity().findViewById(R.id.tvTitle);
         tvTitle.setText("إنشاء حساب");
-        tvTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDarker));
+//        tvTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDarker));
         ibBack = (ImageButton) getActivity().findViewById(R.id.ibBack);
 
     }
