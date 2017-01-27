@@ -7,12 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.fragment.HomeFragment;
 import com.sunmediaeg.offers.fragment.LoginFragment;
-import com.sunmediaeg.offers.fragment.SignUpFragment;
+import com.sunmediaeg.offers.fragment.OffersFragment;
 
 import java.util.ArrayList;
 
@@ -24,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FrameLayout flMainFragment;
     private ArrayList<ImageButton> imageButtons;
     private ImageButton ibHome, ibList, ibLogo, ibGrid, ibSetting;
-    private SignUpFragment signUpFragment;
+    private OffersFragment offersFragment;
     private LoginFragment loginFragment;
     private HomeFragment homeFragment;
     private final int HOME = 100, LIST = 101, LOGO = 102, GRID = 103, SETTING = 104;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.ibList:
                 changeBackground(ibList, LIST);
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, signUpFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, offersFragment).commit();
                 break;
             case R.id.ibLogo:
                 changeBackground(ibLogo, LOGO);
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         homeFragment = HomeFragment.newInstance("", "");
         getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, homeFragment).commit();
 
-        signUpFragment = SignUpFragment.newInstance("", "");
+        offersFragment = OffersFragment.newInstance("", "");
         loginFragment = LoginFragment.newInstance("", "");
 
         imageButtons = new ArrayList<>();
@@ -91,11 +90,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imageButtons.add(ibSetting);
     }
 
-    private void changeBackground(ImageButton current, int clikedID) {
+    private void changeBackground(ImageButton current, int clickedID) {
         for (ImageButton imageButton : imageButtons) {
             if (imageButton == current) {
                 imageButton.setBackgroundColor(ContextCompat.getColor(this, R.color.colorBackground));
-                switch (clikedID) {
+                switch (clickedID) {
                     case HOME:
                         imageButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.home_icon));
                         break;
