@@ -5,4 +5,9 @@ package com.sunmediaeg.offers.dataModel;
  */
 
 public class Offer {
+    private int offerCompanyLogo, offerCategoryImage;
+    private String offerCompanyName, offerPrice, offerDescription, productImageUrl, remainingDate, day, hour, second, minuit;
+    private boolean isLike = false;
+
+
 }

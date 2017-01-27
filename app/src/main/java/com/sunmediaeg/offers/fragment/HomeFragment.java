@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.adapters.RVCompaniesAdapter;
+import com.sunmediaeg.offers.adapters.RVOffersAdapter;
 import com.sunmediaeg.offers.dataModel.Company;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private RecyclerView rvCompanies;
+    private RecyclerView rvCompanies, rvOffers;
     private TextView tvTitle;
 
     public HomeFragment() {
@@ -51,7 +52,6 @@ public class HomeFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment HomeFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -80,17 +80,25 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        tvTitle = (TextView) getActivity().findViewById(R.id.tvTitle);
-        tvTitle.setText(getString(R.string.onViewStuff));
-
-        rvCompanies = (RecyclerView) getActivity().findViewById(R.id.rvCompanies);
-        RVCompaniesAdapter companiesAdapter = new RVCompaniesAdapter(getContext(),initCompaniesData());
-        rvCompanies.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
-
+        setRetainInstance(true);
+        initComponents();
+        RVCompaniesAdapter companiesAdapter = new RVCompaniesAdapter(getContext(), initCompaniesData());
         rvCompanies.setAdapter(companiesAdapter);
+        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext());
+        rvOffers.setAdapter(offersAdapter);
+
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    private void initComponents() {
+        tvTitle = (TextView) getActivity().findViewById(R.id.tvTitle);
+        tvTitle.setText(getString(R.string.onViewStuff));
+        getActivity().findViewById(R.id.ibBack).setVisibility(View.GONE);
+        rvOffers = (RecyclerView) getActivity().findViewById(R.id.rvHomeOffers);
+        rvOffers.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvCompanies = (RecyclerView) getActivity().findViewById(R.id.rvCompanies);
+        rvCompanies.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+    }
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -131,8 +139,8 @@ public class HomeFragment extends Fragment {
     private ArrayList<Company> initCompaniesData() {
         ArrayList<Company> companies = new ArrayList<>();
         companies.add(new Company(0, getString(R.string.egyptAir), R.drawable.egypt_air));
-        companies.add(new Company(1, getString(R.string.carrefour), R.drawable.cafarrefour));
         companies.add(new Company(2, getString(R.string.arrabMall), R.drawable.mall_of_arabia));
+        companies.add(new Company(1, getString(R.string.carrefour), R.drawable.cafarrefour));
         companies.add(new Company(3, getString(R.string.cityCenter), R.drawable.city_centre));
         return companies;
     }

@@ -1,6 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
 
+
+    <RelativeLayout
+        android:id="@+id/rlOffers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+
+        <ImageButton
+            android:id="@+id/ibOfferCompanyLogo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/cafarrefour" />
+
+        <LinearLayout
+            android:id="@+id/rlOffer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/ibOfferCompanyLogo"
+            android:layout_toLeftOf="@+id/ibOfferCategoryImage"
+            android:layout_toRightOf="@+id/ibOfferCompanyLogo"
+            android:layout_toStartOf="@+id/ibOfferCategoryImage"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tvOfferCompanyName"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/tvOfferPrice"
+                android:layout_weight="1"
+                android:background="@color/colorBackground"
+                android:gravity="center"
+                android:inputType="textMultiLine"
+                android:padding="3dp"
+                android:text="@string/tvOfferCompany"
+                android:textColor="@color/colorPrimaryDarker"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvOfferPrice"
+                android:layout_width="90dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/tvOfferDescription"
+                android:layout_weight="1"
+                android:background="@color/colorAccent"
+                android:gravity="center"
+                android:inputType="textMultiLine"
+                android:padding="2dp"
+                android:text="@string/tvOfferPrice"
+                android:textColor="@color/colorPrimaryDarker"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvOfferDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="3dp"
+                android:layout_toLeftOf="@+id/ibOffer"
+                android:layout_weight="4"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:padding="3dp"
+                android:text="@string/tvOfferDescription"
+                android:textColor="@color/colorPrimaryDarker"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/ibOfferCategoryImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/furniture" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@+id/rlOffers"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cvProductImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            app:cardBackgroundColor="@color/colorBackground">
+
+
+            <ImageView
+                android:id="@+id/ivProductImage"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:scaleType="fitStart"
+                android:src="@drawable/photo_replacement" />
+        </android.support.v7.widget.CardView>
+
+        <include
+            android:id="@+id/lTimerLayout"
+            layout="@layout/timer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/cvProductImage" />
+
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/dashed_line" />
 </LinearLayout>

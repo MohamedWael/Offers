@@ -21,6 +21,5 @@
         android:layout_marginTop="5dp"
         android:gravity="center"
         android:text="مصر للطيران"
-        android:textSize="20sp"
         android:textStyle="bold" />
 </LinearLayout>

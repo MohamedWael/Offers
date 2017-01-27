@@ -9,5 +9,6 @@
     <color name="colorBackground">#efd6a2</color>
     <color name="colorButton">#b9c0a4</color>
     <color name="colorSelected">#a2eceff1</color>
+    <color name="colorLightRed">#f1b18b</color>
 
 </resources>

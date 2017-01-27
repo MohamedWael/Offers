@@ -6,7 +6,7 @@ package com.sunmediaeg.offers.dataModel;
 
 public class Company {
     private int id, imageSourse;
-    private String name;
+    private String name, companyLogoUrl;
 
     public Company(int id, String name, int imageSourse) {
         this.id = id;
@@ -14,6 +14,12 @@ public class Company {
         this.name = name;
     }
 
+
+    public Company(int id, String name, String companyLogoUrl) {
+        this.id = id;
+        this.name = name;
+        this.companyLogoUrl = companyLogoUrl;
+    }
 
     public int getCompanyId() {
         return id;
@@ -25,5 +31,9 @@ public class Company {
 
     public String getCompanyName() {
         return name;
+    }
+
+    public String getCompanyLogoUrl() {
+        return companyLogoUrl;
     }
 }
