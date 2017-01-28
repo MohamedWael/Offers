@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.fragment.CategoriesFragment;
 import com.sunmediaeg.offers.fragment.HomeFragment;
 import com.sunmediaeg.offers.fragment.LoginFragment;
 import com.sunmediaeg.offers.fragment.OffersFragment;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LoginFragment loginFragment;
     private HomeFragment homeFragment;
     private final int HOME = 100, LIST = 101, LOGO = 102, GRID = 103, SETTING = 104;
+    private CategoriesFragment categoriesFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, homeFragment).commit();
                 break;
-            case R.id.ibList:
+            case R.id.ibOffers:
                 changeBackground(ibList, LIST);
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, offersFragment).commit();
@@ -54,8 +56,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, loginFragment).commit();
                 break;
-            case R.id.ibGrid:
+            case R.id.ibCategories:
                 changeBackground(ibGrid, GRID);
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, categoriesFragment).commit();
                 break;
             case R.id.ibSetting:
                 changeBackground(ibSetting, SETTING);
@@ -66,11 +70,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initComponents() {
         ibHome = (ImageButton) findViewById(R.id.ibHome);
         ibHome.setOnClickListener(this);
-        ibList = (ImageButton) findViewById(R.id.ibList);
+        ibList = (ImageButton) findViewById(R.id.ibOffers);
         ibList.setOnClickListener(this);
         ibLogo = (ImageButton) findViewById(R.id.ibLogo);
         ibLogo.setOnClickListener(this);
-        ibGrid = (ImageButton) findViewById(R.id.ibGrid);
+        ibGrid = (ImageButton) findViewById(R.id.ibCategories);
         ibGrid.setOnClickListener(this);
         ibSetting = (ImageButton) findViewById(R.id.ibSetting);
         ibSetting.setOnClickListener(this);
@@ -81,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         offersFragment = OffersFragment.newInstance(getString(R.string.offers), "");
         loginFragment = LoginFragment.newInstance("", "");
+        categoriesFragment = CategoriesFragment.newInstance(getString(R.string.categories), "");
 
         imageButtons = new ArrayList<>();
         imageButtons.add(ibHome);

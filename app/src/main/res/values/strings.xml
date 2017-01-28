@@ -14,6 +14,16 @@
     <string name="tvHaveAccoutn">ليس لديك حساب؟</string>
     <string name="onViewStuff">المعروضات</string>
     <string name="offers">أوفرز</string>
+    <string name="categories">التصنيفات</string>
+    <string name="electronics">الإلكترونيات</string>
+    <string name="travel">السفر</string>
+    <string name="airplanes">الطيران</string>
+    <string name="cars">السيارات</string>
+    <string name="communications">الإتصالات</string>
+    <string name="furniture">المفروشات</string>
+    <string name="resteraunts">المطاعم</string>
+    <string name="health">الصحة واللياقة</string>
+    <string name="clothes">الملابس</string>
 
 
     <string name="egyptAir">مصر للطيران</string>

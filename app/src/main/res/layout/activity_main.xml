@@ -47,7 +47,7 @@
                 android:src="@drawable/home_icon" />
 
             <ImageButton
-                android:id="@+id/ibList"
+                android:id="@+id/ibOffers"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_weight="1"
@@ -63,7 +63,7 @@
                 android:src="@drawable/logo" />
 
             <ImageButton
-                android:id="@+id/ibGrid"
+                android:id="@+id/ibCategories"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_weight="1"
