@@ -1,6 +1,7 @@
 package com.sunmediaeg.offers.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.activities.OffersGeneralActivity;
+import com.sunmediaeg.offers.utilities.Constants;
 
 /**
  * Created by moham on 1/26/2017.
@@ -34,6 +37,14 @@ public class RVOffersAdapter extends RecyclerView.Adapter<RVOffersAdapter.Offers
     @Override
     public void onBindViewHolder(OffersViewHolder holder, int position) {
 
+        holder.ivProductImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent offersGeneralActivityIntent = new Intent(mContext, OffersGeneralActivity.class);
+                offersGeneralActivityIntent.putExtra(Constants.ACTIVITY, Constants.ACTIVITY_PRODUCT_DETAILS);
+                mContext.startActivity(offersGeneralActivityIntent);
+            }
+        });
     }
 
     @Override

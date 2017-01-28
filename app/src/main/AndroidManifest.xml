@@ -28,12 +28,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MainLoginActivity"
+            android:name=".activities.OffersGeneralActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.LoginChoiceActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.MainActivity"></activity>
+        <activity android:name=".activities.MainActivity" />
     </application>
 
 </manifest>

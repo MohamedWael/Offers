@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.sunmediaeg.offers.R;
-import com.sunmediaeg.offers.activities.MainLoginActivity;
+import com.sunmediaeg.offers.activities.OffersGeneralActivity;
 import com.sunmediaeg.offers.utilities.Constants;
 
 /**
@@ -105,7 +105,7 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
     }
 
     private void initComponents() {
-        intent = new Intent(getActivity(), MainLoginActivity.class);
+        intent = new Intent(getActivity(), OffersGeneralActivity.class);
         btnSignUpAsVendor = (Button) getActivity().findViewById(R.id.btnSignUpAsVendor);
         btnSignUpAsUser = (Button) getActivity().findViewById(R.id.btnSignUpAsUser);
         btnLogin = (Button) getActivity().findViewById(R.id.btnLogin);

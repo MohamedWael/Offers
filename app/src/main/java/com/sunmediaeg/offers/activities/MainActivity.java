@@ -76,10 +76,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ibSetting.setOnClickListener(this);
         flMainFragment = (FrameLayout) findViewById(R.id.flMainFragment);
 
-        homeFragment = HomeFragment.newInstance("", "");
+        homeFragment = HomeFragment.newInstance(getString(R.string.onViewStuff), "");
         getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, homeFragment).commit();
 
-        offersFragment = OffersFragment.newInstance("", "");
+        offersFragment = OffersFragment.newInstance(getString(R.string.offers), "");
         loginFragment = LoginFragment.newInstance("", "");
 
         imageButtons = new ArrayList<>();

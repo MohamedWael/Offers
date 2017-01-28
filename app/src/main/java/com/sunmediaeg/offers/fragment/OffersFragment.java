@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.adapters.RVOffersAdapter;
+import com.sunmediaeg.offers.utilities.Log;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,6 +66,7 @@ public class OffersFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -74,26 +76,30 @@ public class OffersFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_offers, container, false);
 //        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        setRetainInstance(true);
+        initComponents(view);
+
+        Log.d("executed","onCreate");
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        initComponents();
-        setRetainInstance(true);
+        Log.d("executed","onResume");
+
         RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext());
         rvOffers.setAdapter(offersAdapter);
     }
 
 
-    private void initComponents() {
-        tvTitle = (TextView) getActivity().findViewById(R.id.tvTitle);
-        tvTitle.setText(getString(R.string.offers));
-        getActivity().findViewById(R.id.ibBack).setVisibility(View.GONE);
-        rvOffers = (RecyclerView) getActivity().findViewById(R.id.rvOffers);
+    private void initComponents(View view) {
+        tvTitle = (TextView) view.findViewById(R.id.tvTitle);
+        tvTitle.setText(mParam1);
+//            tvTitle.setText(getString(R.string.offers));
+        view.findViewById(R.id.ibBack).setVisibility(View.GONE);
+        rvOffers = (RecyclerView) view.findViewById(R.id.rvOffers);
         rvOffers.setLayoutManager(new LinearLayoutManager(getContext()));
-
     }
 
     public void onButtonPressed(Uri uri) {

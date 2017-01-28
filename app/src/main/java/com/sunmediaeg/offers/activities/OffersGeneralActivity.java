@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.fragment.DetailsFragment;
 import com.sunmediaeg.offers.fragment.LoginFragment;
 import com.sunmediaeg.offers.fragment.SignUpFragment;
 import com.sunmediaeg.offers.utilities.Constants;
@@ -12,10 +13,11 @@ import com.sunmediaeg.offers.utilities.Constants;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainLoginActivity extends AppCompatActivity {
+public class OffersGeneralActivity extends AppCompatActivity {
 
     private LoginFragment loginFragment;
     private SignUpFragment signUpFragment;
+    private DetailsFragment detailsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,11 @@ public class MainLoginActivity extends AppCompatActivity {
             case Constants.ACTIVITY_LOGIN:
                 loginFragment = LoginFragment.newInstance("", "");
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, loginFragment).commit();
+                break;
+
+            case Constants.ACTIVITY_PRODUCT_DETAILS:
+                detailsFragment = DetailsFragment.newInstance("", "");
+                getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, detailsFragment).commit();
                 break;
         }
 
