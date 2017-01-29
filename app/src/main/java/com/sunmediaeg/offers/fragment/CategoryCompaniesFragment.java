@@ -4,11 +4,19 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.adapters.RVCategoryCompaniesAdapter;
+import com.sunmediaeg.offers.dataModel.Company;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,7 +26,7 @@ import com.sunmediaeg.offers.R;
  * Use the {@link CategoryCompaniesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CategoryCompaniesFragment extends Fragment {
+public class CategoryCompaniesFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,6 +37,10 @@ public class CategoryCompaniesFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private RecyclerView rvCategoryCompanies;
+    private RVCategoryCompaniesAdapter categoryCompaniesAdapter;
+    private TextView tvTitle;
+    private ImageButton ibBack;
 
     public CategoryCompaniesFragment() {
         // Required empty public constructor
@@ -65,12 +77,25 @@ public class CategoryCompaniesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category_companies, container, false);
-
+        initComponents(view);
 
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    private void initComponents(View v) {
+        tvTitle = (TextView) v.findViewById(R.id.tvTitle);
+        tvTitle.setText(mParam1);
+        ibBack = (ImageButton) v.findViewById(R.id.ibBack);
+        ibBack.setOnClickListener(this);
+        rvCategoryCompanies = (RecyclerView) v.findViewById(R.id.rvCategoryCompanies);
+        rvCategoryCompanies.setLayoutManager(new LinearLayoutManager(getContext()));
+        ArrayList<Company> companies = new ArrayList<>();
+        Company company = new Company(0, R.drawable.egypt_air, 14, getString(R.string.egyptAir), "", false);
+        companies.add(company);
+        categoryCompaniesAdapter = new RVCategoryCompaniesAdapter(getContext(), companies);
+        rvCategoryCompanies.setAdapter(categoryCompaniesAdapter);
+    }
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -91,6 +116,15 @@ public class CategoryCompaniesFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ibBack:
+                getActivity().finish();
+                break;
+        }
     }
 
     /**

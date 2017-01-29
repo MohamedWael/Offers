@@ -84,13 +84,13 @@ public class CategoriesFragment extends Fragment {
         tvTitle.setText(mParam1);
         view.findViewById(R.id.ibBack).setVisibility(View.GONE);
         gvCategories = (GridView) view.findViewById(R.id.gvCategories);
-        GVCategoriesAdapter categoriesAdapter = new GVCategoriesAdapter(getContext(),categories());
+        GVCategoriesAdapter categoriesAdapter = new GVCategoriesAdapter(getContext(), categories());
         gvCategories.setAdapter(categoriesAdapter);
     }
 
     private ArrayList<Category> categories() {
         ArrayList<Category> categories = new ArrayList<>();
-        Category electronics = new Category(Constants.ELECTRONICS, R.drawable.computer, getString(R.string.app_name));
+        Category electronics = new Category(Constants.ELECTRONICS, R.drawable.computer, getString(R.string.electronics));
         Category travel = new Category(Constants.TRAVEL, R.drawable.travel, getString(R.string.travel));
         Category airplanes = new Category(Constants.AIRPLANE, R.drawable.plane, getString(R.string.airplanes));
         Category cars = new Category(Constants.CARS, R.drawable.cars, getString(R.string.cars));

@@ -5,8 +5,9 @@ package com.sunmediaeg.offers.dataModel;
  */
 
 public class Company {
-    private int id, imageSourse;
+    private int id, imageSourse, numberOfOffers = 0;
     private String name, companyLogoUrl;
+    private boolean isFollwed = false;
 
     public Company(int id, String name, int imageSourse) {
         this.id = id;
@@ -14,11 +15,27 @@ public class Company {
         this.name = name;
     }
 
+    public Company(int id, int imageSourse, int numberOfOffers, String name, String companyLogoUrl, boolean isFollwed) {
+        this.id = id;
+        this.imageSourse = imageSourse;
+        this.numberOfOffers = numberOfOffers;
+        this.name = name;
+        this.companyLogoUrl = companyLogoUrl;
+        this.isFollwed = isFollwed;
+    }
 
     public Company(int id, String name, String companyLogoUrl) {
         this.id = id;
         this.name = name;
         this.companyLogoUrl = companyLogoUrl;
+    }
+
+    public int getNumberOfOffers() {
+        return numberOfOffers;
+    }
+
+    public boolean isFollwed() {
+        return isFollwed;
     }
 
     public int getCompanyId() {
@@ -35,5 +52,30 @@ public class Company {
 
     public String getCompanyLogoUrl() {
         return companyLogoUrl;
+    }
+
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setImageSourse(int imageSourse) {
+        this.imageSourse = imageSourse;
+    }
+
+    public void setNumberOfOffers(int numberOfOffers) {
+        this.numberOfOffers = numberOfOffers;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCompanyLogoUrl(String companyLogoUrl) {
+        this.companyLogoUrl = companyLogoUrl;
+    }
+
+    public void setFollwed(boolean follwed) {
+        isFollwed = follwed;
     }
 }

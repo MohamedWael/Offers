@@ -9,12 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.activities.OffersGeneralActivity;
 import com.sunmediaeg.offers.dataModel.Category;
+import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Log;
 
 import java.util.ArrayList;
@@ -90,6 +91,9 @@ public class GVCategoriesAdapter extends BaseAdapter {
             this.ibTileImage = ibTileImage;
             this.tvTileTitle = tvTileTitle;
             ibTileImage.setOnClickListener(this);
+            llMainRowItem.setOnClickListener(this);
+            tvTileTitle.setOnClickListener(this);
+
             ibTileImage.setOnTouchListener(this);
 
 
@@ -97,7 +101,10 @@ public class GVCategoriesAdapter extends BaseAdapter {
 
         @Override
         public void onClick(View view) {
-
+            Intent intent = new Intent(mContext, OffersGeneralActivity.class);
+            intent.putExtra(Constants.ACTIVITY, Constants.ACTIVITY_CATEGORY_COMPANIES);
+            intent.putExtra("Category", tvTileTitle.getText().toString());
+            mContext.startActivity(intent);
         }
 
         @Override

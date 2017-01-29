@@ -16,6 +16,7 @@ public final class Constants {
     public static final int ACTIVITY_SIGN_UP_AS_VENDOR = 1001;
     public static final int ACTIVITY_SIGN_UP_AS_USER = 1002;
     public static final int ACTIVITY_PRODUCT_DETAILS = 1003;
+    public static final int ACTIVITY_CATEGORY_COMPANIES = 1013;
     public static final int ELECTRONICS = 1004;
     public static final int TRAVEL = 1005;
     public static final int AIRPLANE = 1006;

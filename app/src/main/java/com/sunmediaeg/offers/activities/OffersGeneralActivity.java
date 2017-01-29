@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.fragment.CategoryCompaniesFragment;
 import com.sunmediaeg.offers.fragment.DetailsFragment;
 import com.sunmediaeg.offers.fragment.LoginFragment;
 import com.sunmediaeg.offers.fragment.SignUpFragment;
@@ -18,12 +19,14 @@ public class OffersGeneralActivity extends AppCompatActivity {
     private LoginFragment loginFragment;
     private SignUpFragment signUpFragment;
     private DetailsFragment detailsFragment;
+    private CategoryCompaniesFragment categoryCompaniesFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_main);
-        int activityType = getIntent().getExtras().getInt(Constants.ACTIVITY);
+        Bundle data = getIntent().getExtras();
+        int activityType = data.getInt(Constants.ACTIVITY);
 
 
         switch (activityType) {
@@ -39,10 +42,13 @@ public class OffersGeneralActivity extends AppCompatActivity {
                 loginFragment = LoginFragment.newInstance("", "");
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, loginFragment).commit();
                 break;
-
             case Constants.ACTIVITY_PRODUCT_DETAILS:
-                detailsFragment = DetailsFragment.newInstance("", "");
+                detailsFragment = DetailsFragment.newInstance(getString(R.string.offerDetails), "");
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, detailsFragment).commit();
+                break;
+            case Constants.ACTIVITY_CATEGORY_COMPANIES:
+                categoryCompaniesFragment = CategoryCompaniesFragment.newInstance(data.getString("Category"), "");
+                getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, categoryCompaniesFragment).commit();
                 break;
         }
 
