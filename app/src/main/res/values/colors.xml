@@ -5,6 +5,7 @@
     <color name="colorPrimaryDarkWithTransparency">#0029434b</color>
     <color name="colorAccent">#f4695d</color>
 
+    <color name="orangeBackground">#FF8000</color>
 
     <color name="colorPrimaryDarker">#0e2f3f</color>
     <color name="colorBackground">#efd6a2</color>
