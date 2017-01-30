@@ -12,6 +12,8 @@ public final class Constants {
     public static final boolean LOG_TOGGLE = true;
 
     public static final String ACTIVITY = "activityType";
+    public static final String IS_COMPANY_PROFILE = "isCompanyProfile";
+    public static final String COMPANY_PROFILE_TITLE = "CompanyProfile";
     public static final int ACTIVITY_LOGIN = 1000;
     public static final int ACTIVITY_SIGN_UP_AS_VENDOR = 1001;
     public static final int ACTIVITY_SIGN_UP_AS_USER = 1002;

@@ -28,11 +28,18 @@ public class GVCategoriesAdapter extends BaseAdapter {
 
     private Context mContext;
     private ArrayList<Category> categories;
+    private boolean isCategoriesFragment = true;
     private Intent intent;
 
     public GVCategoriesAdapter(Context mContext, ArrayList<Category> categories) {
         this.mContext = mContext;
         this.categories = categories;
+    }
+
+    public GVCategoriesAdapter(Context mContext, ArrayList<Category> categories, boolean isCategoriesFragment) {
+        this.mContext = mContext;
+        this.categories = categories;
+        this.isCategoriesFragment = isCategoriesFragment;
     }
 
     @Override
@@ -56,7 +63,11 @@ public class GVCategoriesAdapter extends BaseAdapter {
         final Category item = categories.get(i);
 
         if (view == null) {
-            view = LayoutInflater.from(mContext).inflate(R.layout.category_item_layout, viewGroup, false);
+            if (isCategoriesFragment) {
+                view = LayoutInflater.from(mContext).inflate(R.layout.category_item_layout, viewGroup, false);
+            } else {
+                view = LayoutInflater.from(mContext).inflate(R.layout.category_item_layout_wide, viewGroup, false);
+            }
             RelativeLayout llMainRowItem = (RelativeLayout) view.findViewById(R.id.llMainRowItem);
             ImageButton ibTileImage = (ImageButton) view.findViewById(R.id.ibTileImage);
             TextView tvTileTitle = (TextView) view.findViewById(R.id.tvTileTitle);
@@ -93,8 +104,9 @@ public class GVCategoriesAdapter extends BaseAdapter {
             ibTileImage.setOnClickListener(this);
             llMainRowItem.setOnClickListener(this);
             tvTileTitle.setOnClickListener(this);
-
             ibTileImage.setOnTouchListener(this);
+            llMainRowItem.setOnTouchListener(this);
+            tvTileTitle.setOnTouchListener(this);
 
 
         }

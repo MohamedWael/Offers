@@ -96,8 +96,8 @@ public class OffersFragment extends Fragment {
     private void initComponents(View view) {
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         tvTitle.setText(mParam1);
-//            tvTitle.setText(getString(R.string.offers));
         view.findViewById(R.id.ibBack).setVisibility(View.GONE);
+        view.findViewById(R.id.ibSearch).setVisibility(View.GONE);
         rvOffers = (RecyclerView) view.findViewById(R.id.rvOffers);
         rvOffers.setLayoutManager(new LinearLayoutManager(getContext()));
     }

@@ -10,9 +10,13 @@ import android.widget.ImageButton;
 
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.fragment.CategoriesFragment;
+import com.sunmediaeg.offers.fragment.CompanyProfileFragment;
 import com.sunmediaeg.offers.fragment.HomeFragment;
 import com.sunmediaeg.offers.fragment.LoginFragment;
 import com.sunmediaeg.offers.fragment.OffersFragment;
+import com.sunmediaeg.offers.fragment.SearchFragment;
+import com.sunmediaeg.offers.fragment.SettingsFragment;
+import com.sunmediaeg.offers.utilities.Constants;
 
 import java.util.ArrayList;
 
@@ -29,12 +33,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private HomeFragment homeFragment;
     private final int HOME = 100, LIST = 101, LOGO = 102, GRID = 103, SETTING = 104;
     private CategoriesFragment categoriesFragment;
+    private SearchFragment searchFragment;
+    private SettingsFragment settingsFragment;
+    private CompanyProfileFragment companyProfileFragment;
+    private boolean isCompanyProfile = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initComponents();
+        Bundle bundle = getIntent().getExtras();
+        isCompanyProfile = bundle.getBoolean(Constants.IS_COMPANY_PROFILE, false);
+        initComponents(bundle);
 
     }
 
@@ -54,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.ibLogo:
                 changeBackground(ibLogo, LOGO);
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, loginFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, searchFragment).commit();
                 break;
             case R.id.ibCategories:
                 changeBackground(ibGrid, GRID);
@@ -62,12 +72,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, categoriesFragment).commit();
                 break;
             case R.id.ibSetting:
+                getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, settingsFragment).commit();
+
+                /*
+                CompanyProfileFragment companyProfileFragment = CompanyProfileFragment.newInstance("", "");
+                getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, companyProfileFragment).commit();
+                * */
+
                 changeBackground(ibSetting, SETTING);
                 break;
         }
     }
 
-    private void initComponents() {
+    private void initComponents(Bundle bundle) {
         ibHome = (ImageButton) findViewById(R.id.ibHome);
         ibHome.setOnClickListener(this);
         ibList = (ImageButton) findViewById(R.id.ibOffers);
@@ -80,19 +97,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ibSetting.setOnClickListener(this);
         flMainFragment = (FrameLayout) findViewById(R.id.flMainFragment);
 
-        homeFragment = HomeFragment.newInstance(getString(R.string.onViewStuff), "");
-        getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, homeFragment).commit();
 
-        offersFragment = OffersFragment.newInstance(getString(R.string.offers), "");
-        loginFragment = LoginFragment.newInstance("", "");
-        categoriesFragment = CategoriesFragment.newInstance(getString(R.string.categories), "");
+        if (!isCompanyProfile) {
+            findViewById(R.id.tbToolBar).setVisibility(View.VISIBLE);
+            homeFragment = HomeFragment.newInstance(getString(R.string.onViewStuff), "");
+            getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, homeFragment).commit();
 
-        imageButtons = new ArrayList<>();
-        imageButtons.add(ibHome);
-        imageButtons.add(ibList);
-        imageButtons.add(ibLogo);
-        imageButtons.add(ibGrid);
-        imageButtons.add(ibSetting);
+            offersFragment = OffersFragment.newInstance(getString(R.string.offers), "");
+            loginFragment = LoginFragment.newInstance("", "");
+            categoriesFragment = CategoriesFragment.newInstance(getString(R.string.categories), "");
+            searchFragment = SearchFragment.newInstance(getString(R.string.search), "");
+            settingsFragment = SettingsFragment.newInstance(getString(R.string.settings), "");
+
+            imageButtons = new ArrayList<>();
+            imageButtons.add(ibHome);
+            imageButtons.add(ibList);
+            imageButtons.add(ibLogo);
+            imageButtons.add(ibGrid);
+            imageButtons.add(ibSetting);
+        } else {
+            findViewById(R.id.tbToolBar).setVisibility(View.GONE);
+            companyProfileFragment = CompanyProfileFragment.newInstance(bundle.getString(Constants.COMPANY_PROFILE_TITLE), "");
+            getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, companyProfileFragment).commit();
+        }
+
+
     }
 
     private void changeBackground(ImageButton current, int clickedID) {

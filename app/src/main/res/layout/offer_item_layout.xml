@@ -120,7 +120,7 @@
                 android:id="@+id/ivProductImage"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:scaleType="fitStart"
+                android:scaleType="fitXY"
                 android:src="@drawable/photo_replacement" />
         </android.support.v7.widget.CardView>
 

@@ -83,6 +83,7 @@ public class CategoriesFragment extends Fragment {
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         tvTitle.setText(mParam1);
         view.findViewById(R.id.ibBack).setVisibility(View.GONE);
+        view.findViewById(R.id.ibSearch).setVisibility(View.GONE);
         gvCategories = (GridView) view.findViewById(R.id.gvCategories);
         GVCategoriesAdapter categoriesAdapter = new GVCategoriesAdapter(getContext(), categories());
         gvCategories.setAdapter(categoriesAdapter);

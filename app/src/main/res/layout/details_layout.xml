@@ -111,7 +111,7 @@
             android:layout_below="@+id/rlOffers"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:scaleType="centerInside"
+            android:scaleType="fitXY"
             android:scaleX="1"
             android:scaleY=".9"
             android:src="@drawable/photo_replacement" />
@@ -231,7 +231,7 @@
                 android:layout_weight="1">
 
                 <RadioGroup
-                    android:id="@+id/rgLike"
+                    android:id="@+id/rgLikeDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -262,7 +262,7 @@
                     android:id="@+id/tvShare"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/rgLike"
+                    android:layout_below="@id/rgLikeDetails"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
                     android:drawableLeft="@drawable/share_icon"
@@ -278,6 +278,7 @@
                 layout="@layout/timer_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1.5" />
 

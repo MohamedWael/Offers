@@ -1,7 +1,9 @@
 package com.sunmediaeg.offers.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.activities.MainActivity;
 import com.sunmediaeg.offers.dataModel.Company;
+import com.sunmediaeg.offers.utilities.Constants;
 
 import java.util.ArrayList;
 
@@ -38,17 +42,29 @@ public class RVCategoryCompaniesAdapter extends RecyclerView.Adapter<RVCategoryC
     @Override
     public void onBindViewHolder(final CategoryCompanyViewHolder holder, int position) {
         final Company company = companies.get(position);
+
+
+        holder.cvCompany.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, MainActivity.class);
+                intent.putExtra(Constants.IS_COMPANY_PROFILE, true);
+                intent.putExtra(Constants.COMPANY_PROFILE_TITLE, company.getCompanyName());
+
+                mContext.startActivity(intent);
+            }
+        });
         holder.btnFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!company.isFollwed()) {
                     holder.btnFollow.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
-                    holder.btnFollow.setTextColor(ContextCompat.getColor(mContext,R.color.colorBackground));
+                    holder.btnFollow.setTextColor(ContextCompat.getColor(mContext, R.color.colorBackground));
                     company.setFollwed(true);
                 } else {
                     company.setFollwed(false);
                     holder.btnFollow.setBackgroundResource(R.drawable.button_border);
-                    holder.btnFollow.setTextColor(ContextCompat.getColor(mContext,R.color.colorPrimaryDark));
+                    holder.btnFollow.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
                 }
             }
         });
@@ -61,12 +77,14 @@ public class RVCategoryCompaniesAdapter extends RecyclerView.Adapter<RVCategoryC
     }
 
     class CategoryCompanyViewHolder extends RecyclerView.ViewHolder {
+        CardView cvCompany;
         ImageView ivCompanyLogo;
         TextView tvCompanyName, tvNumberOfOffers;
         Button btnFollow;
 
         public CategoryCompanyViewHolder(View itemView) {
             super(itemView);
+            cvCompany = (CardView) itemView.findViewById(R.id.cvCompany);
             ivCompanyLogo = (ImageView) itemView.findViewById(R.id.ivCompanyLogo);
             tvCompanyName = (TextView) itemView.findViewById(R.id.tvCompanyName);
             tvNumberOfOffers = (TextView) itemView.findViewById(R.id.btnNumberOfOffers);

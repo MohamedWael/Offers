@@ -91,7 +91,13 @@ public class CategoryCompaniesFragment extends Fragment implements View.OnClickL
         rvCategoryCompanies.setLayoutManager(new LinearLayoutManager(getContext()));
         ArrayList<Company> companies = new ArrayList<>();
         Company company = new Company(0, R.drawable.egypt_air, 14, getString(R.string.egyptAir), "", false);
+        Company company1 = new Company(0, R.drawable.egypt_air, 14, getString(R.string.egyptAir), "", false);
+        Company company2 = new Company(0, R.drawable.egypt_air, 14, getString(R.string.egyptAir), "", false);
+        Company company3 = new Company(0, R.drawable.egypt_air, 14, getString(R.string.egyptAir), "", false);
         companies.add(company);
+        companies.add(company1);
+        companies.add(company2);
+        companies.add(company3);
         categoryCompaniesAdapter = new RVCategoryCompaniesAdapter(getContext(), companies);
         rvCategoryCompanies.setAdapter(categoryCompaniesAdapter);
     }

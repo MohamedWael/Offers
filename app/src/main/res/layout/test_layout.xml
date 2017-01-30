@@ -12,7 +12,6 @@
         android:showDividers="middle"
         android:stretchColumns="*">
 
-
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,20 +67,48 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:background="@color/colorBackground"
-                android:text="this is a text" />
+            <LinearLayout android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/colorBackground"
+                    android:text="this is a text" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/colorBackground"
+                    android:src="@drawable/egypt_air"
+                    android:text="this is a text" />
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:layout_marginLeft="5dp"
-                android:background="@color/colorBackground"
-                android:text="this is a text" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/colorBackground"
+                    android:text="this is a text" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/colorBackground"
+                    android:src="@drawable/egypt_air"
+                    android:text="this is a text" />
+            </LinearLayout>
         </TableRow>
 
         <TableRow
@@ -89,41 +116,45 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:background="@color/colorBackground"
-                android:text="this is a text" />
+            <LinearLayout android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorBackground"
+                    android:text="this is a text" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/colorBackground"
+                    android:src="@drawable/egypt_air"
+                    android:text="this is a text" />
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:layout_marginLeft="5dp"
-                android:background="@color/colorBackground"
-                android:text="this is a text" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorBackground"
+                    android:text="this is a text" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/colorBackground"
+                    android:src="@drawable/egypt_air"
+                    android:text="this is a text" />
+            </LinearLayout>
         </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorBackground"
-                android:text="this is a text" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:background="@color/colorBackground"
-                android:text="this is a text" />
-        </TableRow>
-
 
     </TableLayout>
 

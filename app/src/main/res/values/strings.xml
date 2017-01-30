@@ -15,6 +15,8 @@
     <string name="onViewStuff">المعروضات</string>
     <string name="offers">أوفرز</string>
     <string name="categories">التصنيفات</string>
+    <string name="search">بحث</string>
+    <string name="settings">الإعدادات</string>
     <string name="electronics">الإلكترونيات</string>
     <string name="travel">السفر</string>
     <string name="airplanes">الطيران</string>
@@ -44,4 +46,12 @@
     <string name="offers_com">Offers.com</string>
     <string name="tvPhone">01000000000</string>
     <string name="tvDetails">هذا وصف مطول لتفاصيل العرض هذا وصف مطول لتفاصيل العرض هذا وصف مطول لتفاصيل العرض هذا وصف مطول لتفاصيل العرض هذا وصف مطول لتفاصيل العرض هذا وصف مطول لتفاصيل العرض هذا وصف مطول لتفاصيل العرض هذا وصف مطول لتفاصيل العرض هذا وصف مطول لتفاصيل العرض هذا وصف مطول لتفاصيل العرض هذا وصف مطول لتفاصيل العرض هذا وصف مطول لتفاصيل العرض هذا وصف مطول لتفاصيل العرض هذا وصف مطول لتفاصيل العرض هذا وصف مطول لتفاصيل العرض </string>
+    <string name="etSearch">البحث عن شركات وعروض ...</string>
+    <string name="tvCategoryClasses">تصنيفات البحث</string>
+    <string name="tvNewOffers"># عروض جديدة</string>
+    <string name="tvOffersToEnd"># عروض ستنتهى</string>
+    <string name="tvSearchForOffers">إبحث عن العروض</string>
+    <string name="btnContactUs">راسلنا</string>
+    <string name="btnAdvertise">أعلن معنا</string>
+    <string name="btnSignUp">التسجيل</string>
 </resources>

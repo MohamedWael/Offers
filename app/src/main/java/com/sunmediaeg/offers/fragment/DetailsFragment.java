@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
@@ -19,7 +20,7 @@ import com.sunmediaeg.offers.R;
  * Use the {@link DetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DetailsFragment extends Fragment {
+public class DetailsFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -30,6 +31,7 @@ public class DetailsFragment extends Fragment {
     private String mParam2;
     private TextView tvTitle;
     private OnFragmentInteractionListener mListener;
+    private ImageButton ibBack;
 
     public DetailsFragment() {
         // Required empty public constructor
@@ -74,6 +76,9 @@ public class DetailsFragment extends Fragment {
     private void initComponents(View v) {
         tvTitle = (TextView) v.findViewById(R.id.tvTitle);
         tvTitle.setText(mParam1);
+        v.findViewById(R.id.rgLike).setVisibility(View.GONE);
+        ibBack = (ImageButton) v.findViewById(R.id.ibBack);
+        ibBack.setOnClickListener(this);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -97,6 +102,15 @@ public class DetailsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ibBack:
+                getActivity().finish();
+                break;
+        }
     }
 
     /**

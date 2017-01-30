@@ -9,24 +9,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
-import com.sunmediaeg.offers.adapters.RVCompaniesAdapter;
 import com.sunmediaeg.offers.adapters.RVOffersAdapter;
-import com.sunmediaeg.offers.dataModel.Company;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link HomeFragment.OnFragmentInteractionListener} interface
+ * {@link CompanyProfileFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link HomeFragment#newInstance} factory method to
+ * Use the {@link CompanyProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class CompanyProfileFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -37,10 +34,11 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private RecyclerView rvCompanies, rvOffers;
     private TextView tvTitle;
+    private ImageButton ibBack;
+    private RecyclerView rvCompanyOffers;
 
-    public HomeFragment() {
+    public CompanyProfileFragment() {
         // Required empty public constructor
     }
 
@@ -50,10 +48,11 @@ public class HomeFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
+     * @return A new instance of fragment CompanyProfileFragment.
      */
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
+    // TODO: Rename and change types and number of parameters
+    public static CompanyProfileFragment newInstance(String param1, String param2) {
+        CompanyProfileFragment fragment = new CompanyProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -67,38 +66,37 @@ public class HomeFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-
-
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        setRetainInstance(true);
+        View view = inflater.inflate(R.layout.fragment_company_profile, container, false);
         initComponents(view);
+
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        RVCompaniesAdapter companiesAdapter = new RVCompaniesAdapter(getContext(), initCompaniesData());
-        rvCompanies.setAdapter(companiesAdapter);
+    private void initComponents(View v) {
+        tvTitle = (TextView) v.findViewById(R.id.tvTitle);
+        tvTitle.setText(mParam1);
+        ibBack = (ImageButton) v.findViewById(R.id.ibBackCP);
+        ibBack.setOnClickListener(this);
+        rvCompanyOffers = (RecyclerView) v.findViewById(R.id.rvCompanyOffers);
+        rvCompanyOffers.setLayoutManager(new LinearLayoutManager(getContext()));
         RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext());
-        rvOffers.setAdapter(offersAdapter);
+        rvCompanyOffers.setAdapter(offersAdapter);
     }
 
-    private void initComponents(View view) {
-        tvTitle = (TextView) view.findViewById(R.id.tvTitle);
-        tvTitle.setText(mParam1);
-        view.findViewById(R.id.ibBack).setVisibility(View.GONE);
-        view.findViewById(R.id.ibSearch).setVisibility(View.GONE);
-        rvOffers = (RecyclerView) view.findViewById(R.id.rvHomeOffers);
-        rvOffers.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvCompanies = (RecyclerView) view.findViewById(R.id.rvCompanies);
-        rvCompanies.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ibBackCP:
+                getActivity().finish();
+                break;
+        }
     }
 
     public void onButtonPressed(Uri uri) {
@@ -136,14 +134,5 @@ public class HomeFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    private ArrayList<Company> initCompaniesData() {
-        ArrayList<Company> companies = new ArrayList<>();
-        companies.add(new Company(0, getString(R.string.egyptAir), R.drawable.egypt_air));
-        companies.add(new Company(2, getString(R.string.arrabMall), R.drawable.mall_of_arabia));
-        companies.add(new Company(1, getString(R.string.carrefour), R.drawable.cafarrefour));
-        companies.add(new Company(3, getString(R.string.cityCenter), R.drawable.city_centre));
-        return companies;
     }
 }
