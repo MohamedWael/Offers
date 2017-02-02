@@ -31,9 +31,6 @@
             android:name=".activities.OffersGeneralActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.LoginChoiceActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait" />
     </application>

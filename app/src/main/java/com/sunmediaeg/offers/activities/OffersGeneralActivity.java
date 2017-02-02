@@ -31,11 +31,11 @@ public class OffersGeneralActivity extends AppCompatActivity {
 
         switch (activityType) {
             case Constants.ACTIVITY_SIGN_UP_AS_VENDOR:
-                signUpFragment = SignUpFragment.newInstance("", "");
+                signUpFragment = SignUpFragment.newInstance(Constants.REGISTER_VENDOR, "");
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, signUpFragment).commit();
                 break;
             case Constants.ACTIVITY_SIGN_UP_AS_USER:
-                signUpFragment = SignUpFragment.newInstance("", "");
+                signUpFragment = SignUpFragment.newInstance(Constants.REGISTER_USER, "");
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, signUpFragment).commit();
                 break;
             case Constants.ACTIVITY_LOGIN:

@@ -11,8 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.activities.MainActivity;
 import com.sunmediaeg.offers.activities.OffersGeneralActivity;
 import com.sunmediaeg.offers.utilities.Constants;
+import com.sunmediaeg.offers.utilities.Log;
+import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,6 +38,7 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
     private OnFragmentInteractionListener mListener;
     private Button btnSignUpAsVendor, btnSignUpAsUser, btnLogin;
     private Intent intent;
+    private Intent mainActivityIntent;
 
     public LoginChoiceFragment() {
         // Required empty public constructor
@@ -71,13 +75,15 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login_choice, container, false);
+        initComponents(view);
+        haveAccount();
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        initComponents();
+
 
     }
 
@@ -104,11 +110,11 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
 //        getActivity().finish();
     }
 
-    private void initComponents() {
+    private void initComponents(View v) {
         intent = new Intent(getActivity(), OffersGeneralActivity.class);
-        btnSignUpAsVendor = (Button) getActivity().findViewById(R.id.btnSignUpAsVendor);
-        btnSignUpAsUser = (Button) getActivity().findViewById(R.id.btnSignUpAsUser);
-        btnLogin = (Button) getActivity().findViewById(R.id.btnLogin);
+        btnSignUpAsVendor = (Button) v.findViewById(R.id.btnSignUpAsVendor);
+        btnSignUpAsUser = (Button) v.findViewById(R.id.btnSignUpAsUser);
+        btnLogin = (Button) v.findViewById(R.id.btnLogin);
         btnSignUpAsVendor.setOnClickListener(this);
         btnSignUpAsUser.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
@@ -150,5 +156,17 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+    private void haveAccount() {
+        boolean haveAccount = SharedPreferencesManager.getInstance(getContext()).initSharedPreferences().getBoolean(Constants.HAVE_ACCOUNT, false);
+        Log.d("HaveAccount?", haveAccount + "");
+        if (haveAccount) {
+            mainActivityIntent = new Intent(getActivity(), MainActivity.class);
+            mainActivityIntent.putExtra(Constants.IS_COMPANY_PROFILE, false); // <-- this extra is related only to the MainActivity
+            getActivity().startActivity(intent);
+            getActivity().finish();
+        }
     }
 }

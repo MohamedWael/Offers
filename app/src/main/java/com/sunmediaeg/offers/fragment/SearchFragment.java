@@ -97,8 +97,8 @@ public class SearchFragment extends Fragment {
         Category travel = new Category(Constants.TRAVEL, R.drawable.travel, getString(R.string.travel));
         Category airplanes = new Category(Constants.AIRPLANE, R.drawable.plane, getString(R.string.airplanes));
         Category cars = new Category(Constants.CARS, R.drawable.cars, getString(R.string.cars));
-        Category furniture = new Category(Constants.FURNUTURE, R.drawable.furniture, getString(R.string.furniture));
-        Category restaurant = new Category(Constants.RESTRAUNTS, R.drawable.restaurant, getString(R.string.resteraunts));
+        Category furniture = new Category(Constants.FURNITURE, R.drawable.furniture, getString(R.string.furniture));
+        Category restaurant = new Category(Constants.RESTAURANTS, R.drawable.restaurant, getString(R.string.resteraunts));
 
         categories.add(electronics);
         categories.add(travel);

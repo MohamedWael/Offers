@@ -12,4 +12,8 @@ public class Log {
             android.util.Log.d(tag, message);
     }
 
+    public static void e(String tag, String message) {
+        if (Constants.LOG_TOGGLE)
+            android.util.Log.e(tag, message);
+    }
 }

@@ -96,8 +96,8 @@ public class CategoriesFragment extends Fragment {
         Category airplanes = new Category(Constants.AIRPLANE, R.drawable.plane, getString(R.string.airplanes));
         Category cars = new Category(Constants.CARS, R.drawable.cars, getString(R.string.cars));
         Category communications = new Category(Constants.COMMUNICATIONS, R.drawable.electronics, getString(R.string.communications));
-        Category furniture = new Category(Constants.FURNUTURE, R.drawable.furniture, getString(R.string.furniture));
-        Category restaurant = new Category(Constants.RESTRAUNTS, R.drawable.restaurant, getString(R.string.resteraunts));
+        Category furniture = new Category(Constants.FURNITURE, R.drawable.furniture, getString(R.string.furniture));
+        Category restaurant = new Category(Constants.RESTAURANTS, R.drawable.restaurant, getString(R.string.resteraunts));
         Category health = new Category(Constants.HEALTH, R.drawable.fitness, getString(R.string.health));
         Category clothes = new Category(Constants.CLOTHES, R.drawable.clothes, getString(R.string.clothes));
 

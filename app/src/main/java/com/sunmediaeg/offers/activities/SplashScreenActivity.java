@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
@@ -25,15 +26,14 @@ public class SplashScreenActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         progressBar.setProgress(50);
-//        progressBar.getProgressDrawable().setColorFilter(
-//                ContextCompat.getColor(this, R.color.colorPrimaryDarker), android.graphics.PorterDuff.Mode.SRC_IN);
+        progressBar.getProgressDrawable().setColorFilter(
+                ContextCompat.getColor(this, R.color.colorPrimaryDarker), android.graphics.PorterDuff.Mode.SRC_IN);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intentIntro = new Intent(SplashScreenActivity.this, MainActivity.class);
-                intentIntro.putExtra(Constants.IS_COMPANY_PROFILE, false);
-//                Intent intentIntro = new Intent(SplashScreenActivity.this, LoginChoiceActivity.class);
+                intentIntro.putExtra(Constants.IS_COMPANY_PROFILE, false); // <-- this extra is related only to the MainActivity
                 startActivity(intentIntro);
                 finish();
             }

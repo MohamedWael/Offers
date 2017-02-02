@@ -5,7 +5,6 @@ import android.app.Application;
 import com.android.volley.RequestQueue;
 import com.sunmediaeg.offers.R;
 
-
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
@@ -22,6 +21,7 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        SharedPreferencesManager prefesManager = SharedPreferencesManager.getInstance(this);
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/cairo_regular.ttf")
                 .setFontAttrId(R.attr.fontPath)
