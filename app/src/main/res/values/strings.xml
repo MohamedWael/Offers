@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">أوفرز</string>
 
+    <string name="facebook_app_id">1235663223185739</string>
+    <string name="fb_login_protocol_scheme">fb1235663223185739</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="btnSignUpAsUser">إنشاء حساب كمستخدم</string>
     <string name="btnSignUpAsVendor">إنشاء حساب كبائع</string>
@@ -54,4 +56,5 @@
     <string name="btnContactUs">راسلنا</string>
     <string name="btnAdvertise">أعلن معنا</string>
     <string name="btnSignUp">التسجيل</string>
+    <string name="btnForgetPassword">طلب إستعادة كلمة السر</string>
 </resources>

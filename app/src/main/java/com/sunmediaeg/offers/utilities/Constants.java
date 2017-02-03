@@ -38,6 +38,8 @@ public final class Constants {
 
     public static final String API_Base_URL = "http://api.sunmediaeg.com/offer/public/api/";
     public static final String REGISTER_USER = API_Base_URL + "user";
+    public static final String USER_LOGIN = REGISTER_USER + "/login";
+
     public static final String REGISTER_VENDOR = API_Base_URL + "vendor";
 
     public static final String HAVE_ACCOUNT = "haveAccount";

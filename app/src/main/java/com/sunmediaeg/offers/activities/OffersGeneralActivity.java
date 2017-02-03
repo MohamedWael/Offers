@@ -31,15 +31,15 @@ public class OffersGeneralActivity extends AppCompatActivity {
 
         switch (activityType) {
             case Constants.ACTIVITY_SIGN_UP_AS_VENDOR:
-                signUpFragment = SignUpFragment.newInstance(Constants.REGISTER_VENDOR, "");
+                signUpFragment = SignUpFragment.newInstance(Constants.REGISTER_VENDOR, "إنشاء حساب كبائع");
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, signUpFragment).commit();
                 break;
             case Constants.ACTIVITY_SIGN_UP_AS_USER:
-                signUpFragment = SignUpFragment.newInstance(Constants.REGISTER_USER, "");
+                signUpFragment = SignUpFragment.newInstance(Constants.REGISTER_USER, "إنشاء حساب كمستخدم");
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, signUpFragment).commit();
                 break;
             case Constants.ACTIVITY_LOGIN:
-                loginFragment = LoginFragment.newInstance("", "");
+                loginFragment = LoginFragment.newInstance("تسجيل الدخول", "");
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, loginFragment).commit();
                 break;
             case Constants.ACTIVITY_PRODUCT_DETAILS:

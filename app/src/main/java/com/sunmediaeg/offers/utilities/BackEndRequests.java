@@ -11,32 +11,36 @@ import org.json.JSONObject;
 /**
  * Created by moham on 2/2/2017.
  */
-public class BackEndRequests {
-    private static BackEndRequests ourInstance;
+public class BackendRequests {
+    private static BackendRequests ourInstance;
     private final VolleySingleton volley;
 
-    public static BackEndRequests getInstance(Context mContext) {
+    public static BackendRequests getInstance(Context mContext) {
         if (ourInstance == null) {
-            ourInstance = new BackEndRequests(mContext);
+            Log.d("BackendRequests", "new BackendRequests");
+            ourInstance = new BackendRequests(mContext);
+            return ourInstance;
+        } else {
+            Log.d("BackendRequests", "old BackendRequests");
+            return ourInstance;
         }
-        return ourInstance;
     }
 
-    private BackEndRequests(Context mContext) {
+    private BackendRequests(Context mContext) {
         volley = VolleySingleton.getInstance(mContext);
     }
 
-    public void signUp(int method, String url, final JSONObject body, final NetworkResponse networkResponse) {
+    public void getResponse(int method, String url, final JSONObject body, final BackendResponse backendResponse) {
         JsonObjectRequest signUpRequest = new JsonObjectRequest(method, volley.uriEncoder(url), body, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                networkResponse.getResponse(response);
-                Log.d("response", response.toString());
+                backendResponse.onResponse(response);
+                Log.d("Response", response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                networkResponse.getError(error);
+                backendResponse.onErrorResponse(error);
                 Log.d("VolleyError", error.toString());
             }
         }) {
@@ -48,6 +52,14 @@ public class BackEndRequests {
         };
         volley.addToRequestQueue(signUpRequest);
     }
+
+    public interface BackendResponse {
+        void onResponse(JSONObject response);
+
+        void onErrorResponse(VolleyError error);
+
+    }
+
 }
 
 

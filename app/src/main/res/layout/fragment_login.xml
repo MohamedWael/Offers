@@ -18,99 +18,117 @@
         android:layout_height="wrap_content" />
 
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/lAppBar">
+        android:layout_marginTop="50dp"
+        android:gravity="center">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="130dp"
+            android:visibility="invisible" />
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/progressBar"
+            android:layout_marginLeft="97dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edittext_line"
+            android:gravity="center_vertical|right"
+            android:hint="@string/etMail"
+            android:inputType="textEmailAddress"
+            android:paddingRight="10dp"
+            android:textColor="@color/colorPrimaryDarker" />
+
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/etEmail"
+            android:layout_marginLeft="78dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/edittext_line"
+            android:gravity="center_vertical|right"
+            android:hint="@string/etPassword"
+            android:inputType="textPassword"
+            android:paddingRight="10dp"
+            android:textColor="@color/colorPrimaryDarker" />
+
+        <Button
+            android:id="@+id/btnForgetPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etPassword"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:text="نسيت كلمة المرور ؟" />
+
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/btnForgetPassword"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/button_selector"
+            android:paddingLeft="10dp"
+            android:text="@string/btnSend"
+            android:textColor="@color/colorPrimaryDarker"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <RelativeLayout
+            android:id="@+id/rlOrganizerContainer1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="50dp"
-            android:gravity="center">
-
-
-            <EditText
-                android:id="@+id/etUserName"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:background="@drawable/edittext_line"
-                android:gravity="center_vertical|right"
-                android:hint="@string/etUserName"
-                android:paddingRight="10dp"
-                android:textColor="@color/colorPrimaryDarker" />
-
-
-            <EditText
-                android:id="@+id/etPassword"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_below="@id/etUserName"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/edittext_line"
-                android:gravity="center_vertical|right"
-                android:hint="@string/etPassword"
-                android:paddingRight="10dp"
-                android:textColor="@color/colorPrimaryDarker" />
-
-            <Button
-                android:id="@+id/btnForgetPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/etPassword"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/transparent"
-                android:text="نسيت كلمة المرور ؟" />
-
-
-            <Button
-                android:id="@+id/btnSend"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@+id/btnForgetPassword"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="160dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/button_selector"
-                android:paddingLeft="10dp"
-                android:text="@string/btnSend"
-                android:textColor="@color/colorPrimaryDarker"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            android:layout_height="50dp"
+            android:layout_below="@+id/btnSend"
+            android:layout_marginTop="30dp">
 
             <Button
                 android:id="@+id/btnHaveAccoutn"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_below="@+id/btnSend"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="150dp"
-                android:background="@android:color/transparent"
+                android:layout_marginLeft="50dp"
+                android:background="@drawable/ib_main_selector"
                 android:gravity="center"
                 android:text="@string/btnHaveAccoutn"
                 android:textColor="@color/colorPrimaryDarker"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <Button
                 android:id="@+id/tvHaveAccoutn"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_below="@+id/btnSend"
-                android:layout_marginTop="150dp"
                 android:layout_toRightOf="@+id/btnHaveAccoutn"
+                android:background="@android:color/transparent"
                 android:gravity="center"
                 android:text="@string/tvHaveAccoutn"
                 android:textColor="@color/colorPrimaryDarker"
                 android:textSize="20sp" />
-
         </RelativeLayout>
-    </ScrollView>
+
+        <TextView
+            android:id="@+id/tvNotification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlOrganizerContainer1"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="@android:color/holo_red_dark" />
+    </RelativeLayout>
 </RelativeLayout>

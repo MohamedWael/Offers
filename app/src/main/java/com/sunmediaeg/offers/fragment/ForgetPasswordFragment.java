@@ -1,31 +1,27 @@
 package com.sunmediaeg.offers.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
-import com.sunmediaeg.offers.activities.MainActivity;
-import com.sunmediaeg.offers.activities.OffersGeneralActivity;
 import com.sunmediaeg.offers.utilities.Constants;
-import com.sunmediaeg.offers.utilities.Log;
-import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link LoginChoiceFragment.OnFragmentInteractionListener} interface
+ * {@link ForgetPasswordFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link LoginChoiceFragment#newInstance} factory method to
+ * Use the {@link ForgetPasswordFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginChoiceFragment extends Fragment implements View.OnClickListener {
+public class ForgetPasswordFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,11 +32,10 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private Button btnSignUpAsVendor, btnSignUpAsUser, btnLogin;
-    private Intent intent;
-    private Intent mainActivityIntent;
+    private TextView tvTitle;
+    private ImageButton ibBack;
 
-    public LoginChoiceFragment() {
+    public ForgetPasswordFragment() {
         // Required empty public constructor
     }
 
@@ -50,11 +45,11 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment LoginChoiceFragment.
+     * @return A new instance of fragment ForgetPasswordFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static LoginChoiceFragment newInstance(String param1, String param2) {
-        LoginChoiceFragment fragment = new LoginChoiceFragment();
+    public static ForgetPasswordFragment newInstance(String param1, String param2) {
+        ForgetPasswordFragment fragment = new ForgetPasswordFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -74,45 +69,21 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login_choice, container, false);
-        haveAccount();
-        initComponents(view);
+        View view = inflater.inflate(R.layout.fragment_forget_password, container, false);
+        initComponent(view);
         return view;
     }
 
-    @Override
-    public void onClick(View v) {
+    private void initComponent(View v) {
+        Constants.hideSearchButton(v);
 
-        switch (v.getId()) {
-            case R.id.btnSignUpAsVendor:
-                startActivity(Constants.ACTIVITY_SIGN_UP_AS_VENDOR);
-                break;
-            case R.id.btnSignUpAsUser:
-                startActivity(Constants.ACTIVITY_SIGN_UP_AS_USER);
-                break;
-            case R.id.btnLogin:
-                startActivity(Constants.ACTIVITY_LOGIN);
-                break;
-        }
-
+        tvTitle = (TextView) v.findViewById(R.id.tvTitle);
+        tvTitle.setText(mParam1);
+        ibBack = (ImageButton) v.findViewById(R.id.ibBack);
+        ibBack.setOnClickListener(this);
     }
 
-    private void startActivity(int value) {
-        intent.putExtra(Constants.ACTIVITY, value);
-        startActivity(intent);
-//        getActivity().finish();
-    }
-
-    private void initComponents(View v) {
-        intent = new Intent(getActivity(), OffersGeneralActivity.class);
-        btnSignUpAsVendor = (Button) v.findViewById(R.id.btnSignUpAsVendor);
-        btnSignUpAsUser = (Button) v.findViewById(R.id.btnSignUpAsUser);
-        btnLogin = (Button) v.findViewById(R.id.btnLogin);
-        btnSignUpAsVendor.setOnClickListener(this);
-        btnSignUpAsUser.setOnClickListener(this);
-        btnLogin.setOnClickListener(this);
-    }
-
+    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -135,6 +106,14 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
         mListener = null;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ibBack:
+                getActivity().finish();
+                break;
+        }
+    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -149,17 +128,5 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-
-    private void haveAccount() {
-        boolean haveAccount = SharedPreferencesManager.getInstance(getContext()).initSharedPreferences().getBoolean(Constants.HAVE_ACCOUNT, false);
-        Log.d("HaveAccount?", haveAccount + "");
-        if (haveAccount) {
-            mainActivityIntent = new Intent(getActivity(), MainActivity.class);
-            mainActivityIntent.putExtra(Constants.IS_COMPANY_PROFILE, false); // <-- this extra is related only to the MainActivity
-            getActivity().startActivity(intent);
-            getActivity().finish();
-        }
     }
 }

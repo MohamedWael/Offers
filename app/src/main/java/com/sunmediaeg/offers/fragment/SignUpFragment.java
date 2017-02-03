@@ -17,18 +17,29 @@ import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.MainActivity;
+import com.sunmediaeg.offers.dataModel.jsonModels.FbProfileData;
 import com.sunmediaeg.offers.dataModel.jsonModels.User;
-import com.sunmediaeg.offers.utilities.BackEndRequests;
+import com.sunmediaeg.offers.utilities.BackendRequests;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Log;
-import com.sunmediaeg.offers.utilities.NetworkResponse;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 import com.sunmediaeg.offers.utilities.SignUpUtility;
 
 import org.json.JSONObject;
+
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,12 +65,16 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private ImageButton ibBack;
     private EditText etUserName, etMail, etPassword;
     private String userName, mail, password;
-    private Button btnSend;
+    private Button btnSend, btnFaceBook;
     private ImageButton ibFaceBook, ibTwitter, ibGooglePlus;
     private ProgressBar progressBar;
-    private BackEndRequests requests;
+    private BackendRequests requests;
     private SharedPreferencesManager prefs;
     private SharedPreferences.Editor editor;
+    private CallbackManager callbackManager;
+    private Profile profile;
+    private Gson gson;
+    private FbProfileData fbProfileData;
 
 
     public SignUpFragment() {
@@ -91,6 +106,51 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        gson = new Gson();
+        callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+
+                AccessToken accessToken = loginResult.getAccessToken();
+
+                Log.d("AccessToken", loginResult.getAccessToken().getToken());
+                Log.d("grantedPermissions", loginResult.getRecentlyGrantedPermissions().toString());
+//                profile = Profile.getCurrentProfile();
+//                Log.e("profileName", profile.getName());
+//                etUserName.setText(profile.getName());
+
+
+                GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Log.d("GraphResponse", response.toString());
+                        Log.d("JSONObject", object.toString());
+                        fbProfileData = gson.fromJson(object.toString(), FbProfileData.class);
+                        etUserName.setText(fbProfileData.getName());
+                        etMail.setText(fbProfileData.getEmail());
+                    }
+                });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                graphRequest.setParameters(parameters);
+                graphRequest.executeAsync();
+
+            }
+
+            @Override
+            public void onCancel() {
+                Log.e("FbOnCancel", "canceled");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.e("fbError", error.toString());
+            }
+        });
+
+
     }
 
     @Override
@@ -107,33 +167,41 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initComponents(View v) {
+
         prefs = SharedPreferencesManager.getInstance(getContext());
         editor = prefs.initEditor();
-        requests = BackEndRequests.getInstance(getContext());
+        requests = BackendRequests.getInstance(getContext());
         Constants.hideSearchButton(v);
         tvNotification = (TextView) v.findViewById(R.id.tvNotification);
 
         tvTitle = (TextView) v.findViewById(R.id.tvTitle);
-        tvTitle.setText("إنشاء حساب");
+        tvTitle.setText(mParam2);
 
-        etUserName = (EditText) v.findViewById(R.id.etUserName);
+        etUserName = (EditText) v.findViewById(R.id.etEmail);
         etMail = (EditText) v.findViewById(R.id.etMail);
         etPassword = (EditText) v.findViewById(R.id.etPassword);
 
         ibBack = (ImageButton) v.findViewById(R.id.ibBack);
-        ibFaceBook = (ImageButton) v.findViewById(R.id.ibFaceBook);
+//        ibFaceBook = (ImageButton) v.findViewById(R.id.btnFaceBook);
+        btnFaceBook = (Button) v.findViewById(R.id.btnFaceBook);
         ibTwitter = (ImageButton) v.findViewById(R.id.ibTwitter);
         ibGooglePlus = (ImageButton) v.findViewById(R.id.ibGooglePlus);
         btnSend = (Button) v.findViewById(R.id.btnSignUp);
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 
         ibBack.setOnClickListener(this);
-        ibFaceBook.setOnClickListener(this);
+        btnFaceBook.setOnClickListener(this);
         ibTwitter.setOnClickListener(this);
         ibGooglePlus.setOnClickListener(this);
         btnSend.setOnClickListener(this);
 
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -165,11 +233,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                         } else {
                             url = Constants.REGISTER_VENDOR;
                         }
-                        requests.signUp(Request.Method.POST, url, body, new NetworkResponse() {
+                        requests.getResponse(Request.Method.POST, url, body, new BackendRequests.BackendResponse() {
                             @Override
-                            public void getResponse(JSONObject response) {
+                            public void onResponse(JSONObject response) {
                                 Log.d("response", response.toString());
-                                Gson gson = new Gson();
+
                                 User user = gson.fromJson(response.toString(), User.class);
                                 Log.d("user", user.toString());
                                 editor.putString(Constants.NAME, user.getName());
@@ -185,7 +253,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                             }
 
                             @Override
-                            public void getError(VolleyError error) {
+                            public void onErrorResponse(VolleyError error) {
                                 progressBar.setVisibility(View.INVISIBLE);
                                 Log.d("VolleyError", error.toString());
                             }
@@ -203,8 +271,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 }
 
                 break;
-            case R.id.ibFaceBook:
-
+            case R.id.btnFaceBook:
+                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile", "user_photos"));
                 break;
             case R.id.ibTwitter:
 

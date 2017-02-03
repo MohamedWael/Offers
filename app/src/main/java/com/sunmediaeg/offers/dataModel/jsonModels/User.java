@@ -10,6 +10,9 @@ public class User {
 
     private String name;
 
+    private String image;
+    private String token;
+
     public String getEmail() {
         return email;
     }
@@ -34,9 +37,24 @@ public class User {
         this.name = name;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     @Override
     public String toString() {
-        return getId() + " " + getName() + " " + getEmail();
+        return "id: " + getId() + ", name: " + getName() + ", email: " + getEmail() + ", token: " + getToken();
     }
 }

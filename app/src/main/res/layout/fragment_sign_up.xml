@@ -33,7 +33,7 @@
         android:layout_marginRight="20dp">
 
         <EditText
-            android:id="@+id/etUserName"
+            android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="97dp"
@@ -50,7 +50,7 @@
             android:id="@+id/etMail"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_below="@id/etUserName"
+            android:layout_below="@id/etEmail"
             android:layout_marginLeft="78dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="10dp"
@@ -107,14 +107,13 @@
         android:gravity="center"
         android:padding="10dp">
 
-        <ImageButton
-            android:id="@+id/ibFaceBook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Button
+            android:id="@+id/btnFaceBook"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginRight="20dp"
-            android:background="@drawable/shadow"
-            android:elevation="5dp"
-            android:src="@drawable/facebook" />
+            android:background="@drawable/facebook"
+            android:elevation="5dp" />
 
         <ImageButton
             android:id="@+id/ibTwitter"
@@ -146,4 +145,6 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="20dp"
         android:textColor="@android:color/holo_red_dark" />
+
+
 </RelativeLayout>
