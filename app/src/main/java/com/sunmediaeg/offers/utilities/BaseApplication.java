@@ -20,16 +20,11 @@ public class BaseApplication extends Application {
     private RequestQueue requestQueue;
     private RequestQueue downloadQueue;
 
-
-    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
-    private static final String TWITTER_KEY = "IMQdb01tqIPiUeK22nZn04VFL";
-    private static final String TWITTER_SECRET = "q8ZWVv4nBCC9FhbvuyV7whR4U1ap4o3FxlMl9dfOnlKnrbDSrb";
-
-
     @Override
     public void onCreate() {
         super.onCreate();
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Log.d("Application", "Created");
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_KEY, Constants.TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
 
         SharedPreferencesManager prefesManager = SharedPreferencesManager.getInstance(this);
@@ -42,8 +37,18 @@ public class BaseApplication extends Application {
 
         volleySingleton = VolleySingleton.getInstance(this);
         requestQueue = volleySingleton.getRequestQueue();
+        requestQueue.start();
         downloadQueue = volleySingleton.getDownloadRequestQueue();
         downloadQueue.start();
-        requestQueue.start();
+
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        Log.d("Application", "Terminated");
+        volleySingleton = null;
+        downloadQueue.stop();
+        requestQueue.stop();
     }
 }

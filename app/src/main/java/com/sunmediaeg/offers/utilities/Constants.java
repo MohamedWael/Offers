@@ -12,6 +12,10 @@ public final class Constants {
     private Constants() {
     }
 
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    static final String TWITTER_KEY = "IMQdb01tqIPiUeK22nZn04VFL";
+    static final String TWITTER_SECRET = "q8ZWVv4nBCC9FhbvuyV7whR4U1ap4o3FxlMl9dfOnlKnrbDSrb";
+
     public static final int SPLASH_TIME_OUT = 3000;
     public static final boolean LOG_TOGGLE = true;
 

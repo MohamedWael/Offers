@@ -115,6 +115,13 @@
             android:background="@drawable/facebook"
             android:elevation="5dp" />
 
+
+        <com.sunmediaeg.offers.utilities.TwitterLoginButton
+            android:id="@+id/btnTwitterLogin"
+            android:layout_width="40dp"
+            android:background="@drawable/twitter"
+            android:layout_height="40dp" />
+
         <ImageButton
             android:id="@+id/ibTwitter"
             android:layout_width="wrap_content"

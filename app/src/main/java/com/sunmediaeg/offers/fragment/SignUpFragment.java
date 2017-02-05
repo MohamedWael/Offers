@@ -36,6 +36,11 @@ import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Log;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 import com.sunmediaeg.offers.utilities.SignUpUtility;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import org.json.JSONObject;
 
@@ -75,6 +80,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private Profile profile;
     private Gson gson;
     private FbProfileData fbProfileData;
+    private com.sunmediaeg.offers.utilities.TwitterLoginButton btnTwitterLogin;
 
 
     public SignUpFragment() {
@@ -158,6 +164,17 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
         initComponents(view);
+        btnTwitterLogin.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+
+            }
+        });
         return view;
     }
 
@@ -185,6 +202,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 //        ibFaceBook = (ImageButton) v.findViewById(R.id.btnFaceBook);
         btnFaceBook = (Button) v.findViewById(R.id.btnFaceBook);
         ibTwitter = (ImageButton) v.findViewById(R.id.ibTwitter);
+        btnTwitterLogin = (com.sunmediaeg.offers.utilities.TwitterLoginButton) v.findViewById(R.id.btnTwitterLogin);
+//        btnTwitterLogin.setBackgroundResource(R.drawable.twitter);
         ibGooglePlus = (ImageButton) v.findViewById(R.id.ibGooglePlus);
         btnSend = (Button) v.findViewById(R.id.btnSignUp);
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
