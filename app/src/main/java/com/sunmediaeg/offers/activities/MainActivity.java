@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
+import com.facebook.FacebookSdk;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.fragment.CategoriesFragment;
 import com.sunmediaeg.offers.fragment.CompanyProfileFragment;
@@ -19,9 +20,12 @@ import com.sunmediaeg.offers.fragment.SearchFragment;
 import com.sunmediaeg.offers.fragment.SettingsFragment;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
 
 import java.util.ArrayList;
 
+import io.fabric.sdk.android.Fabric;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -44,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        FacebookSdk.sdkInitialize(this);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_KEY, Constants.TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
         Bundle bundle = getIntent().getExtras();
         haveAccount = SharedPreferencesManager.getInstance(this).initSharedPreferences().getBoolean(Constants.HAVE_ACCOUNT, false);

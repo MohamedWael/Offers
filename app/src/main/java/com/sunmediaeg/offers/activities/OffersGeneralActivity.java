@@ -1,16 +1,21 @@
 package com.sunmediaeg.offers.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.facebook.FacebookSdk;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.fragment.CategoryCompaniesFragment;
 import com.sunmediaeg.offers.fragment.DetailsFragment;
 import com.sunmediaeg.offers.fragment.LoginFragment;
 import com.sunmediaeg.offers.fragment.SignUpFragment;
 import com.sunmediaeg.offers.utilities.Constants;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
 
+import io.fabric.sdk.android.Fabric;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -24,6 +29,9 @@ public class OffersGeneralActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        FacebookSdk.sdkInitialize(this);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_KEY, Constants.TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_login_main);
         Bundle data = getIntent().getExtras();
         int activityType = data.getInt(Constants.ACTIVITY);
@@ -54,6 +62,15 @@ public class OffersGeneralActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (signUpFragment != null) {
+            signUpFragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {

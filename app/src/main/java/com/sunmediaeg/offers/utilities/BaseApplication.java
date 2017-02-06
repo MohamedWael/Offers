@@ -3,6 +3,7 @@ package com.sunmediaeg.offers.utilities;
 import android.app.Application;
 
 import com.android.volley.RequestQueue;
+import com.facebook.FacebookSdk;
 import com.sunmediaeg.offers.R;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;

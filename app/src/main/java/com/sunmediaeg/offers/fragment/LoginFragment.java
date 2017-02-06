@@ -22,7 +22,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.MainActivity;
-import com.sunmediaeg.offers.dataModel.jsonModels.User;
+import com.sunmediaeg.offers.dataModel.jsonModels.LoginResponse;
 import com.sunmediaeg.offers.utilities.BackendRequests;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Log;
@@ -161,11 +161,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
                             public void onResponse(JSONObject response) {
                                 Log.d("LoginResponse", response.toString());
                                 Gson gson = new Gson();
-                                User user = gson.fromJson(response.toString(), User.class);
-                                Log.d("user", user.toString());
-                                editor.putString(Constants.NAME, user.getName());
-                                editor.putString(Constants.EMAIL, user.getEmail());
-                                editor.putLong(Constants.USER_ID, user.getId());
+                                LoginResponse login = gson.fromJson(response.toString(), LoginResponse.class);
+                                Log.d("user", login.toString());
+                                editor.putString(Constants.NAME, login.getData().getUser().getName());
+                                editor.putString(Constants.EMAIL, login.getData().getUser().getEmail());
+                                editor.putLong(Constants.USER_ID, login.getData().getUser().getId());
                                 editor.putBoolean(Constants.HAVE_ACCOUNT, true);
                                 editor.commit();
                                 Intent intent = new Intent(getActivity(), MainActivity.class);

@@ -35,7 +35,8 @@ public class TwitterLoginButton extends com.twitter.sdk.android.core.identity.Tw
         if (isInEditMode()) {
             return;
         }
-//        setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.twitter), null, null, null);
+
+        setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.twitter), null, null, null);
         setBackgroundColor(ContextCompat.getColor(context, R.color.colorTransparent));
         setBackgroundResource(R.drawable.twitter);
     }

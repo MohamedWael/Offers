@@ -30,17 +30,19 @@ import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.MainActivity;
 import com.sunmediaeg.offers.dataModel.jsonModels.FbProfileData;
-import com.sunmediaeg.offers.dataModel.jsonModels.User;
+import com.sunmediaeg.offers.dataModel.jsonModels.LoginResponse;
 import com.sunmediaeg.offers.utilities.BackendRequests;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Log;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 import com.sunmediaeg.offers.utilities.SignUpUtility;
+import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterAuthToken;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import org.json.JSONObject;
 
@@ -80,7 +82,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private Profile profile;
     private Gson gson;
     private FbProfileData fbProfileData;
-    private com.sunmediaeg.offers.utilities.TwitterLoginButton btnTwitterLogin;
+    private TwitterAuthClient twitterAuthClient;
+    private String token;
+    private String secret;
+//    private com.sunmediaeg.offers.utilities.TwitterLoginButton btnTwitterLogin;
 
 
     public SignUpFragment() {
@@ -164,17 +169,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
         initComponents(view);
-        btnTwitterLogin.setCallback(new Callback<TwitterSession>() {
-            @Override
-            public void success(Result<TwitterSession> result) {
 
-            }
-
-            @Override
-            public void failure(TwitterException exception) {
-
-            }
-        });
         return view;
     }
 
@@ -199,10 +194,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         etPassword = (EditText) v.findViewById(R.id.etPassword);
 
         ibBack = (ImageButton) v.findViewById(R.id.ibBack);
-//        ibFaceBook = (ImageButton) v.findViewById(R.id.btnFaceBook);
-        btnFaceBook = (Button) v.findViewById(R.id.btnFaceBook);
         ibTwitter = (ImageButton) v.findViewById(R.id.ibTwitter);
-        btnTwitterLogin = (com.sunmediaeg.offers.utilities.TwitterLoginButton) v.findViewById(R.id.btnTwitterLogin);
+        btnFaceBook = (Button) v.findViewById(R.id.btnFaceBook);
+//        btnTwitterLogin = (com.sunmediaeg.offers.utilities.TwitterLoginButton) v.findViewById(R.id.btnTwitterLogin);
 //        btnTwitterLogin.setBackgroundResource(R.drawable.twitter);
         ibGooglePlus = (ImageButton) v.findViewById(R.id.ibGooglePlus);
         btnSend = (Button) v.findViewById(R.id.btnSignUp);
@@ -221,6 +215,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+        Log.d("OnActivityResult", "checked");
+        twitterAuthClient.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -252,16 +248,22 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                         } else {
                             url = Constants.REGISTER_VENDOR;
                         }
+                        final String finalUrl = url;
                         requests.getResponse(Request.Method.POST, url, body, new BackendRequests.BackendResponse() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Log.d("response", response.toString());
 
-                                User user = gson.fromJson(response.toString(), User.class);
-                                Log.d("user", user.toString());
-                                editor.putString(Constants.NAME, user.getName());
-                                editor.putString(Constants.EMAIL, user.getEmail());
-                                editor.putLong(Constants.USER_ID, user.getId());
+                                LoginResponse loginResponse = gson.fromJson(response.toString(), LoginResponse.class);
+                                if (finalUrl.equals(Constants.REGISTER_USER)) {
+                                    loginResponse.getData().getUser().setUserType(Constants.TYPE_USER);
+                                } else {
+                                    loginResponse.getData().getUser().setUserType(Constants.TYPE_VENDOR);
+                                }
+                                Log.d("user", loginResponse.getData().getUser().toString());
+                                editor.putString(Constants.NAME, loginResponse.getData().getUser().getName());
+                                editor.putString(Constants.EMAIL, loginResponse.getData().getUser().getEmail());
+                                editor.putLong(Constants.USER_ID, loginResponse.getData().getUser().getId());
                                 editor.putBoolean(Constants.HAVE_ACCOUNT, true);
                                 editor.commit();
                                 Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -294,7 +296,25 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile", "user_photos"));
                 break;
             case R.id.ibTwitter:
+                twitterAuthClient = new TwitterAuthClient();
+                twitterAuthClient.authorize(getActivity(), new Callback<TwitterSession>() {
+                    @Override
+                    public void success(Result<TwitterSession> result) {
+                        Log.d("TwitterAuth", "Successed");
+                        Log.d("TwitterAuth", result.data.getUserName());
+                        TwitterSession session = Twitter.getSessionManager().getActiveSession();
+                        TwitterAuthToken authToken = session.getAuthToken();
+                        token = authToken.token;
+                        secret = authToken.secret;
+                    }
 
+                    @Override
+                    public void failure(TwitterException exception) {
+                        Log.d("TwitterAuth", "fail");
+                        Log.d("TwitterAuth", exception.getMessage());
+
+                    }
+                });
                 break;
             case R.id.ibGooglePlus:
 
