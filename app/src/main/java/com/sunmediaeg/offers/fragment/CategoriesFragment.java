@@ -38,6 +38,7 @@ public class CategoriesFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private TextView tvTitle;
     private GridView gvCategories;
+    private static CategoriesFragment fragment;
 
     public CategoriesFragment() {
         // Required empty public constructor
@@ -53,11 +54,13 @@ public class CategoriesFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static CategoriesFragment newInstance(String param1, String param2) {
-        CategoriesFragment fragment = new CategoriesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        if (fragment == null) {
+            fragment = new CategoriesFragment();
+            Bundle args = new Bundle();
+            args.putString(ARG_PARAM1, param1);
+            args.putString(ARG_PARAM2, param2);
+            fragment.setArguments(args);
+        }
         return fragment;
     }
 

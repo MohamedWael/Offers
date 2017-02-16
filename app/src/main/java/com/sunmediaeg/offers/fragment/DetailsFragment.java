@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.utilities.Constants;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,6 +75,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initComponents(View v) {
+        Constants.hideSearchButton(v);
         tvTitle = (TextView) v.findViewById(R.id.tvTitle);
         tvTitle.setText(mParam1);
         v.findViewById(R.id.rgLike).setVisibility(View.GONE);

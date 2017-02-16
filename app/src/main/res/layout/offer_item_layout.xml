@@ -45,12 +45,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:layout_toLeftOf="@+id/tvOfferPrice"
                 android:layout_weight="1"
                 android:background="@color/colorBackground"
                 android:gravity="center"
                 android:inputType="textMultiLine"
-                android:padding="3dp"
+                android:paddingBottom="3dp"
+                android:paddingTop="3dp"
                 android:text="@string/tvOfferCompany"
                 android:textColor="@color/colorPrimaryDarker"
                 android:textStyle="bold" />
@@ -65,7 +68,8 @@
                 android:background="@color/colorAccent"
                 android:gravity="center"
                 android:inputType="textMultiLine"
-                android:padding="2dp"
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
                 android:text="@string/tvOfferPrice"
                 android:textColor="@color/colorPrimaryDarker"
                 android:textStyle="bold" />
@@ -78,9 +82,9 @@
                 android:layout_marginLeft="3dp"
                 android:layout_toLeftOf="@+id/ibOffer"
                 android:layout_weight="4"
-                android:background="@color/colorPrimary"
                 android:gravity="center"
-                android:padding="3dp"
+                android:paddingBottom="3dp"
+                android:paddingTop="3dp"
                 android:text="@string/tvOfferDescription"
                 android:textColor="@color/colorPrimaryDarker"
                 android:textStyle="bold" />
@@ -112,6 +116,7 @@
             android:id="@+id/cvProductImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:elevation="10dp"
             app:cardBackgroundColor="@color/colorBackground">
 
@@ -129,6 +134,7 @@
             layout="@layout/timer_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_toRightOf="@+id/cvProductImage" />
 
 

@@ -76,6 +76,15 @@ public final class Constants {
     public static final String _METHOD_DESTROY = "DESTROY";
 
 
+    public static final String CATEGORY = API_Base_URL + "category/";
+    public static final String GET_ALL_CATEGORIES = CATEGORY + "all";
+    public static final String GET_OFFERS_OFCERTAIN_CATEGORY = CATEGORY + "offers/";//{categoryId}
+    public static final String GET_ALL_VENDORs_POSTED_IN_CERTAIN_CATEGORY = CATEGORY + "vendors/";//{categoryId}
+
+
+    public static final String GET_ALL_VENDORS = API_Base_URL + "vendor/";
+
+
     public static void hideToolbarButtons(View v) {
         v.findViewById(R.id.ibBack).setVisibility(View.GONE);
         v.findViewById(R.id.ibSearch).setVisibility(View.GONE);

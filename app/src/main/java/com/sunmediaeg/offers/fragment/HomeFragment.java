@@ -39,6 +39,7 @@ public class HomeFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private RecyclerView rvCompanies, rvOffers;
     private TextView tvTitle;
+    private static HomeFragment fragment;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -53,11 +54,13 @@ public class HomeFragment extends Fragment {
      * @return A new instance of fragment HomeFragment.
      */
     public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        if (fragment == null) {
+            fragment = new HomeFragment();
+            Bundle args = new Bundle();
+            args.putString(ARG_PARAM1, param1);
+            args.putString(ARG_PARAM2, param2);
+            fragment.setArguments(args);
+        }
         return fragment;
     }
 
@@ -94,7 +97,6 @@ public class HomeFragment extends Fragment {
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         tvTitle.setText(mParam1);
         view.findViewById(R.id.ibBack).setVisibility(View.GONE);
-        view.findViewById(R.id.ibSearch).setVisibility(View.GONE);
         rvOffers = (RecyclerView) view.findViewById(R.id.rvHomeOffers);
         rvOffers.setLayoutManager(new LinearLayoutManager(getContext()));
         rvCompanies = (RecyclerView) view.findViewById(R.id.rvCompanies);
