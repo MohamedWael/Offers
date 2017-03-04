@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.adapters.RVOffersAdapter;
-import com.sunmediaeg.offers.utilities.Log;
+import com.sunmediaeg.offers.utilities.Logger;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,14 +79,14 @@ public class OffersFragment extends Fragment {
         setRetainInstance(true);
         initComponents(view);
 
-        Log.d("executed","onCreate");
+        Logger.d("executed","onCreate");
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("executed","onResume");
+        Logger.d("executed","onResume");
 
         RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext());
         rvOffers.setAdapter(offersAdapter);

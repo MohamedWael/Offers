@@ -16,7 +16,7 @@ import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.OffersGeneralActivity;
 import com.sunmediaeg.offers.dataModel.Category;
 import com.sunmediaeg.offers.utilities.Constants;
-import com.sunmediaeg.offers.utilities.Log;
+import com.sunmediaeg.offers.utilities.Logger;
 
 import java.util.ArrayList;
 
@@ -79,7 +79,7 @@ public class GVCategoriesAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("onClick", "view");
+                Logger.d("onClick", "view");
             }
         });
 

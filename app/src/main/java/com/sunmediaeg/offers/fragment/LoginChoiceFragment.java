@@ -14,8 +14,12 @@ import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.MainActivity;
 import com.sunmediaeg.offers.activities.OffersGeneralActivity;
 import com.sunmediaeg.offers.utilities.Constants;
-import com.sunmediaeg.offers.utilities.Log;
+import com.sunmediaeg.offers.utilities.Logger;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
+import com.sunmediaeg.offers.views.TimerView;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -104,6 +108,7 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
     }
 
     private void initComponents(View v) {
+        testTimerView(v);
         intent = new Intent(getActivity(), OffersGeneralActivity.class);
         btnSignUpAsVendor = (Button) v.findViewById(R.id.btnSignUpAsVendor);
         btnSignUpAsUser = (Button) v.findViewById(R.id.btnSignUpAsUser);
@@ -111,6 +116,20 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
         btnSignUpAsVendor.setOnClickListener(this);
         btnSignUpAsUser.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
+    }
+
+    private void testTimerView(View v) {
+        TimerView timerView = (TimerView) v.findViewById(R.id.timerView);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+        try {
+            Logger.d("TimerView","called");
+            timerView.setStartDate(simpleDateFormat.parse("2017-3-2 11:50:50").getTime());
+            timerView.setEndDate(simpleDateFormat.parse("2017-3-4 11:50:50").getTime());
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onButtonPressed(Uri uri) {
@@ -154,7 +173,7 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
 
     private void haveAccount() {
         boolean haveAccount = SharedPreferencesManager.getInstance(getContext()).initSharedPreferences().getBoolean(Constants.HAVE_ACCOUNT, false);
-        Log.d("HaveAccount?", haveAccount + "");
+        Logger.d("HaveAccount?", haveAccount + "");
         if (haveAccount) {
             mainActivityIntent = new Intent(getActivity(), MainActivity.class);
             mainActivityIntent.putExtra(Constants.IS_COMPANY_PROFILE, false); // <-- this extra is related only to the MainActivity

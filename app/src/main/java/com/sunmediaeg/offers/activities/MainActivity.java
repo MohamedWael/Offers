@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
-import com.facebook.FacebookSdk;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.fragment.CategoriesFragment;
 import com.sunmediaeg.offers.fragment.CompanyProfileFragment;
@@ -31,13 +30,13 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private final int HOME = 100, LIST = 101, LOGO = 102, GRID = 103, SETTING = 104;
     private FrameLayout flMainFragment;
     private ArrayList<ImageButton> imageButtons;
     private ImageButton ibHome, ibList, ibLogo, ibGrid, ibSetting;
     private OffersFragment offersFragment;
     private LoginFragment loginFragment;
     private HomeFragment homeFragment;
-    private final int HOME = 100, LIST = 101, LOGO = 102, GRID = 103, SETTING = 104;
     private CategoriesFragment categoriesFragment;
     private SearchFragment searchFragment;
     private SettingsFragment settingsFragment;

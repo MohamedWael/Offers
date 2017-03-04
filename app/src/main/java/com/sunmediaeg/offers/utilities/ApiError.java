@@ -4,11 +4,11 @@ package com.sunmediaeg.offers.utilities;
  * Created by moham on 2/6/2017.
  */
 
-public class Errors {
+public class ApiError {
 
     private String errorMsg;
 
-    public Errors(int errorCode) {
+    public ApiError(int errorCode) {
         switch (errorCode) {
             case Constants.CODE_SUCCESS:
                 errorMsg = "CODE_SUCCESS".replace("_", " ").toLowerCase();
@@ -25,8 +25,8 @@ public class Errors {
             case Constants.CODE_NOT_FOUND:
                 errorMsg = "CODE_NOT_FOUND".replace("_", " ").toLowerCase();
                 break;
-            case Constants.CODE_AUTH_FAILD:
-                errorMsg = "CODE_AUTH_FAILD".replace("_", " ").toLowerCase();
+            case Constants.CODE_AUTH_FAILED:
+                errorMsg = "CODE_AUTH_FAILED".replace("_", " ").toLowerCase();
                 break;
             case Constants.CODE_TOKEN_NOT_FOUND:
                 errorMsg = "CODE_TOKEN_NOT_FOUND".replace("_", " ").toLowerCase();

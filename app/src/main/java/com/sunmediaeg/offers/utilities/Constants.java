@@ -49,7 +49,7 @@ public final class Constants {
     public static final int CODE_SOMETHING_WRONG = 100;
     public static final int CODE_INVALID_API_TOKEN = 111;
     public static final int CODE_NOT_FOUND = 404; //something not found like an ad
-    public static final int CODE_AUTH_FAILD = 103;
+    public static final int CODE_AUTH_FAILED = 103;
     public static final int CODE_TOKEN_NOT_FOUND = 115;
     public static final int CODE_WRONG_PHONE_NUMBER = 405;
     public static final int CODE_WRONG_FORGET_PASS_VERIFY_NUMBER = 406;

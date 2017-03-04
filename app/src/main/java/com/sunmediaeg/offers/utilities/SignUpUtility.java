@@ -10,13 +10,16 @@ public class SignUpUtility {
     private final static String REGEX_Mail = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
 
     public static SignUpUtility getInstance(String userName, String email, String password) throws Exception {
+        userName = userName.trim();
+        email = email.trim();
+        password = password.trim();
         if (!userName.isEmpty()) {
             if (!email.isEmpty()) {
                 if (!password.isEmpty()) {
                     if (email.matches(REGEX_Mail)) {
                         if (newInstance == null) {
-                            Log.d("newInstance", "new");
-                            newInstance = new SignUpUtility(userName.trim(), email.trim(), password.trim());
+                            Logger.d("newInstance", "new");
+                            newInstance = new SignUpUtility(userName, email, password);
                             return newInstance;
                         }
                     } else {
@@ -32,7 +35,7 @@ public class SignUpUtility {
             nullPointerEx("userName is empty");
         }
 
-        Log.d("newInstance", "old");
+        Logger.d("newInstance", "old");
         return newInstance;
     }
 
@@ -44,7 +47,7 @@ public class SignUpUtility {
 
     private static void nullPointerEx(String msg) {
         newInstance = null;
-        Log.e("SIGN_UP", msg);
+        Logger.e("SIGN_UP", msg);
         throw new NullPointerException(msg);
     }
 

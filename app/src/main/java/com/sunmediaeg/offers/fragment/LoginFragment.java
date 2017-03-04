@@ -25,7 +25,7 @@ import com.sunmediaeg.offers.activities.MainActivity;
 import com.sunmediaeg.offers.dataModel.jsonModels.LoginResponse;
 import com.sunmediaeg.offers.utilities.BackendRequests;
 import com.sunmediaeg.offers.utilities.Constants;
-import com.sunmediaeg.offers.utilities.Log;
+import com.sunmediaeg.offers.utilities.Logger;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 
 import org.json.JSONException;
@@ -159,10 +159,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
                         requests.getResponse(Request.Method.POST, Constants.USER_LOGIN, body, new BackendRequests.BackendResponse() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Log.d("LoginResponse", response.toString());
+                                Logger.d("LoginResponse", response.toString());
                                 Gson gson = new Gson();
                                 LoginResponse login = gson.fromJson(response.toString(), LoginResponse.class);
-                                Log.d("user", login.toString());
+                                Logger.d("user", login.toString());
                                 editor.putString(Constants.NAME, login.getData().getUser().getName());
                                 editor.putString(Constants.EMAIL, login.getData().getUser().getEmail());
                                 editor.putLong(Constants.USER_ID, login.getData().getUser().getId());
@@ -177,7 +177,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
 
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Log.d("LoginError", error.toString());
+                                Logger.d("LoginError", error.toString());
                                 progressBar.setVisibility(View.INVISIBLE);
                             }
                         });
@@ -239,7 +239,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
 
 
     private void touchListener(Button v, MotionEvent motionEvent) {
-        Log.d("action", motionEvent.getAction() + "");
+        Logger.d("action", motionEvent.getAction() + "");
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN ||
                 motionEvent.getAction() == MotionEvent.ACTION_HOVER_ENTER ||
                 motionEvent.getAction() == MotionEvent.ACTION_HOVER_MOVE ||

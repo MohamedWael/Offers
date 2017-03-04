@@ -17,11 +17,11 @@ public class BackendRequests {
 
     public static BackendRequests getInstance(Context mContext) {
         if (ourInstance == null) {
-            Log.d("BackendRequests", "new BackendRequests");
+            Logger.d("BackendRequests", "new BackendRequests");
             ourInstance = new BackendRequests(mContext);
             return ourInstance;
         } else {
-            Log.d("BackendRequests", "old BackendRequests");
+            Logger.d("BackendRequests", "old BackendRequests");
             return ourInstance;
         }
     }
@@ -35,18 +35,18 @@ public class BackendRequests {
             @Override
             public void onResponse(JSONObject response) {
                 backendResponse.onResponse(response);
-                Log.d("Response", response.toString());
+                Logger.d("Response", response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 backendResponse.onErrorResponse(error);
-                Log.d("VolleyError", error.toString());
+                Logger.d("VolleyError", error.toString());
             }
         }) {
             @Override
             public byte[] getBody() {
-                Log.d("body", body.toString());
+                Logger.d("body", body.toString());
                 return super.getBody();
             }
         };

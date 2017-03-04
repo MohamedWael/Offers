@@ -3,7 +3,6 @@ package com.sunmediaeg.offers.utilities;
 import android.app.Application;
 
 import com.android.volley.RequestQueue;
-import com.facebook.FacebookSdk;
 import com.sunmediaeg.offers.R;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -24,7 +23,7 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("Application", "Created");
+        Logger.d("Application", "Created");
         TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_KEY, Constants.TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
 
@@ -47,7 +46,7 @@ public class BaseApplication extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        Log.d("Application", "Terminated");
+        Logger.d("Application", "Terminated");
         volleySingleton = null;
         downloadQueue.stop();
         requestQueue.stop();

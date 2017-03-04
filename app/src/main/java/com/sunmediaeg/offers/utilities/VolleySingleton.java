@@ -161,8 +161,6 @@ public class VolleySingleton {
         final String ALLOWED_URI_CHARS = "@#&=*+-_.,:!?()/~'%";
         String encodedURL = "";
         encodedURL = Uri.encode(query, ALLOWED_URI_CHARS);
-
-
         return encodedURL;
     }
 

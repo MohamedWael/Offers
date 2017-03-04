@@ -33,7 +33,7 @@ import com.sunmediaeg.offers.dataModel.jsonModels.FbProfileData;
 import com.sunmediaeg.offers.dataModel.jsonModels.LoginResponse;
 import com.sunmediaeg.offers.utilities.BackendRequests;
 import com.sunmediaeg.offers.utilities.Constants;
-import com.sunmediaeg.offers.utilities.Log;
+import com.sunmediaeg.offers.utilities.Logger;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 import com.sunmediaeg.offers.utilities.SignUpUtility;
 import com.twitter.sdk.android.Twitter;
@@ -125,18 +125,18 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
                 AccessToken accessToken = loginResult.getAccessToken();
 
-                Log.d("AccessToken", loginResult.getAccessToken().getToken());
-                Log.d("grantedPermissions", loginResult.getRecentlyGrantedPermissions().toString());
+                Logger.d("AccessToken", loginResult.getAccessToken().getToken());
+                Logger.d("grantedPermissions", loginResult.getRecentlyGrantedPermissions().toString());
 //                profile = Profile.getCurrentProfile();
-//                Log.e("profileName", profile.getName());
+//                Logger.e("profileName", profile.getName());
 //                etUserName.setText(profile.getName());
 
 
                 GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        Log.d("GraphResponse", response.toString());
-                        Log.d("JSONObject", object.toString());
+                        Logger.d("GraphResponse", response.toString());
+                        Logger.d("JSONObject", object.toString());
                         fbProfileData = gson.fromJson(object.toString(), FbProfileData.class);
                         etUserName.setText(fbProfileData.getName());
                         etMail.setText(fbProfileData.getEmail());
@@ -152,12 +152,12 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onCancel() {
-                Log.e("FbOnCancel", "canceled");
+                Logger.e("FbOnCancel", "canceled");
             }
 
             @Override
             public void onError(FacebookException error) {
-                Log.e("fbError", error.toString());
+                Logger.e("fbError", error.toString());
             }
         });
 
@@ -215,7 +215,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
-        Log.d("OnActivityResult", "checked");
+        Logger.d("OnActivityResult", "checked");
         twitterAuthClient.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -252,7 +252,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                         requests.getResponse(Request.Method.POST, url, body, new BackendRequests.BackendResponse() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Log.d("response", response.toString());
+                                Logger.d("response", response.toString());
 
                                 LoginResponse loginResponse = gson.fromJson(response.toString(), LoginResponse.class);
                                 if (finalUrl.equals(Constants.REGISTER_USER)) {
@@ -260,7 +260,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                 } else {
                                     loginResponse.getData().getUser().setUserType(Constants.TYPE_VENDOR);
                                 }
-                                Log.d("user", loginResponse.getData().getUser().toString());
+                                Logger.d("user", loginResponse.getData().getUser().toString());
                                 editor.putString(Constants.NAME, loginResponse.getData().getUser().getName());
                                 editor.putString(Constants.EMAIL, loginResponse.getData().getUser().getEmail());
                                 editor.putLong(Constants.USER_ID, loginResponse.getData().getUser().getId());
@@ -276,7 +276,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 progressBar.setVisibility(View.INVISIBLE);
-                                Log.d("VolleyError", error.toString());
+                                Logger.d("VolleyError", error.toString());
                             }
                         });
 
@@ -287,7 +287,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.e("SignUpError", e.getMessage());
+                    Logger.e("SignUpError", e.getMessage());
                     tvNotification.setText("من فضلك تأكد من إدخال جميع الحقول بشكل صحيح");
                 }
 
@@ -300,8 +300,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 twitterAuthClient.authorize(getActivity(), new Callback<TwitterSession>() {
                     @Override
                     public void success(Result<TwitterSession> result) {
-                        Log.d("TwitterAuth", "Successed");
-                        Log.d("TwitterAuth", result.data.getUserName());
+                        Logger.d("TwitterAuth", "Successed");
+                        Logger.d("TwitterAuth", result.data.getUserName());
                         TwitterSession session = Twitter.getSessionManager().getActiveSession();
                         TwitterAuthToken authToken = session.getAuthToken();
                         token = authToken.token;
@@ -310,8 +310,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void failure(TwitterException exception) {
-                        Log.d("TwitterAuth", "fail");
-                        Log.d("TwitterAuth", exception.getMessage());
+                        Logger.d("TwitterAuth", "fail");
+                        Logger.d("TwitterAuth", exception.getMessage());
 
                     }
                 });
