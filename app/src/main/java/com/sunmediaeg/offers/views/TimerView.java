@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.utilities.Logger;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -23,6 +24,7 @@ public class TimerView extends LinearLayout {
 
     private final int SECOND = 1000;
     private RemainingTime time;
+    private Date now;
     private TextView tvRemainingDate, tvDay, tvHour, tvSecond, tvMinuit;
     private Date startDate, endDate;
     private View view;
@@ -61,18 +63,24 @@ public class TimerView extends LinearLayout {
     }
 
     private void initComponents(View v) {
-        tvRemainingDate = (TextView) v.findViewById(R.id.tvRemainingDate);
-        tvDay = (TextView) v.findViewById(R.id.tvDay);
-        tvHour = (TextView) v.findViewById(R.id.tvHour);
-        tvSecond = (TextView) v.findViewById(R.id.tvSecond);
-        tvMinuit = (TextView) v.findViewById(R.id.tvMinuit);
-        if (endDate != null && startDate != null) {
-            Logger.d("calculateRemainingTime", "issued");
-            calculateRemainingTime();
-        }
+        tvRemainingDate = (TextView) findViewById(R.id.tvRemainingDate);
+        tvDay = (TextView) findViewById(R.id.tvDay);
+        tvHour = (TextView) findViewById(R.id.tvHour);
+        tvSecond = (TextView) findViewById(R.id.tvSecond);
+        tvMinuit = (TextView) findViewById(R.id.tvMinuit);
+        now = new Date();
         time = new RemainingTime() {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/mm/yyyy HH:MM");
+            @Override
+            public void totalPeriod(long totalPeriod) {
+                Logger.d("totalPeriod", simpleDateFormat.format(new Date(totalPeriod)));
+            }
+
             @Override
             public void getTime(long remainingTime) {
+
+
+                Logger.d("remainingTime", simpleDateFormat.format(new Date(remainingTime)));
                 java.util.Calendar calendar = java.util.Calendar.getInstance();
                 calendar.setTimeInMillis(remainingTime);
                 int day = calendar.get(Calendar.DAY_OF_YEAR);
@@ -91,7 +99,10 @@ public class TimerView extends LinearLayout {
             }
         };
 
-
+        if (endDate != null && startDate != null) {
+            Logger.d("calculateRemainingTime", "issued");
+            calculateRemainingTime();
+        }
     }
 
     public long getStartDate() {
@@ -126,29 +137,34 @@ public class TimerView extends LinearLayout {
     }
 
     private void calculateRemainingTime() {
-        if (endDate != null && startDate != null)
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
+        time.totalPeriod(endDate.getTime() - startDate.getTime());
+
+//        if (endDate != null && startDate != null) {
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
                     long remainingTime = -1L;
-                    while (remainingTime != 0) {
+                    while (endDate.getTime() == now.getTime()) {
                         try {
 
-                            remainingTime = endDate.getTime() - startDate.getTime();
+                            remainingTime = endDate.getTime() - now.getTime();
                             time.getTime(remainingTime);
-                            wait(SECOND);
+
+                            Thread.sleep(SECOND);
 
 
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
-                }
-            }).start();
-        else throwException();
+//                }
+//            }).start();
+//        } else throwException();
     }
 
     private interface RemainingTime {
+        void totalPeriod(long totalPeriod);
+
         void getTime(long remainingTime);
     }
 }
