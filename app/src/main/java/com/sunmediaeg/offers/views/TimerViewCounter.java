@@ -3,7 +3,8 @@ package com.sunmediaeg.offers.views;
 import android.content.Context;
 import android.os.Handler;
 
-import java.text.SimpleDateFormat;
+import com.sunmediaeg.offers.utilities.Logger;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -12,8 +13,7 @@ import java.util.concurrent.TimeUnit;
  * Created by moham on 3/10/2017.
  */
 
-public class TimerViewTimer {
-
+public class TimerViewCounter {
 
     public static final int MILLIS = 1000;
     public static final int SECOND = 1 * MILLIS;
@@ -24,18 +24,15 @@ public class TimerViewTimer {
     public static final String STANDARD_TIME_FORMAT = "yyyy-MM-dd HH:mm";
     public static final String STANDARD_DATE_FORMAT = "yyyy-MM-dd";
     private final String STANDARD_TIME_FORMAT2 = "yyyy-MM-dd HH:mm:ss.S";
-    private final SimpleDateFormat simpleDateFormat;
     private Date startDate, endDate;
 
-    public TimerViewTimer(Date startDate, Date endDate) {
+    public TimerViewCounter(Date startDate, Date endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
-        simpleDateFormat = new SimpleDateFormat(STANDARD_TIME_FORMAT);
     }
 
     public void calculateRemainingTime(Context context, final RemainingTime time) {
         final Handler handler = new Handler(context.getMainLooper());
-
         time.totalPeriod(Math.abs(endDate.getTime() - startDate.getTime()));
         if (endDate != null && startDate != null) {
 
@@ -53,12 +50,19 @@ public class TimerViewTimer {
                                     time.getTime(finalRemainingTime);
                                 }
                             });
-
                             Thread.sleep(SECOND);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Logger.d("OnTimeOut", "Time Out");
+                            time.onTimeOut();
+                        }
+                    });
+
                 }
             }).start();
         } else {
@@ -96,6 +100,10 @@ public class TimerViewTimer {
         return TimeUnit.DAYS.convert(time, TimeUnit.MILLISECONDS);
     }
 
+    public static long getDurationInHours(long time) {
+        return TimeUnit.HOURS.convert(time, TimeUnit.MILLISECONDS);
+    }
+
     public HashMap<Integer, Long> getRelativeTime(long time) {
         HashMap<Integer, Long> relativeTime = new HashMap<>();
         if (time > DAY) {
@@ -118,6 +126,8 @@ public class TimerViewTimer {
     }
 
     public interface RemainingTime {
+        void onTimeOut();
+
         void totalPeriod(long totalPeriod);
 
         void getTime(long remainingTime);

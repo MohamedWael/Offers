@@ -119,7 +119,6 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
 
     private void testTimerView(View v) {
         TimerView timerView = (TimerView) v.findViewById(R.id.timerView);
-        Logger.d("TimerView", "called");
         timerView.setTime(new Date(1489215930000L), new Date(1489561530000L));
 
     }

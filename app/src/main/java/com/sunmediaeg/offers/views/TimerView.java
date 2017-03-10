@@ -64,29 +64,30 @@ public class TimerView extends LinearLayout {
     }
 
     public void setTime(Date startDate, Date endDate) {
-        SimpleDateFormat format = new SimpleDateFormat(TimerViewTimer.STANDARD_DATE_FORMAT);
+        SimpleDateFormat format = new SimpleDateFormat(TimerViewCounter.STANDARD_DATE_FORMAT);
         tvRemainingDate.setText(format.format(endDate));
-        final TimerViewTimer timer = new TimerViewTimer(startDate, endDate);
-        timer.calculateRemainingTime(getContext(), new TimerViewTimer.RemainingTime() {
+        final TimerViewCounter counter = new TimerViewCounter(startDate, endDate);
+        counter.calculateRemainingTime(getContext(), new TimerViewCounter.RemainingTime() {
+            @Override
+            public void onTimeOut() {
+
+            }
+
             @Override
             public void totalPeriod(long totalPeriod) {
-                Logger.d("remaining days", TimerViewTimer.getDurationInDays(totalPeriod) + "");
+                Logger.d("remaining days", TimerViewCounter.getDurationInDays(totalPeriod) + "");
             }
 
             @Override
             public void getTime(long remainingTime) {
-                Logger.d("Days", TimerViewTimer.getDurationInDays(remainingTime) + "");
+                Logger.d("Days", TimerViewCounter.getDurationInDays(remainingTime) + "");
                 Logger.d("remainingTime", remainingTime + "");
-                HashMap<Integer, Long> relativeTime = timer.getRelativeTime(remainingTime);
+                HashMap<Integer, Long> relativeTime = counter.getRelativeTime(remainingTime);
 
-//                java.util.Calendar calendar = java.util.Calendar.getInstance();
-//                calendar.setTimeInMillis(remainingTime);
-                long day = relativeTime.get(TimerViewTimer.DAY);//calendar.get(Calendar.DAY_OF_YEAR);
-                //long month = calendar.get(Calendar.MONTH);
-
-                long second = relativeTime.get(TimerViewTimer.SECOND);//calendar.get(Calendar.SECOND);
-                long minute = relativeTime.get(TimerViewTimer.MINUTE);//calendar.get(Calendar.MINUTE);
-                long hour = relativeTime.get(TimerViewTimer.HOUR);//calendar.get(Calendar.HOUR_OF_DAY);
+                long day = relativeTime.get(TimerViewCounter.DAY);
+                long second = relativeTime.get(TimerViewCounter.SECOND);
+                long minute = relativeTime.get(TimerViewCounter.MINUTE);
+                long hour = relativeTime.get(TimerViewCounter.HOUR);
 
                 tvDay.setText(day + "");
                 tvHour.setText(hour + "");
@@ -94,7 +95,6 @@ public class TimerView extends LinearLayout {
                 tvSecond.setText(second + "");
 
                 Logger.d("remaining time", second + " second, " + minute + " minute, " + hour + " hour, " + day + " day, "/* + month + " month"*/);
-//                calendar = null;
             }
         });
     }
