@@ -31,9 +31,9 @@ import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.MainActivity;
 import com.sunmediaeg.offers.dataModel.jsonModels.FbProfileData;
 import com.sunmediaeg.offers.dataModel.jsonModels.LoginResponse;
-import com.sunmediaeg.offers.utilities.BackendRequests;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
+import com.sunmediaeg.offers.utilities.Service;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 import com.sunmediaeg.offers.utilities.SignUpUtility;
 import com.twitter.sdk.android.Twitter;
@@ -75,7 +75,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private Button btnSend, btnFaceBook;
     private ImageButton ibFaceBook, ibTwitter, ibGooglePlus;
     private ProgressBar progressBar;
-    private BackendRequests requests;
+    private Service requests;
     private SharedPreferencesManager prefs;
     private SharedPreferences.Editor editor;
     private CallbackManager callbackManager;
@@ -182,7 +182,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
         prefs = SharedPreferencesManager.getInstance(getContext());
         editor = prefs.initEditor();
-        requests = BackendRequests.getInstance(getContext());
+        requests = Service.getInstance(getContext());
         Constants.hideSearchButton(v);
         tvNotification = (TextView) v.findViewById(R.id.tvNotification);
 
@@ -237,6 +237,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                             password.toCharArray().length >= 6 && password.toCharArray().length <= 255) {
                         progressBar.setVisibility(View.VISIBLE);
                         SignUpUtility signUp = SignUpUtility.getInstance(userName, mail, password);
+                        if (!SignUpUtility.isFirstTime()) {
+                            signUp.setUserName(userName);
+                            signUp.setEmail(mail);
+                            signUp.setPassword(password);
+                        }
 
                         JSONObject body = new JSONObject();
                         body.put(Constants.NAME, signUp.getUserName());
@@ -249,7 +254,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                             url = Constants.REGISTER_VENDOR;
                         }
                         final String finalUrl = url;
-                        requests.getResponse(Request.Method.POST, url, body, new BackendRequests.BackendResponse() {
+                        Logger.d("Register", url + "");
+                        //NOTE Registration as a vendor is removed form the backend
+                        requests.getResponse(Request.Method.POST, url, body, new Service.ServiceResponse() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Logger.d("response", response.toString());

@@ -23,7 +23,7 @@ import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.MainActivity;
 import com.sunmediaeg.offers.dataModel.jsonModels.LoginResponse;
-import com.sunmediaeg.offers.utilities.BackendRequests;
+import com.sunmediaeg.offers.utilities.Service;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
@@ -61,7 +61,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
     private Button btnForgetPassword, btnSend, btnHaveAccoutn;
     private SharedPreferencesManager preferencesManager;
     private SharedPreferences pref;
-    private BackendRequests requests;
+    private Service requests;
     private SharedPreferences.Editor editor;
     private SignUpFragment signUpFragment;
     private ForgetPasswordFragment forgetPassworsFragment;
@@ -107,7 +107,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
     }
 
     private void initComponents(View v) {
-        requests = BackendRequests.getInstance(getContext());
+        requests = Service.getInstance(getContext());
         preferencesManager = SharedPreferencesManager.getInstance(getContext());
         pref = preferencesManager.initSharedPreferences();
         editor = preferencesManager.initEditor();
@@ -156,7 +156,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
                         JSONObject body = new JSONObject();
                         body.put(Constants.EMAIL, email);
                         body.put(Constants.PASSWORD, password);
-                        requests.getResponse(Request.Method.POST, Constants.USER_LOGIN, body, new BackendRequests.BackendResponse() {
+                        requests.getResponse(Request.Method.POST, Constants.USER_LOGIN, body, new Service.ServiceResponse() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Logger.d("LoginResponse", response.toString());

@@ -18,8 +18,7 @@ import com.sunmediaeg.offers.utilities.Logger;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 import com.sunmediaeg.offers.views.TimerView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -120,16 +119,9 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
 
     private void testTimerView(View v) {
         TimerView timerView = (TimerView) v.findViewById(R.id.timerView);
+        Logger.d("TimerView", "called");
+        timerView.setTime(new Date(1489215930000L), new Date(1489561530000L));
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-        try {
-            Logger.d("TimerView","called");
-            timerView.setStartDate(simpleDateFormat.parse("2017-3-2 11:50:50").getTime());
-            timerView.setEndDate(simpleDateFormat.parse("2017-3-4 11:50:50").getTime());
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
     }
 
     public void onButtonPressed(Uri uri) {

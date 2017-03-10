@@ -8,7 +8,16 @@ public class SignUpUtility {
     private static SignUpUtility newInstance;
     private String userName, email, password, status;
     private final static String REGEX_Mail = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
+    private static boolean firstTime = true;
 
+    /**
+     *
+     * @param userName
+     * @param email
+     * @param password
+     * @return
+     * @throws Exception
+     */
     public static SignUpUtility getInstance(String userName, String email, String password) throws Exception {
         userName = userName.trim();
         email = email.trim();
@@ -16,10 +25,11 @@ public class SignUpUtility {
         if (!userName.isEmpty()) {
             if (!email.isEmpty()) {
                 if (!password.isEmpty()) {
-                    if (email.matches(REGEX_Mail)) {
+                    if (isMailValid(email)) {
                         if (newInstance == null) {
-                            Logger.d("newInstance", "new");
+                            Logger.d("newInstance", "yes");
                             newInstance = new SignUpUtility(userName, email, password);
+                            firstTime = false;
                             return newInstance;
                         }
                     } else {
@@ -35,7 +45,7 @@ public class SignUpUtility {
             nullPointerEx("userName is empty");
         }
 
-        Logger.d("newInstance", "old");
+        Logger.d("newInstance", "no");
         return newInstance;
     }
 
@@ -70,4 +80,31 @@ public class SignUpUtility {
     public String getPassword() {
         return password;
     }
+
+    public void setUserName(String userName) {
+        if (isNotEmpty(userName)) this.userName = userName;
+    }
+
+    public void setEmail(String email) {
+        if (isNotEmpty(email)) this.email = email;
+    }
+
+    public void setPassword(String password) {
+        if (isNotEmpty(password)) this.password = password;
+    }
+
+    public static boolean isFirstTime() {
+        return firstTime;
+    }
+
+    public static boolean isMailValid(String email) {
+        return email.matches(REGEX_Mail);
+    }
+
+
+    public boolean isNotEmpty(String userName) {
+        return !userName.isEmpty();
+    }
+
+
 }

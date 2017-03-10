@@ -13,8 +13,8 @@ import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.utilities.Logger;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by moham on 3/2/2017.
@@ -22,15 +22,8 @@ import java.util.Date;
 
 public class TimerView extends LinearLayout {
 
-    private final int SECOND = 1000;
-    private RemainingTime time;
-    private Date now;
     private TextView tvRemainingDate, tvDay, tvHour, tvSecond, tvMinuit;
-    private Date startDate, endDate;
     private View view;
-//    rgLike
-//            rbLike
-//    rbDislike
 
     public TimerView(Context context) {
         super(context);
@@ -68,103 +61,42 @@ public class TimerView extends LinearLayout {
         tvHour = (TextView) findViewById(R.id.tvHour);
         tvSecond = (TextView) findViewById(R.id.tvSecond);
         tvMinuit = (TextView) findViewById(R.id.tvMinuit);
-        now = new Date();
-        time = new RemainingTime() {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/mm/yyyy HH:MM");
+    }
+
+    public void setTime(Date startDate, Date endDate) {
+        SimpleDateFormat format = new SimpleDateFormat(TimerViewTimer.STANDARD_DATE_FORMAT);
+        tvRemainingDate.setText(format.format(endDate));
+        final TimerViewTimer timer = new TimerViewTimer(startDate, endDate);
+        timer.calculateRemainingTime(getContext(), new TimerViewTimer.RemainingTime() {
             @Override
             public void totalPeriod(long totalPeriod) {
-                Logger.d("totalPeriod", simpleDateFormat.format(new Date(totalPeriod)));
+                Logger.d("remaining days", TimerViewTimer.getDurationInDays(totalPeriod) + "");
             }
 
             @Override
             public void getTime(long remainingTime) {
+                Logger.d("Days", TimerViewTimer.getDurationInDays(remainingTime) + "");
+                Logger.d("remainingTime", remainingTime + "");
+                HashMap<Integer, Long> relativeTime = timer.getRelativeTime(remainingTime);
 
+//                java.util.Calendar calendar = java.util.Calendar.getInstance();
+//                calendar.setTimeInMillis(remainingTime);
+                long day = relativeTime.get(TimerViewTimer.DAY);//calendar.get(Calendar.DAY_OF_YEAR);
+                //long month = calendar.get(Calendar.MONTH);
 
-                Logger.d("remainingTime", simpleDateFormat.format(new Date(remainingTime)));
-                java.util.Calendar calendar = java.util.Calendar.getInstance();
-                calendar.setTimeInMillis(remainingTime);
-                int day = calendar.get(Calendar.DAY_OF_YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int year = calendar.get(Calendar.YEAR);
-                int hour = calendar.get(Calendar.HOUR);
-                int minute = calendar.get(Calendar.MINUTE);
-                int second = calendar.get(Calendar.SECOND);
-                tvDay.setText(day);
-                tvHour.setText(hour);
-                tvMinuit.setText(minute);
-                tvSecond.setText(second);
+                long second = relativeTime.get(TimerViewTimer.SECOND);//calendar.get(Calendar.SECOND);
+                long minute = relativeTime.get(TimerViewTimer.MINUTE);//calendar.get(Calendar.MINUTE);
+                long hour = relativeTime.get(TimerViewTimer.HOUR);//calendar.get(Calendar.HOUR_OF_DAY);
 
-                Logger.d("remaining time", second + "second " + minute + "minute " + hour + "hour " + day + "day " + month + "month " + year + "year ");
-                calendar = null;
+                tvDay.setText(day + "");
+                tvHour.setText(hour + "");
+                tvMinuit.setText(minute + "");
+                tvSecond.setText(second + "");
+
+                Logger.d("remaining time", second + " second, " + minute + " minute, " + hour + " hour, " + day + " day, "/* + month + " month"*/);
+//                calendar = null;
             }
-        };
-
-        if (endDate != null && startDate != null) {
-            Logger.d("calculateRemainingTime", "issued");
-            calculateRemainingTime();
-        }
+        });
     }
 
-    public long getStartDate() {
-        if (startDate == null) {
-            throwException();
-        }
-        return startDate.getTime();
-    }
-
-    public void setStartDate(long startDate) {
-        this.startDate = new Date(startDate);
-    }
-
-    public long getEndDate() {
-        if (endDate == null) {
-            throwException();
-        }
-        return endDate.getTime();
-    }
-
-    public void setEndDate(long endDate) {
-        this.endDate = new Date(endDate);
-        if (this.startDate != null) {
-            Logger.d("calculateTimeSetEndDate", "issued");
-            calculateRemainingTime();
-        }
-    }
-
-    private void throwException() {
-        if (view != null)
-            throw new RuntimeException(view.getContext().toString() + " must setStartDate() and setEndDate()");
-    }
-
-    private void calculateRemainingTime() {
-        time.totalPeriod(endDate.getTime() - startDate.getTime());
-
-//        if (endDate != null && startDate != null) {
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-                    long remainingTime = -1L;
-                    while (endDate.getTime() == now.getTime()) {
-                        try {
-
-                            remainingTime = endDate.getTime() - now.getTime();
-                            time.getTime(remainingTime);
-
-                            Thread.sleep(SECOND);
-
-
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-//                }
-//            }).start();
-//        } else throwException();
-    }
-
-    private interface RemainingTime {
-        void totalPeriod(long totalPeriod);
-
-        void getTime(long remainingTime);
-    }
 }

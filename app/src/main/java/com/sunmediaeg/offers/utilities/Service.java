@@ -11,36 +11,36 @@ import org.json.JSONObject;
 /**
  * Created by moham on 2/2/2017.
  */
-public class BackendRequests {
-    private static BackendRequests ourInstance;
+public class Service {
+    private static Service ourInstance;
     private final VolleySingleton volley;
 
-    public static BackendRequests getInstance(Context mContext) {
+    public static Service getInstance(Context mContext) {
         if (ourInstance == null) {
-            Logger.d("BackendRequests", "new BackendRequests");
-            ourInstance = new BackendRequests(mContext);
+            Logger.d("Service", "new Service");
+            ourInstance = new Service(mContext);
             return ourInstance;
         } else {
-            Logger.d("BackendRequests", "old BackendRequests");
+            Logger.d("Service", "old Service");
             return ourInstance;
         }
     }
 
-    private BackendRequests(Context mContext) {
+    private Service(Context mContext) {
         volley = VolleySingleton.getInstance(mContext);
     }
 
-    public void getResponse(int method, String url, final JSONObject body, final BackendResponse backendResponse) {
+    public void getResponse(int method, String url, final JSONObject body, final ServiceResponse serviceResponse) {
         JsonObjectRequest signUpRequest = new JsonObjectRequest(method, volley.uriEncoder(url), body, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                backendResponse.onResponse(response);
+                serviceResponse.onResponse(response);
                 Logger.d("Response", response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                backendResponse.onErrorResponse(error);
+                serviceResponse.onErrorResponse(error);
                 Logger.d("VolleyError", error.toString());
             }
         }) {
@@ -53,7 +53,7 @@ public class BackendRequests {
         volley.addToRequestQueue(signUpRequest);
     }
 
-    public interface BackendResponse {
+    public interface ServiceResponse {
         void onResponse(JSONObject response);
 
         void onErrorResponse(VolleyError error);
