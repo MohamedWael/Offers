@@ -27,19 +27,19 @@ public class TimerView extends LinearLayout {
 
     public TimerView(Context context) {
         super(context);
-        Logger.d("constructor", "TimerView(Context context)");
+//        Logger.d("constructor", "TimerView(Context context)");
         initView(context);
     }
 
     public TimerView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Logger.d("constructor", "TimerView(Context context, AttributeSet attrs)");
+//        Logger.d("constructor", "TimerView(Context context, AttributeSet attrs)");
         initView(context);
     }
 
     public TimerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        Logger.d("constructor", "TimerView(Context context, AttributeSet attrs, int defStyleAttr)");
+//        Logger.d("constructor", "TimerView(Context context, AttributeSet attrs, int defStyleAttr)");
         initView(context);
     }
 
@@ -75,13 +75,13 @@ public class TimerView extends LinearLayout {
 
             @Override
             public void totalPeriod(long totalPeriod) {
-                Logger.d("remaining days", TimerViewCounter.getDurationInDays(totalPeriod) + "");
+//                Logger.d("remaining days", TimerViewCounter.getDurationInDays(totalPeriod) + "");
             }
 
             @Override
             public void getTime(long remainingTime) {
-                Logger.d("Days", TimerViewCounter.getDurationInDays(remainingTime) + "");
-                Logger.d("remainingTime", remainingTime + "");
+//                Logger.d("Days", TimerViewCounter.getDurationInDays(remainingTime) + "");
+//                Logger.d("remainingTime", remainingTime + "");
                 HashMap<Integer, Long> relativeTime = counter.getRelativeTime(remainingTime);
 
                 long day = relativeTime.get(TimerViewCounter.DAY);
@@ -94,7 +94,7 @@ public class TimerView extends LinearLayout {
                 tvMinuit.setText(minute + "");
                 tvSecond.setText(second + "");
 
-                Logger.d("remaining time", second + " second, " + minute + " minute, " + hour + " hour, " + day + " day, "/* + month + " month"*/);
+//                Logger.d("remaining time", second + " second, " + minute + " minute, " + hour + " hour, " + day + " day, "/* + month + " month"*/);
             }
         });
     }

@@ -22,6 +22,7 @@ public class SharedPreferencesManager {
 
     private SharedPreferencesManager(Context mContext) {
         this.mContext = mContext;
+        initSharedPreferences();
     }
 
 
@@ -37,10 +38,16 @@ public class SharedPreferencesManager {
     }
 
     public SharedPreferences.Editor getEditor() {
+        if (editor == null) {
+            initEditor();
+        }
         return editor;
     }
 
     public SharedPreferences getPrefs() {
+        if (prefs == null) {
+            initSharedPreferences();
+        }
         return prefs;
     }
 }
