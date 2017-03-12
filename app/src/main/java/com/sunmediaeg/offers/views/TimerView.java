@@ -28,30 +28,30 @@ public class TimerView extends LinearLayout {
     public TimerView(Context context) {
         super(context);
         Logger.d("constructor", "TimerView(Context context)");
-        initView(context, null);
+        initView(context);
     }
 
     public TimerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         Logger.d("constructor", "TimerView(Context context, AttributeSet attrs)");
-        initView(context, attrs);
+        initView(context);
     }
 
     public TimerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         Logger.d("constructor", "TimerView(Context context, AttributeSet attrs, int defStyleAttr)");
-        initView(context, attrs);
+        initView(context);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public TimerView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        initView(context, attrs);
+        initView(context);
     }
 
-    private void initView(Context context, AttributeSet attrs) {
+    private void initView(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.timer_layout, this);
+        view = inflater.inflate(R.layout.timer_view_layout, this);
         initComponents(view);
     }
 

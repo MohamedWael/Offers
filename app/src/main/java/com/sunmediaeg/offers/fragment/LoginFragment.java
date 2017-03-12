@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.MainActivity;
 import com.sunmediaeg.offers.dataModel.jsonModels.LoginResponse;
+import com.sunmediaeg.offers.utilities.ApiError;
 import com.sunmediaeg.offers.utilities.Service;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
@@ -159,20 +160,46 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
                         requests.getResponse(Request.Method.POST, Constants.USER_LOGIN, body, new Service.ServiceResponse() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Logger.d("LoginResponse", response.toString());
-                                Gson gson = new Gson();
-                                LoginResponse login = gson.fromJson(response.toString(), LoginResponse.class);
-                                Logger.d("user", login.toString());
-                                editor.putString(Constants.NAME, login.getData().getUser().getName());
-                                editor.putString(Constants.EMAIL, login.getData().getUser().getEmail());
-                                editor.putLong(Constants.USER_ID, login.getData().getUser().getId());
-                                editor.putBoolean(Constants.HAVE_ACCOUNT, true);
-                                editor.commit();
-                                Intent intent = new Intent(getActivity(), MainActivity.class);
-                                intent.putExtra(Constants.IS_COMPANY_PROFILE, false); // <-- this extra is related only to the MainActivity
-                                getActivity().startActivity(intent);
-                                getActivity().finish();
-                                progressBar.setVisibility(View.INVISIBLE);
+                                try {
+                                    String emailMsg = "", passwordMsg = "", name = "";
+                                    int responseCode = 0;
+                                    responseCode = response.getInt("code");
+
+                                    if (response.has("errors")) {
+                                        JSONObject errors = response.getJSONObject("errors");
+                                        if (errors.has("email")) {
+                                            emailMsg = errors.getString("email");
+                                        } else if (errors.has("password")) {
+                                            passwordMsg = errors.getString("password");
+                                        } else if (errors.has("name")) {
+                                            name = errors.getString("name");
+                                        } else {
+                                            ApiError apiError = new ApiError(responseCode);
+                                            Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                                        }
+                                    }
+                                    if (responseCode == 200) {
+                                        Logger.d("LoginResponse", response.toString());
+                                        Gson gson = new Gson();
+                                        LoginResponse login = gson.fromJson(response.toString(), LoginResponse.class);
+
+                                        editor.putString(Constants.NAME, login.getData().getUser().getName());
+                                        editor.putString(Constants.EMAIL, login.getData().getUser().getEmail());
+                                        editor.putLong(Constants.USER_ID, login.getData().getUser().getId());
+                                        editor.putBoolean(Constants.HAVE_ACCOUNT, true);
+                                        editor.commit();
+                                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                                        intent.putExtra(Constants.IS_COMPANY_PROFILE, false); // <-- this extra is related only to the MainActivity
+                                        getActivity().startActivity(intent);
+                                        getActivity().finish();
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                    } else {
+                                        Constants.toastMsg(getContext(), name + "\n" + emailMsg + "\n" + passwordMsg);
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
 
                             @Override
@@ -184,18 +211,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
                         preferencesManager.initEditor().putBoolean(Constants.HAVE_ACCOUNT, true).commit();
                     } else {
                         progressBar.setVisibility(View.INVISIBLE);
-                        String msg = "من فضلك تأكد من إدخال جميع الحقول بشكل صحيح\n" + "يجب ألا تقل كلمة السر عن 6 أحرف";
+                        String msg = getString(R.string.loginError);
                         tvNotification.setText(msg);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    String msg = "حدث خطأ ما من فضلك حاول فى وقت لاحق";
+                    String msg = getString(R.string.loginError2);
                     tvNotification.setText(msg);
                 }
 
                 break;
             case R.id.btnHaveAccoutn:
-                signUpFragment = SignUpFragment.newInstance(Constants.REGISTER_USER, "إنشاء حساب كمستخدم");
+                signUpFragment = SignUpFragment.newInstance(Constants.REGISTER_USER, getString(R.string.tvCreateAccount));
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, signUpFragment).commit();
                 break;
         }

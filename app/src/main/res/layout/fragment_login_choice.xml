@@ -10,13 +10,6 @@
         android:scaleType="centerCrop"
         android:src="@drawable/back_logo" />
 
-    <com.sunmediaeg.offers.views.TimerView
-        android:id="@+id/timerView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="57dp" />
-
     <Button
         android:id="@+id/btnSignUpAsVendor"
         android:layout_width="wrap_content"

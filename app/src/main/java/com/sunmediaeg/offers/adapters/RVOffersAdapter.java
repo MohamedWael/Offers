@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.OffersGeneralActivity;
 import com.sunmediaeg.offers.utilities.Constants;
+import com.sunmediaeg.offers.views.TimerView;
 
 /**
  * Created by moham on 1/26/2017.
@@ -59,6 +60,7 @@ public class RVOffersAdapter extends RecyclerView.Adapter<RVOffersAdapter.Offers
         public ImageView ivProductImage;
         public RadioGroup rgLike;
         public RadioButton rbLike, rbDislike;
+        public TimerView timerView;
 
         public OffersViewHolder(View itemView) {
             super(itemView);
@@ -69,10 +71,10 @@ public class RVOffersAdapter extends RecyclerView.Adapter<RVOffersAdapter.Offers
             tvOfferCompanyName = (TextView) itemView.findViewById(R.id.tvOfferCompanyName);
             tvOfferPrice = (TextView) itemView.findViewById(R.id.tvOfferPrice);
             tvOfferDescription = (TextView) itemView.findViewById(R.id.tvOfferDescription);
-            tvRemainingDate = (TextView) itemView.findViewById(R.id.tvRemainingDate);
-            tvHour = (TextView) itemView.findViewById(R.id.tvHour);
-            tvSecond = (TextView) itemView.findViewById(R.id.tvSecond);
-            tvMinuit = (TextView) itemView.findViewById(R.id.tvMinuit);
+
+            timerView = (TimerView) itemView.findViewById(R.id.timerView);
+
+
             rgLike = (RadioGroup) itemView.findViewById(R.id.rgLike);
             rbLike = (RadioButton) itemView.findViewById(R.id.rbLike);
             rbDislike = (RadioButton) itemView.findViewById(R.id.rbDislike);

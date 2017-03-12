@@ -34,7 +34,7 @@ public class BaseApplication extends Application {
                 .build());
 
         TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/cairo_regular.ttf");
-
+        CacheManager.getInstance();
         volleySingleton = VolleySingleton.getInstance(this);
         requestQueue = volleySingleton.getRequestQueue();
         requestQueue.start();
