@@ -129,14 +129,46 @@
                 android:src="@drawable/photo_replacement" />
         </android.support.v7.widget.CardView>
 
-        <include
-            android:id="@+id/lTimerLayout"
-            layout="@layout/timer_layout"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_toRightOf="@+id/cvProductImage" />
+            android:layout_toRightOf="@+id/cvProductImage">
 
+            <com.sunmediaeg.offers.views.TimerView
+                android:id="@+id/timerView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+
+            <RadioGroup
+                android:id="@+id/rgLike"
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/timerView"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbLike"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="25dp"
+                    android:button="@null"
+                    android:drawableRight="@drawable/like_button_selector" />
+
+                <RadioButton
+                    android:id="@+id/rbDislike"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableRight="@drawable/dislike_button_selector" />
+            </RadioGroup>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

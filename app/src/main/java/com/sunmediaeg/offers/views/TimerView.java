@@ -27,31 +27,31 @@ public class TimerView extends LinearLayout {
 
     public TimerView(Context context) {
         super(context);
-        Logger.d("constructor", "TimerView(Context context)");
-        initView(context, null);
+//        Logger.d("constructor", "TimerView(Context context)");
+        initView(context);
     }
 
     public TimerView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Logger.d("constructor", "TimerView(Context context, AttributeSet attrs)");
-        initView(context, attrs);
+//        Logger.d("constructor", "TimerView(Context context, AttributeSet attrs)");
+        initView(context);
     }
 
     public TimerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        Logger.d("constructor", "TimerView(Context context, AttributeSet attrs, int defStyleAttr)");
-        initView(context, attrs);
+//        Logger.d("constructor", "TimerView(Context context, AttributeSet attrs, int defStyleAttr)");
+        initView(context);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public TimerView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        initView(context, attrs);
+        initView(context);
     }
 
-    private void initView(Context context, AttributeSet attrs) {
+    private void initView(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.timer_layout, this);
+        view = inflater.inflate(R.layout.timer_view_layout, this);
         initComponents(view);
     }
 
@@ -75,13 +75,13 @@ public class TimerView extends LinearLayout {
 
             @Override
             public void totalPeriod(long totalPeriod) {
-                Logger.d("remaining days", TimerViewCounter.getDurationInDays(totalPeriod) + "");
+//                Logger.d("remaining days", TimerViewCounter.getDurationInDays(totalPeriod) + "");
             }
 
             @Override
             public void getTime(long remainingTime) {
-                Logger.d("Days", TimerViewCounter.getDurationInDays(remainingTime) + "");
-                Logger.d("remainingTime", remainingTime + "");
+//                Logger.d("Days", TimerViewCounter.getDurationInDays(remainingTime) + "");
+//                Logger.d("remainingTime", remainingTime + "");
                 HashMap<Integer, Long> relativeTime = counter.getRelativeTime(remainingTime);
 
                 long day = relativeTime.get(TimerViewCounter.DAY);
@@ -94,7 +94,7 @@ public class TimerView extends LinearLayout {
                 tvMinuit.setText(minute + "");
                 tvSecond.setText(second + "");
 
-                Logger.d("remaining time", second + " second, " + minute + " minute, " + hour + " hour, " + day + " day, "/* + month + " month"*/);
+//                Logger.d("remaining time", second + " second, " + minute + " minute, " + hour + " hour, " + day + " day, "/* + month + " month"*/);
             }
         });
     }

@@ -31,6 +31,7 @@ import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.MainActivity;
 import com.sunmediaeg.offers.dataModel.jsonModels.FbProfileData;
 import com.sunmediaeg.offers.dataModel.jsonModels.LoginResponse;
+import com.sunmediaeg.offers.utilities.ApiError;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
 import com.sunmediaeg.offers.utilities.Service;
@@ -44,6 +45,7 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -260,24 +262,47 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Logger.d("response", response.toString());
+                                try {
+                                    String emailMsg = "", passwordMsg = "";
+                                    int responseCode = response.getInt("code");
+                                    if (response.has("errors")) {
+                                        JSONObject errors = response.getJSONObject("errors");
+                                        if (errors.has("email")) {
+                                            emailMsg = errors.getString("email");
+                                        } else if (errors.has("password")) {
+                                            passwordMsg = errors.getString("password");
+                                        } else {
+                                            ApiError apiError = new ApiError(responseCode);
+                                            Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                                        }
+                                    }
 
-                                LoginResponse loginResponse = gson.fromJson(response.toString(), LoginResponse.class);
-                                if (finalUrl.equals(Constants.REGISTER_USER)) {
-                                    loginResponse.getData().getUser().setUserType(Constants.TYPE_USER);
-                                } else {
-                                    loginResponse.getData().getUser().setUserType(Constants.TYPE_VENDOR);
+                                    if (responseCode == 200) {
+                                        LoginResponse loginResponse = gson.fromJson(response.toString(), LoginResponse.class);
+
+                                        if (finalUrl.equals(Constants.REGISTER_USER)) {
+                                            loginResponse.getData().getUser().setUserType(Constants.TYPE_USER);
+                                        } else {
+                                            loginResponse.getData().getUser().setUserType(Constants.TYPE_VENDOR);
+                                        }
+                                        Logger.d("user", loginResponse.getData().getUser().toString());
+                                        editor.putString(Constants.NAME, loginResponse.getData().getUser().getName());
+                                        editor.putString(Constants.EMAIL, loginResponse.getData().getUser().getEmail());
+                                        editor.putLong(Constants.USER_ID, loginResponse.getData().getUser().getId());
+                                        editor.putBoolean(Constants.HAVE_ACCOUNT, true);
+                                        editor.commit();
+                                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                                        intent.putExtra(Constants.IS_COMPANY_PROFILE, false); // <-- this extra is related only to the MainActivity
+                                        getActivity().startActivity(intent);
+                                        getActivity().finish();
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                    } else {
+                                        Constants.toastMsg(getContext(), emailMsg + "\n" + passwordMsg);
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
-                                Logger.d("user", loginResponse.getData().getUser().toString());
-                                editor.putString(Constants.NAME, loginResponse.getData().getUser().getName());
-                                editor.putString(Constants.EMAIL, loginResponse.getData().getUser().getEmail());
-                                editor.putLong(Constants.USER_ID, loginResponse.getData().getUser().getId());
-                                editor.putBoolean(Constants.HAVE_ACCOUNT, true);
-                                editor.commit();
-                                Intent intent = new Intent(getActivity(), MainActivity.class);
-                                intent.putExtra(Constants.IS_COMPANY_PROFILE, false); // <-- this extra is related only to the MainActivity
-                                getActivity().startActivity(intent);
-                                getActivity().finish();
-                                progressBar.setVisibility(View.INVISIBLE);
                             }
 
                             @Override

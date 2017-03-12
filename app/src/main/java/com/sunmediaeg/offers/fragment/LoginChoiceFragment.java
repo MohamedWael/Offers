@@ -107,7 +107,7 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
     }
 
     private void initComponents(View v) {
-        testTimerView(v);
+//        testTimerView(v);
         intent = new Intent(getActivity(), OffersGeneralActivity.class);
         btnSignUpAsVendor = (Button) v.findViewById(R.id.btnSignUpAsVendor);
         btnSignUpAsUser = (Button) v.findViewById(R.id.btnSignUpAsUser);
@@ -117,11 +117,11 @@ public class LoginChoiceFragment extends Fragment implements View.OnClickListene
         btnLogin.setOnClickListener(this);
     }
 
-    private void testTimerView(View v) {
-        TimerView timerView = (TimerView) v.findViewById(R.id.timerView);
-        timerView.setTime(new Date(1489215930000L), new Date(1489561530000L));
-
-    }
+//    private void testTimerView(View v) {
+//        TimerView timerView = (TimerView) v.findViewById(R.id.timerView);
+//        timerView.setTime(new Date(1489215930000L), new Date(1489561530000L));
+//
+//    }
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

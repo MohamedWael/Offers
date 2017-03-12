@@ -11,13 +11,9 @@ public class UserData {
 
     @SerializedName("user")
     private User mUser;
-    @SerializedName("vendor")
-    private User mVendor;
 
     public User getUser() {
-        if (mVendor == null)
-            return mUser;
-        else return mVendor;
+        return mUser;
     }
 
     public void setUser(User user) {

@@ -78,7 +78,6 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         Constants.hideSearchButton(v);
         tvTitle = (TextView) v.findViewById(R.id.tvTitle);
         tvTitle.setText(mParam1);
-        v.findViewById(R.id.rgLike).setVisibility(View.GONE);
         ibBack = (ImageButton) v.findViewById(R.id.ibBack);
         ibBack.setOnClickListener(this);
     }

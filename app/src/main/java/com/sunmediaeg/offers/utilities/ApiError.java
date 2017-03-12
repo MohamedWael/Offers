@@ -44,6 +44,7 @@ public class ApiError {
                 errorMsg = "CODE_DO_NOT_HAVE_PERMISSION".replace("_", " ").toLowerCase();
                 break;
         }
+        Logger.d("APIError", errorMsg);
     }
 
     public String getErrorMsg() {

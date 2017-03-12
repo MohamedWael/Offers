@@ -17,7 +17,9 @@ import com.sunmediaeg.offers.fragment.LoginFragment;
 import com.sunmediaeg.offers.fragment.OffersFragment;
 import com.sunmediaeg.offers.fragment.SearchFragment;
 import com.sunmediaeg.offers.fragment.SettingsFragment;
+import com.sunmediaeg.offers.utilities.CacheManager;
 import com.sunmediaeg.offers.utilities.Constants;
+import com.sunmediaeg.offers.utilities.Logger;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -52,10 +54,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
         Bundle bundle = getIntent().getExtras();
-        haveAccount = SharedPreferencesManager.getInstance(this).initSharedPreferences().getBoolean(Constants.HAVE_ACCOUNT, false);
+        SharedPreferencesManager prefesManager = SharedPreferencesManager.getInstance(this);
+        CacheManager manager = CacheManager.getInstance();
+        haveAccount = prefesManager.initSharedPreferences().getBoolean(Constants.HAVE_ACCOUNT, false);
+        if (haveAccount) {
+            manager.chacheObject(Constants.NAME, prefesManager.getPrefs().getString(Constants.NAME, ""));
+            manager.chacheObject(Constants.EMAIL, prefesManager.getPrefs().getString(Constants.EMAIL, ""));
+            manager.chacheObject(Constants.USER_ID, prefesManager.getPrefs().getLong(Constants.USER_ID, 0));
+            Logger.d("NAME", manager.getCachedObject(Constants.NAME) + "");
+            Logger.d("EMAIL", manager.getCachedObject(Constants.EMAIL) + "");
+            Logger.d("USER_ID", manager.getCachedObject(Constants.USER_ID) + "");
+        }
         isCompanyProfile = bundle.getBoolean(Constants.IS_COMPANY_PROFILE, false);
         initComponents(bundle);
-
     }
 
     @Override
