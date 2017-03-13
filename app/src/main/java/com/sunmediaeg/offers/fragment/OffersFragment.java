@@ -9,11 +9,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.adapters.RVOffersAdapter;
+import com.sunmediaeg.offers.dataModel.myOffersResponse.MyOffersResponse;
+import com.sunmediaeg.offers.utilities.ApiError;
+import com.sunmediaeg.offers.utilities.CacheManager;
+import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
+import com.sunmediaeg.offers.utilities.Service;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +49,8 @@ public class OffersFragment extends Fragment {
 
     private RecyclerView rvCompanies, rvOffers;
     private TextView tvTitle;
+    private ProgressBar pbMyOFFers;
+    private Service service;
 
     public OffersFragment() {
         // Required empty public constructor
@@ -66,32 +80,29 @@ public class OffersFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-
+            service = Service.getInstance(getContext());
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_offers, container, false);
-//        View view = inflater.inflate(R.layout.fragment_home, container, false);
         setRetainInstance(true);
+        Long userID = (Long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
         initComponents(view);
-
-        Logger.d("executed","onCreate");
+        getMyOffers(Constants.USER_FEEDS + userID);
+        Logger.d("executed", "onCreate");
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Logger.d("executed","onResume");
+        Logger.d("executed", "onResume");
 
-        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext());
-        rvOffers.setAdapter(offersAdapter);
+
     }
-
 
     private void initComponents(View view) {
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
@@ -99,6 +110,7 @@ public class OffersFragment extends Fragment {
         view.findViewById(R.id.ibBack).setVisibility(View.GONE);
         view.findViewById(R.id.ibSearch).setVisibility(View.GONE);
         rvOffers = (RecyclerView) view.findViewById(R.id.rvOffers);
+        pbMyOFFers = (ProgressBar) view.findViewById(R.id.pbMyOFFers);
         rvOffers.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
@@ -106,6 +118,38 @@ public class OffersFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    public void getMyOffers(String url) {
+        showProgressBar(true);
+        JSONObject body = new JSONObject();
+        try {
+            body.put(Constants.KEY_LIMIT, Constants.LIMIT_VALUE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        service.getResponse(Request.Method.GET, url, body, new Service.ServiceResponse() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Gson gson = new Gson();
+                MyOffersResponse myOffersResponse = gson.fromJson(response.toString(), MyOffersResponse.class);
+                if (myOffersResponse.isSuccess()) {
+                    RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), myOffersResponse.getData().getFeeds());
+                    rvOffers.setAdapter(offersAdapter);
+                    showProgressBar(false);
+
+                } else {
+                    ApiError apiError = new ApiError(myOffersResponse.getCode());
+                    Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
+                    Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
     }
 
     @Override
@@ -122,6 +166,11 @@ public class OffersFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void showProgressBar(boolean visible) {
+        if (visible) pbMyOFFers.setVisibility(View.VISIBLE);
+        else pbMyOFFers.setVisibility(View.GONE);
     }
 
     /**

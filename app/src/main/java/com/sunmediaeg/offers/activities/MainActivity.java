@@ -8,7 +8,11 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.dataModel.userResponse.UserResponse;
 import com.sunmediaeg.offers.fragment.CategoriesFragment;
 import com.sunmediaeg.offers.fragment.CompanyProfileFragment;
 import com.sunmediaeg.offers.fragment.HomeFragment;
@@ -20,9 +24,13 @@ import com.sunmediaeg.offers.fragment.SettingsFragment;
 import com.sunmediaeg.offers.utilities.CacheManager;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
+import com.sunmediaeg.offers.utilities.NetworkStateReceiver;
+import com.sunmediaeg.offers.utilities.Service;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -30,7 +38,7 @@ import io.fabric.sdk.android.Fabric;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NetworkStateReceiver.NetworkStateReceiverListener {
 
     private final int HOME = 100, LIST = 101, LOGO = 102, GRID = 103, SETTING = 104;
     private FrameLayout flMainFragment;
@@ -54,10 +62,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
         Bundle bundle = getIntent().getExtras();
+        NetworkStateReceiver receiver = NetworkStateReceiver.getInstance();
+        registerReceiver(receiver, receiver.getIntentFilter());
         SharedPreferencesManager prefesManager = SharedPreferencesManager.getInstance(this);
         CacheManager manager = CacheManager.getInstance();
         haveAccount = prefesManager.initSharedPreferences().getBoolean(Constants.HAVE_ACCOUNT, false);
         if (haveAccount) {
+            cacheUserData();
             manager.chacheObject(Constants.NAME, prefesManager.getPrefs().getString(Constants.NAME, ""));
             manager.chacheObject(Constants.EMAIL, prefesManager.getPrefs().getString(Constants.EMAIL, ""));
             manager.chacheObject(Constants.USER_ID, prefesManager.getPrefs().getLong(Constants.USER_ID, 0));
@@ -183,6 +194,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void cacheUserData() {
+        Long userID = (Long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
+        Service.getInstance(this).getResponse(Request.Method.GET, Constants.USER + userID, new JSONObject(), new Service.ServiceResponse() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Logger.d("UserCache", response.toString());
+                Gson gson = new Gson();
+                UserResponse userResponse = gson.fromJson(response.toString(), UserResponse.class);
+                if (userResponse != null && userResponse.isSuccess()) {
+                    CacheManager.getInstance().chacheObject(Constants.USER, userResponse.getData().getUser());
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+    }
+
     private void toolbarVisibility(int status) {
         findViewById(R.id.tbToolBar).setVisibility(status);
     }
@@ -190,5 +221,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(new CalligraphyContextWrapper(newBase, CalligraphyConfig.get().getAttrId()));
+    }
+
+    @Override
+    public void networkAvailable() {
+        cacheUserData();
+    }
+
+    @Override
+    public void networkUnavailable() {
+        Constants.toastMsg(this, getString(R.string.connection));
+//        registerReceiver(NetworkStateReceiver.getInstance(), NetworkStateReceiver.getInstance().getIntentFilter())
     }
 }

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.facebook.FacebookSdk;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.fragment.CategoryCompaniesFragment;
 import com.sunmediaeg.offers.fragment.DetailsFragment;
@@ -43,7 +42,7 @@ public class OffersGeneralActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, signUpFragment).commit();
                 break;
             case Constants.ACTIVITY_SIGN_UP_AS_USER:
-                signUpFragment = SignUpFragment.newInstance(Constants.REGISTER_USER, "إنشاء حساب كمستخدم");
+                signUpFragment = SignUpFragment.newInstance(Constants.USER, "إنشاء حساب كمستخدم");
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, signUpFragment).commit();
                 break;
             case Constants.ACTIVITY_LOGIN:

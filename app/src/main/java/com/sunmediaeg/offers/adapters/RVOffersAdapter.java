@@ -14,8 +14,14 @@ import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.OffersGeneralActivity;
+import com.sunmediaeg.offers.dataModel.myOffersResponse.Feed;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.views.TimerView;
+import com.sunmediaeg.offers.views.TimerViewCounter;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by moham on 1/26/2017.
@@ -23,10 +29,13 @@ import com.sunmediaeg.offers.views.TimerView;
 
 public class RVOffersAdapter extends RecyclerView.Adapter<RVOffersAdapter.OffersViewHolder> {
 
-    Context mContext;
-
-    public RVOffersAdapter(Context mContext) {
+    private Context mContext;
+    private ArrayList<Feed> feeds;
+private SimpleDateFormat dateFormat;
+    public RVOffersAdapter(Context mContext, ArrayList<Feed> feeds) {
         this.mContext = mContext;
+        this.feeds = feeds;
+        dateFormat = new SimpleDateFormat(TimerViewCounter.STANDARD_TIME_FORMAT);
     }
 
     @Override
@@ -37,7 +46,9 @@ public class RVOffersAdapter extends RecyclerView.Adapter<RVOffersAdapter.Offers
 
     @Override
     public void onBindViewHolder(OffersViewHolder holder, int position) {
-
+        Feed feed = feeds.get(position);
+        holder.tvOfferDescription.setText(feed.getShortDescription());
+        holder.tvOfferPrice.setText(feed.getPrice());
         holder.ivProductImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,13 +61,13 @@ public class RVOffersAdapter extends RecyclerView.Adapter<RVOffersAdapter.Offers
 
     @Override
     public int getItemCount() {
-        return 10;
+        return feeds.size();
     }
 
     class OffersViewHolder extends RecyclerView.ViewHolder {
 
         public ImageButton ibOfferCompanyLogo, ibOfferCategoryImage;
-        public TextView tvOfferCompanyName, tvOfferPrice, tvOfferDescription, tvRemainingDate, tvDay, tvHour, tvSecond, tvMinuit;
+        public TextView tvOfferCompanyName, tvOfferPrice, tvOfferDescription;
         public ImageView ivProductImage;
         public RadioGroup rgLike;
         public RadioButton rbLike, rbDislike;

@@ -222,7 +222,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
 
                 break;
             case R.id.btnHaveAccoutn:
-                signUpFragment = SignUpFragment.newInstance(Constants.REGISTER_USER, getString(R.string.tvCreateAccount));
+                signUpFragment = SignUpFragment.newInstance(Constants.USER, getString(R.string.tvCreateAccount));
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, signUpFragment).commit();
                 break;
         }

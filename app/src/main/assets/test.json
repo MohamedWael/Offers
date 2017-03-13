@@ -1,0 +1,20 @@
+{
+  "data": {
+    "feeds": [
+      {
+        "id": 5,
+        "title": "2123test2",
+        "image": "http://localhost:8000/uploads/offer/STBiy31rsLQrDiGBAmhXNDYcG08DLRgjc5uMCyYND9ECwcREaLbDIm6xfPcL.png",
+        "start_date": "2017-02-12 19:00:00",
+        "end_date": "2017-02-19 17:00:00",
+        "desc": "",
+        "price": "0.50",
+        "discount": 0,
+        "CategoryName": "الصنف رقم 1",
+        "ShortDesc": ""
+      }
+    ]
+  },
+  "message": "success",
+  "code": 200
+}

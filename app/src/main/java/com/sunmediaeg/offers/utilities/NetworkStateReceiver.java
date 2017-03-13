@@ -3,6 +3,7 @@ package com.sunmediaeg.offers.utilities;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -17,8 +18,17 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 
     protected List<NetworkStateReceiverListener> listeners;
     protected Boolean connected;
+    private static NetworkStateReceiver instance;
+    private IntentFilter intentFilter;
 
-    public NetworkStateReceiver() {
+    public static NetworkStateReceiver getInstance() {
+        if (instance == null) {
+            instance = new NetworkStateReceiver();
+        }
+        return instance;
+    }
+
+    private NetworkStateReceiver() {
         listeners = new ArrayList<NetworkStateReceiverListener>();
         connected = null;
     }
@@ -73,6 +83,13 @@ public class NetworkStateReceiver extends BroadcastReceiver {
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public IntentFilter getIntentFilter() {
+        if (intentFilter == null) {
+            intentFilter = new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION);
+        }
+        return intentFilter;
     }
 
     public interface NetworkStateReceiverListener {

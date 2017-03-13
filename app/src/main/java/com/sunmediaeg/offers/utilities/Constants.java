@@ -56,13 +56,15 @@ public final class Constants {
     public static final int CODE_WRONG_FORGET_PASS_VERIFY_NUMBER = 406;
     public static final int CODE_WAIT_BEFORE_RESEND = 410;
     public static final int CODE_DO_NOT_HAVE_PERMISSION = 412;
+    public static final int LIMIT_VALUE = 0;
 
 
     public static final String REGEX_Mail = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
 
     public static final String API_Base_URL = "http://api.sunmediaeg.com/offer/public/api/";
-    public static final String REGISTER_USER = API_Base_URL + "user";
-    public static final String USER_LOGIN = REGISTER_USER + "/login";
+    public static final String USER = API_Base_URL + "user/";
+    public static final String USER_LOGIN = USER + "login";
+    public static final String USER_FEEDS = USER + "feeds/";
 
     public static final String REGISTER_VENDOR = API_Base_URL + "vendor";
 
@@ -75,6 +77,8 @@ public final class Constants {
     public static final String _METHOD = "_method";
     public static final String _METHOD_PATCH = "PATCH";
     public static final String _METHOD_DESTROY = "DESTROY";
+    public static final String KEY_LIMIT = "limit";
+    public static final String API_ERROR = "apiError";
 
 
     public static final String CATEGORY = API_Base_URL + "category/";

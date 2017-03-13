@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.adapters.RVOffersAdapter;
+import com.sunmediaeg.offers.dataModel.myOffersResponse.Feed;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -85,7 +88,7 @@ public class CompanyProfileFragment extends Fragment implements View.OnClickList
         ibBack.setOnClickListener(this);
         rvCompanyOffers = (RecyclerView) v.findViewById(R.id.rvCompanyOffers);
         rvCompanyOffers.setLayoutManager(new LinearLayoutManager(getContext()));
-        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext());
+        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), new ArrayList<Feed>());
         rvCompanyOffers.setAdapter(offersAdapter);
     }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.sunmediaeg.offers.R;
 
 import org.json.JSONObject;
 
@@ -14,6 +15,9 @@ import org.json.JSONObject;
 public class Service {
     private static Service ourInstance;
     private final VolleySingleton volley;
+    private final Context mContext;
+    private int numberOfRetryingToGetResponse = 0;
+    private final int TRYING_LIMIT = 9;
 
     public static Service getInstance(Context mContext) {
         if (ourInstance == null) {
@@ -27,10 +31,11 @@ public class Service {
     }
 
     private Service(Context mContext) {
+        this.mContext = mContext;
         volley = VolleySingleton.getInstance(mContext);
     }
 
-    public void getResponse(int method, String url, final JSONObject body, final ServiceResponse serviceResponse) {
+    public void getResponse(final int method, final String url, final JSONObject body, final ServiceResponse serviceResponse) {
         JsonObjectRequest signUpRequest = new JsonObjectRequest(method, volley.uriEncoder(url), body, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -41,6 +46,13 @@ public class Service {
             @Override
             public void onErrorResponse(VolleyError error) {
                 serviceResponse.onErrorResponse(error);
+                String volleyErrorStr = error.toString();
+                if (volleyErrorStr.equalsIgnoreCase("com.android.volley.TimeoutError") && numberOfRetryingToGetResponse <= TRYING_LIMIT) {
+                    getResponse(method, url, body, serviceResponse);
+                    numberOfRetryingToGetResponse++;
+                } else {
+                    Constants.toastMsg(mContext, mContext.getString(R.string.connection));
+                }
                 Logger.d("VolleyError", error.toString());
             }
         }) {

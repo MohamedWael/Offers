@@ -15,6 +15,7 @@ import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.adapters.RVCompaniesAdapter;
 import com.sunmediaeg.offers.adapters.RVOffersAdapter;
 import com.sunmediaeg.offers.dataModel.Company;
+import com.sunmediaeg.offers.dataModel.myOffersResponse.Feed;
 
 import java.util.ArrayList;
 
@@ -89,7 +90,7 @@ public class HomeFragment extends Fragment {
         super.onResume();
         RVCompaniesAdapter companiesAdapter = new RVCompaniesAdapter(getContext(), initCompaniesData());
         rvCompanies.setAdapter(companiesAdapter);
-        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext());
+        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), new ArrayList<Feed>());
         rvOffers.setAdapter(offersAdapter);
     }
 

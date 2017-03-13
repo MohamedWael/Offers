@@ -250,8 +250,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                         body.put(Constants.EMAIL, signUp.getEmail());
                         body.put(Constants.PASSWORD, signUp.getPassword());
                         String url = "";
-                        if (mParam1.equals(Constants.REGISTER_USER)) {
-                            url = Constants.REGISTER_USER;
+                        if (mParam1.equals(Constants.USER)) {
+                            url = Constants.USER;
                         } else {
                             url = Constants.REGISTER_VENDOR;
                         }
@@ -280,7 +280,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                     if (responseCode == 200) {
                                         LoginResponse loginResponse = gson.fromJson(response.toString(), LoginResponse.class);
 
-                                        if (finalUrl.equals(Constants.REGISTER_USER)) {
+                                        if (finalUrl.equals(Constants.USER)) {
                                             loginResponse.getData().getUser().setUserType(Constants.TYPE_USER);
                                         } else {
                                             loginResponse.getData().getUser().setUserType(Constants.TYPE_VENDOR);
