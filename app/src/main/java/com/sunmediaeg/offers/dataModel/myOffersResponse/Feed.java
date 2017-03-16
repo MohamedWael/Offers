@@ -5,10 +5,16 @@ import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Generated;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class Feed {
+public class Feed extends RealmObject{
 
+    @PrimaryKey
+    @SerializedName("id")
+    private Long mId;
     @SerializedName("CategoryName")
     private String mCategoryName;
     @SerializedName("desc")
@@ -16,9 +22,7 @@ public class Feed {
     @SerializedName("discount")
     private Long mDiscount;
     @SerializedName("end_date")
-    private String mEndDate;
-    @SerializedName("id")
-    private Long mId;
+    private Long mEndDate;
     @SerializedName("image")
     private String mImage;
     @SerializedName("price")
@@ -26,9 +30,12 @@ public class Feed {
     @SerializedName("ShortDesc")
     private String mShortDesc;
     @SerializedName("start_date")
-    private String mStartDate;
+    private Long mStartDate;
     @SerializedName("title")
     private String mTitle;
+
+    public Feed() {
+    }
 
     public String getCategoryName() {
         return mCategoryName;
@@ -54,11 +61,11 @@ public class Feed {
         mDiscount = discount;
     }
 
-    public String getEndDate() {
+    public Long getEndDate() {
         return mEndDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(Long endDate) {
         mEndDate = endDate;
     }
 
@@ -94,11 +101,11 @@ public class Feed {
         mShortDesc = ShortDesc;
     }
 
-    public String getStartDate() {
+    public Long getStartDate() {
         return mStartDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Long startDate) {
         mStartDate = startDate;
     }
 

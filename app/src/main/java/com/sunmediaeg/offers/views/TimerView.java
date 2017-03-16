@@ -10,8 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
-import com.sunmediaeg.offers.utilities.Logger;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -63,23 +63,37 @@ public class TimerView extends LinearLayout {
         tvMinuit = (TextView) findViewById(R.id.tvMinuit);
     }
 
-    public void setTime(Date startDate, Date endDate) {
+    public void setTime(long startDate, long endDate, TimerViewCounter.RemainingTime remainingTime) {
+        setTime(new Date(startDate), new Date(endDate), remainingTime);
+    }
+
+    public void setTime(String startDate, String endDate, TimerViewCounter.RemainingTime time) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat(TimerViewCounter.STANDARD_DATE_FORMAT);
-        tvRemainingDate.setText(format.format(endDate));
+        setTime(format.parse(startDate), format.parse(endDate), time);
+    }
+
+    public void setTime(Date startDate, Date endDate, final TimerViewCounter.RemainingTime time) {
+        SimpleDateFormat format = new SimpleDateFormat(TimerViewCounter.STANDARD_DATE_FORMAT);
+        if (endDate.getTime() < System.currentTimeMillis())
+            tvRemainingDate.setText(getContext().getString(R.string.timeUp));
+        else
+            tvRemainingDate.setText(format.format(endDate));
         final TimerViewCounter counter = new TimerViewCounter(startDate, endDate);
         counter.calculateRemainingTime(getContext(), new TimerViewCounter.RemainingTime() {
             @Override
             public void onTimeOut() {
-
+                if (time != null) time.onTimeOut();
             }
 
             @Override
             public void totalPeriod(long totalPeriod) {
 //                Logger.d("remaining days", TimerViewCounter.getDurationInDays(totalPeriod) + "");
+                if (time != null) time.totalPeriod(totalPeriod);
             }
 
             @Override
             public void getTime(long remainingTime) {
+                if (time != null) time.getTime(remainingTime);
 //                Logger.d("Days", TimerViewCounter.getDurationInDays(remainingTime) + "");
 //                Logger.d("remainingTime", remainingTime + "");
                 HashMap<Integer, Long> relativeTime = counter.getRelativeTime(remainingTime);
@@ -93,7 +107,6 @@ public class TimerView extends LinearLayout {
                 tvHour.setText(hour + "");
                 tvMinuit.setText(minute + "");
                 tvSecond.setText(second + "");
-
 //                Logger.d("remaining time", second + " second, " + minute + " minute, " + hour + " hour, " + day + " day, "/* + month + " month"*/);
             }
         });

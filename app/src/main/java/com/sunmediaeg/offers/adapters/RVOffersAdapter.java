@@ -12,16 +12,22 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.squareup.picasso.Picasso;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.OffersGeneralActivity;
 import com.sunmediaeg.offers.dataModel.myOffersResponse.Feed;
 import com.sunmediaeg.offers.utilities.Constants;
+import com.sunmediaeg.offers.utilities.Logger;
+import com.sunmediaeg.offers.utilities.VolleySingleton;
 import com.sunmediaeg.offers.views.TimerView;
 import com.sunmediaeg.offers.views.TimerViewCounter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+
+import io.realm.RealmList;
 
 /**
  * Created by moham on 1/26/2017.
@@ -30,9 +36,10 @@ import java.util.Date;
 public class RVOffersAdapter extends RecyclerView.Adapter<RVOffersAdapter.OffersViewHolder> {
 
     private Context mContext;
-    private ArrayList<Feed> feeds;
-private SimpleDateFormat dateFormat;
-    public RVOffersAdapter(Context mContext, ArrayList<Feed> feeds) {
+    private RealmList<Feed> feeds;
+    private SimpleDateFormat dateFormat;
+
+    public RVOffersAdapter(Context mContext, RealmList<Feed> feeds) {
         this.mContext = mContext;
         this.feeds = feeds;
         dateFormat = new SimpleDateFormat(TimerViewCounter.STANDARD_TIME_FORMAT);
@@ -41,13 +48,35 @@ private SimpleDateFormat dateFormat;
     @Override
     public OffersViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.offer_item_layout, parent, false);
+        YoYo.with(Techniques.FadeIn)
+                .duration(700)
+                .playOn(view);
         return new OffersViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(OffersViewHolder holder, int position) {
-        Feed feed = feeds.get(position);
+        final Feed feed = feeds.get(position);
         holder.tvOfferDescription.setText(feed.getShortDescription());
+        Picasso.with(mContext).load(VolleySingleton.getInstance(mContext).uriEncoder(feed.getImage())).placeholder(R.drawable.photo_replacement).into(holder.ivProductImage);
+
+        holder.timerView.setTime(feed.getStartDate(), feed.getEndDate(), new TimerViewCounter.RemainingTime() {
+            @Override
+            public void onTimeOut() {
+                Logger.d("FeedTime", feed.getTitle()+" TimeOut");
+            }
+
+            @Override
+            public void totalPeriod(long totalPeriod) {
+
+            }
+
+            @Override
+            public void getTime(long remainingTime) {
+
+            }
+        });
+
         holder.tvOfferPrice.setText(feed.getPrice());
         holder.ivProductImage.setOnClickListener(new View.OnClickListener() {
             @Override

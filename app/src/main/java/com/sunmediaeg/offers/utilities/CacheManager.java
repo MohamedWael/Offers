@@ -22,14 +22,14 @@ public class CacheManager {
         return instance;
     }
 
-    public Object chacheObject(String key, Object object) {
+    public Object cacheObject(String key, Object object) {
         if (object != null) {
-            Logger.d("chacheObject",object.toString());
+            Logger.d("cacheObject",object.toString());
         }
        return chache.put(key, object);
     }
 
-    public void chacheObject(String key, Object object, Object defaultValue) {
+    public void cacheObject(String key, Object object, Object defaultValue) {
         if (object != null) {
             chache.put(key, object);
         } else chache.put(key, defaultValue);

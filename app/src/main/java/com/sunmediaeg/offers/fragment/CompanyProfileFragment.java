@@ -18,6 +18,8 @@ import com.sunmediaeg.offers.dataModel.myOffersResponse.Feed;
 
 import java.util.ArrayList;
 
+import io.realm.RealmList;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -88,7 +90,7 @@ public class CompanyProfileFragment extends Fragment implements View.OnClickList
         ibBack.setOnClickListener(this);
         rvCompanyOffers = (RecyclerView) v.findViewById(R.id.rvCompanyOffers);
         rvCompanyOffers.setLayoutManager(new LinearLayoutManager(getContext()));
-        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), new ArrayList<Feed>());
+        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), new RealmList<Feed>());
         rvCompanyOffers.setAdapter(offersAdapter);
     }
 

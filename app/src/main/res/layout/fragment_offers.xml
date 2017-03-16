@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.sunmediaeg.offers.fragment.OffersFragment">
-
+2
     <include
         android:id="@+id/iAppBar"
         layout="@layout/app_bar_layout"

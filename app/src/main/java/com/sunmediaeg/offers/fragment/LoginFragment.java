@@ -22,11 +22,13 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.MainActivity;
+import com.sunmediaeg.offers.dataModel.APIResponse;
 import com.sunmediaeg.offers.dataModel.jsonModels.LoginResponse;
 import com.sunmediaeg.offers.utilities.ApiError;
-import com.sunmediaeg.offers.utilities.Service;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
+import com.sunmediaeg.offers.utilities.RealmDB;
+import com.sunmediaeg.offers.utilities.Service;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 
 import org.json.JSONException;
@@ -157,35 +159,20 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
                         JSONObject body = new JSONObject();
                         body.put(Constants.EMAIL, email);
                         body.put(Constants.PASSWORD, password);
-                        requests.getResponse(Request.Method.POST, Constants.USER_LOGIN, body, new Service.ServiceResponse() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                try {
-                                    String emailMsg = "", passwordMsg = "", name = "";
-                                    int responseCode = 0;
-                                    responseCode = response.getInt("code");
+                        try {
+                            requests.getResponse(Request.Method.POST, Constants.USER_LOGIN, body, new Service.ServiceResponse() {
+                                @Override
+                                public void onResponse(JSONObject response) {
 
-                                    if (response.has("errors")) {
-                                        JSONObject errors = response.getJSONObject("errors");
-                                        if (errors.has("email")) {
-                                            emailMsg = errors.getString("email");
-                                        } else if (errors.has("password")) {
-                                            passwordMsg = errors.getString("password");
-                                        } else if (errors.has("name")) {
-                                            name = errors.getString("name");
-                                        } else {
-                                            ApiError apiError = new ApiError(responseCode);
-                                            Constants.toastMsg(getContext(), apiError.getErrorMsg());
-                                        }
-                                    }
-                                    if (responseCode == 200) {
-                                        Logger.d("LoginResponse", response.toString());
-                                        Gson gson = new Gson();
+                                    Gson gson = new Gson();
+                                    APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
+                                    if (apiResponse.isSuccess()) {
                                         LoginResponse login = gson.fromJson(response.toString(), LoginResponse.class);
-
+                                        RealmDB.getInstance(getContext()).createOrUpdate(login.getData().getUser());
                                         editor.putString(Constants.NAME, login.getData().getUser().getName());
                                         editor.putString(Constants.EMAIL, login.getData().getUser().getEmail());
                                         editor.putLong(Constants.USER_ID, login.getData().getUser().getId());
+                                        Logger.d("UserID", login.getData().getUser().getId().toString());
                                         editor.putBoolean(Constants.HAVE_ACCOUNT, true);
                                         editor.commit();
                                         Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -194,20 +181,30 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
                                         getActivity().finish();
                                         progressBar.setVisibility(View.INVISIBLE);
                                     } else {
-                                        Constants.toastMsg(getContext(), name + "\n" + emailMsg + "\n" + passwordMsg);
+                                        ApiError apiError = new ApiError(apiResponse.getCode());
                                         progressBar.setVisibility(View.INVISIBLE);
+                                        editor.putBoolean(Constants.HAVE_ACCOUNT, false);
+                                        editor.commit();
+                                        if (apiResponse.getCode() == Constants.CODE_AUTH_FAILED)
+                                            tvNotification.setText(getString(R.string.loginError3));
+                                        else tvNotification.setText(apiError.getErrorMsg());
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
-                            }
 
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Logger.d("LoginError", error.toString());
-                                progressBar.setVisibility(View.INVISIBLE);
-                            }
-                        });
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Logger.d("LoginError", error.toString());
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                }
+
+                                @Override
+                                public void updateUIOnNetworkUnavailable(String noInternetMessage) {
+                                    tvNotification.setText(noInternetMessage);
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         preferencesManager.initEditor().putBoolean(Constants.HAVE_ACCOUNT, true).commit();
                     } else {
                         progressBar.setVisibility(View.INVISIBLE);

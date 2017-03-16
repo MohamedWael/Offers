@@ -100,8 +100,6 @@ public class OffersFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Logger.d("executed", "onResume");
-
-
     }
 
     private void initComponents(View view) {
@@ -128,28 +126,37 @@ public class OffersFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        service.getResponse(Request.Method.GET, url, body, new Service.ServiceResponse() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Gson gson = new Gson();
-                MyOffersResponse myOffersResponse = gson.fromJson(response.toString(), MyOffersResponse.class);
-                if (myOffersResponse.isSuccess()) {
-                    RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), myOffersResponse.getData().getFeeds());
-                    rvOffers.setAdapter(offersAdapter);
-                    showProgressBar(false);
+        try {
+            service.getResponse(Request.Method.GET, url, body, new Service.ServiceResponse() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Gson gson = new Gson();
+                    MyOffersResponse myOffersResponse = gson.fromJson(response.toString(), MyOffersResponse.class);
+                    if (myOffersResponse.isSuccess()) {
+                        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), myOffersResponse.getData().getFeeds());
+                        rvOffers.setAdapter(offersAdapter);
+                        showProgressBar(false);
 
-                } else {
-                    ApiError apiError = new ApiError(myOffersResponse.getCode());
-                    Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
-                    Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                    } else {
+                        ApiError apiError = new ApiError(myOffersResponse.getCode());
+                        Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
+//                        Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                    }
                 }
-            }
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                @Override
+                public void onErrorResponse(VolleyError error) {
 
-            }
-        });
+                }
+
+                @Override
+                public void updateUIOnNetworkUnavailable(String noInternetMessage) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

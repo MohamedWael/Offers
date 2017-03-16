@@ -9,13 +9,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.adapters.RVCompaniesAdapter;
 import com.sunmediaeg.offers.adapters.RVOffersAdapter;
 import com.sunmediaeg.offers.dataModel.Company;
-import com.sunmediaeg.offers.dataModel.myOffersResponse.Feed;
+import com.sunmediaeg.offers.dataModel.offers.OffersResponse;
+import com.sunmediaeg.offers.utilities.ApiError;
+import com.sunmediaeg.offers.utilities.Constants;
+import com.sunmediaeg.offers.utilities.Logger;
+import com.sunmediaeg.offers.utilities.Service;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -40,6 +50,7 @@ public class HomeFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private RecyclerView rvCompanies, rvOffers;
     private TextView tvTitle;
+    private ProgressBar pbHomeOffers;
     private static HomeFragment fragment;
 
     public HomeFragment() {
@@ -90,11 +101,11 @@ public class HomeFragment extends Fragment {
         super.onResume();
         RVCompaniesAdapter companiesAdapter = new RVCompaniesAdapter(getContext(), initCompaniesData());
         rvCompanies.setAdapter(companiesAdapter);
-        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), new ArrayList<Feed>());
-        rvOffers.setAdapter(offersAdapter);
+        getAllOffers();
     }
 
     private void initComponents(View view) {
+        pbHomeOffers = (ProgressBar) view.findViewById(R.id.pbHomeOffers);
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         tvTitle.setText(mParam1);
         view.findViewById(R.id.ibBack).setVisibility(View.GONE);
@@ -102,6 +113,39 @@ public class HomeFragment extends Fragment {
         rvOffers.setLayoutManager(new LinearLayoutManager(getContext()));
         rvCompanies = (RecyclerView) view.findViewById(R.id.rvCompanies);
         rvCompanies.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+    }
+
+    private void getAllOffers() {
+        try {
+            pbHomeOffers.setVisibility(View.VISIBLE);
+            Service.getInstance(getContext()).getResponse(Request.Method.GET, Constants.removeLastSlash(Constants.SHOW_ALL_OFFERS), new JSONObject(), new Service.ServiceResponse() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Gson gson = new Gson();
+                    OffersResponse offersResponse = gson.fromJson(response.toString(), OffersResponse.class);
+                    if (offersResponse != null && offersResponse.isSuccess()) {
+                        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), offersResponse.getData().getOffers());
+                        rvOffers.setAdapter(offersAdapter);
+                    } else {
+                        ApiError apiError = new ApiError(offersResponse.getCode());
+                        Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
+                    }
+                    pbHomeOffers.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+
+                @Override
+                public void updateUIOnNetworkUnavailable(String noInternetMessage) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void onButtonPressed(Uri uri) {

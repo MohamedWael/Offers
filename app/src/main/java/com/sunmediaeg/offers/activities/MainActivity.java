@@ -68,10 +68,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         CacheManager manager = CacheManager.getInstance();
         haveAccount = prefesManager.initSharedPreferences().getBoolean(Constants.HAVE_ACCOUNT, false);
         if (haveAccount) {
-            cacheUserData();
-            manager.chacheObject(Constants.NAME, prefesManager.getPrefs().getString(Constants.NAME, ""));
-            manager.chacheObject(Constants.EMAIL, prefesManager.getPrefs().getString(Constants.EMAIL, ""));
-            manager.chacheObject(Constants.USER_ID, prefesManager.getPrefs().getLong(Constants.USER_ID, 0));
+//            cacheUserData();
+            manager.cacheObject(Constants.NAME, prefesManager.getPrefs().getString(Constants.NAME, ""));
+            manager.cacheObject(Constants.EMAIL, prefesManager.getPrefs().getString(Constants.EMAIL, ""));
+            manager.cacheObject(Constants.USER_ID, prefesManager.getPrefs().getLong(Constants.USER_ID, 0));
             Logger.d("NAME", manager.getCachedObject(Constants.NAME) + "");
             Logger.d("EMAIL", manager.getCachedObject(Constants.EMAIL) + "");
             Logger.d("USER_ID", manager.getCachedObject(Constants.USER_ID) + "");
@@ -196,22 +196,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void cacheUserData() {
         Long userID = (Long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
-        Service.getInstance(this).getResponse(Request.Method.GET, Constants.USER + userID, new JSONObject(), new Service.ServiceResponse() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Logger.d("UserCache", response.toString());
-                Gson gson = new Gson();
-                UserResponse userResponse = gson.fromJson(response.toString(), UserResponse.class);
-                if (userResponse != null && userResponse.isSuccess()) {
-                    CacheManager.getInstance().chacheObject(Constants.USER, userResponse.getData().getUser());
-                }
-            }
+        Logger.d("userID", userID.toString());
+        if (userID != 0) {
+            try {
+                Service.getInstance(this).getResponse(Request.Method.GET, Constants.USER + userID, new JSONObject(), new Service.ServiceResponse() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Logger.d("UserCache", response.toString());
+                        Gson gson = new Gson();
+                        UserResponse userResponse = gson.fromJson(response.toString(), UserResponse.class);
+                        if (userResponse != null && userResponse.isSuccess()) {
+                            CacheManager.getInstance().cacheObject(Constants.USER, userResponse.getData().getUser());
+                        }
+                    }
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
 
+                    }
+
+                    @Override
+                    public void updateUIOnNetworkUnavailable(String noInternetMessage) {
+
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+        }
     }
 
     private void toolbarVisibility(int status) {

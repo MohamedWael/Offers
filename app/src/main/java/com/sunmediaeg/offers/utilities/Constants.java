@@ -56,6 +56,7 @@ public final class Constants {
     public static final int CODE_WRONG_FORGET_PASS_VERIFY_NUMBER = 406;
     public static final int CODE_WAIT_BEFORE_RESEND = 410;
     public static final int CODE_DO_NOT_HAVE_PERMISSION = 412;
+
     public static final int LIMIT_VALUE = 0;
 
 
@@ -63,6 +64,7 @@ public final class Constants {
 
     public static final String API_Base_URL = "http://api.sunmediaeg.com/offer/public/api/";
     public static final String USER = API_Base_URL + "user/";
+    public static final String USER2 = API_Base_URL + "user";
     public static final String USER_LOGIN = USER + "login";
     public static final String USER_FEEDS = USER + "feeds/";
 
@@ -75,6 +77,7 @@ public final class Constants {
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final String _METHOD = "_method";
+    public static final String _METHOD_POST = "POST";
     public static final String _METHOD_PATCH = "PATCH";
     public static final String _METHOD_DESTROY = "DESTROY";
     public static final String KEY_LIMIT = "limit";
@@ -83,8 +86,11 @@ public final class Constants {
 
     public static final String CATEGORY = API_Base_URL + "category/";
     public static final String GET_ALL_CATEGORIES = CATEGORY + "all";
-    public static final String GET_OFFERS_OFCERTAIN_CATEGORY = CATEGORY + "offers/";//{categoryId}
+    public static final String GET_OFFERS_OF_CERTAIN_CATEGORY = CATEGORY + "offers/";//{categoryId}
     public static final String GET_ALL_VENDORs_POSTED_IN_CERTAIN_CATEGORY = CATEGORY + "vendors/";//{categoryId}
+
+
+    public static final String SHOW_ALL_OFFERS = API_Base_URL + "offer/";
 
 
     public static final String GET_ALL_VENDORS = API_Base_URL + "vendor/";
@@ -134,6 +140,10 @@ public final class Constants {
 
     public static void toastMsg(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+    }
+
+    public static  String removeLastSlash(String url){
+        return url.substring(0, url.length() - 1);
     }
 
 }

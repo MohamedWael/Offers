@@ -1,13 +1,18 @@
 package com.sunmediaeg.offers.dataModel;
 
+import io.realm.RealmObject;
+
 /**
  * Created by moham on 1/26/2017.
  */
 
-public class Company {
+public class Company extends RealmObject {
     private int id, imageSourse, numberOfOffers = 0;
     private String name, companyLogoUrl;
     private boolean isFollwed = false;
+
+    public Company() {
+    }
 
     public Company(int id, String name, int imageSourse) {
         this.id = id;

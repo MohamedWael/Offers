@@ -38,7 +38,8 @@
     <string name="tvOfferDescription">غرفة معيشة متكاملة مكونة من كنبة وكريسسن وترابيزة</string>
     <string name="tvOfferPrice">10.000 ج</string>
     <string name="tvOfferCompany">كارفور مول</string>
-    <string name="tvRemainingDate">2017-02-03</string>
+    <string name="tvRemainingDate">yyyy-mm-dd</string>
+    <string name="timeUp">إنتهى الوقت</string>
     <string name="day">يوم</string>
     <string name="hour">ساعة</string>
     <string name="minuite">دقيقة</string>
@@ -59,5 +60,8 @@
     <string name="btnForgetPassword">طلب إستعادة كلمة السر</string>
     <string name="loginError">من فضلك تأكد من إدخال جميع الحقول بشكل صحيح\n" + "يجب ألا تقل كلمة السر عن 6 أحرف</string>
     <string name="loginError2">حدث خطأ ما من فضلك حاول فى وقت لاحق</string>
+    <string name="loginError3">خطأ فى البريد الإلكترونى أو كلمة السر</string>
     <string name="connection">من فضلك تأكد من إتصالك بالإنتر نت</string>
+    <string name="connectionError">حدث خطأ ما من فضلك حاول فى وقت لاحق</string>
+    <string name="dateError">حدث خطأ فى نمط التاريخ</string>
 </resources>

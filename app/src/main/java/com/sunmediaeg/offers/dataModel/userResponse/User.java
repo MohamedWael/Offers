@@ -3,13 +3,18 @@ package com.sunmediaeg.offers.dataModel.userResponse;
 
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
+import com.sunmediaeg.offers.utilities.Constants;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class User {
+public class User extends RealmObject {
 
     @SerializedName("email")
     private String mEmail;
+    @PrimaryKey
     @SerializedName("id")
     private Long mId;
     @SerializedName("image")
@@ -18,6 +23,10 @@ public class User {
     private Long mIsAdmin;
     @SerializedName("name")
     private String mName;
+    private int userType;
+
+    public User() {
+    }
 
     public String getEmail() {
         return mEmail;
@@ -59,4 +68,7 @@ public class User {
         mName = name;
     }
 
+    public void setUserType(int userType) {
+        this.userType = userType;
+    }
 }

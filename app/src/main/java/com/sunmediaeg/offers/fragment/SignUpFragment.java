@@ -29,11 +29,13 @@ import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.MainActivity;
+import com.sunmediaeg.offers.dataModel.APIResponse;
 import com.sunmediaeg.offers.dataModel.jsonModels.FbProfileData;
 import com.sunmediaeg.offers.dataModel.jsonModels.LoginResponse;
 import com.sunmediaeg.offers.utilities.ApiError;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
+import com.sunmediaeg.offers.utilities.RealmDB;
 import com.sunmediaeg.offers.utilities.Service;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 import com.sunmediaeg.offers.utilities.SignUpUtility;
@@ -249,9 +251,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                         body.put(Constants.NAME, signUp.getUserName());
                         body.put(Constants.EMAIL, signUp.getEmail());
                         body.put(Constants.PASSWORD, signUp.getPassword());
+//                        body.put(Constants._METHOD, Constants._METHOD_POST);
                         String url = "";
                         if (mParam1.equals(Constants.USER)) {
-                            url = Constants.USER;
+                            url = Constants.USER.substring(0, Constants.USER.length() - 1);
                         } else {
                             url = Constants.REGISTER_VENDOR;
                         }
@@ -263,28 +266,16 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                             public void onResponse(JSONObject response) {
                                 Logger.d("response", response.toString());
                                 try {
-                                    String emailMsg = "", passwordMsg = "";
-                                    int responseCode = response.getInt("code");
-                                    if (response.has("errors")) {
-                                        JSONObject errors = response.getJSONObject("errors");
-                                        if (errors.has("email")) {
-                                            emailMsg = errors.getString("email");
-                                        } else if (errors.has("password")) {
-                                            passwordMsg = errors.getString("password");
-                                        } else {
-                                            ApiError apiError = new ApiError(responseCode);
-                                            Constants.toastMsg(getContext(), apiError.getErrorMsg());
-                                        }
-                                    }
-
-                                    if (responseCode == 200) {
+                                    APIResponse aPIResponse = gson.fromJson(response.toString(), APIResponse.class);
+                                    if (aPIResponse.isSuccess()) {
                                         LoginResponse loginResponse = gson.fromJson(response.toString(), LoginResponse.class);
 
-                                        if (finalUrl.equals(Constants.USER)) {
+                                        if (finalUrl.contains(Constants.USER)) {
                                             loginResponse.getData().getUser().setUserType(Constants.TYPE_USER);
                                         } else {
                                             loginResponse.getData().getUser().setUserType(Constants.TYPE_VENDOR);
                                         }
+                                        RealmDB.getInstance(getContext()).createOrUpdate(loginResponse.getData().getUser());
                                         Logger.d("user", loginResponse.getData().getUser().toString());
                                         editor.putString(Constants.NAME, loginResponse.getData().getUser().getName());
                                         editor.putString(Constants.EMAIL, loginResponse.getData().getUser().getEmail());
@@ -297,7 +288,21 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                         getActivity().finish();
                                         progressBar.setVisibility(View.INVISIBLE);
                                     } else {
-                                        Constants.toastMsg(getContext(), emailMsg + "\n" + passwordMsg);
+                                        String emailMsg = "", passwordMsg = "";
+                                        int responseCode = response.getInt("code");
+                                        if (response.has("errors")) {
+                                            JSONObject errors = response.getJSONObject("errors");
+                                            if (errors.has("email")) {
+                                                emailMsg = errors.getString("email");
+                                            } else if (errors.has("password")) {
+                                                passwordMsg = errors.getString("password");
+                                            } else {
+                                                ApiError apiError = new ApiError(responseCode);
+                                                Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                                            }
+                                        }
+                                        tvNotification.setText(emailMsg + "\n" + passwordMsg);
+//                                        Constants.toastMsg(getContext(), emailMsg + "\n" + passwordMsg);
                                         progressBar.setVisibility(View.INVISIBLE);
                                     }
                                 } catch (JSONException e) {
@@ -307,8 +312,18 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                progressBar.setVisibility(View.INVISIBLE);
+                                editor.putBoolean(Constants.HAVE_ACCOUNT, false);
+                                editor.commit();
                                 Logger.d("VolleyError", error.toString());
+                                if (error.getMessage() != null)
+                                    Logger.d("VolleyError", error.getMessage());
+                                progressBar.setVisibility(View.INVISIBLE);
+
+                            }
+
+                            @Override
+                            public void updateUIOnNetworkUnavailable(String noInternetMessage) {
+                                tvNotification.setText(noInternetMessage);
                             }
                         });
 

@@ -42,7 +42,7 @@ public class OffersGeneralActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, signUpFragment).commit();
                 break;
             case Constants.ACTIVITY_SIGN_UP_AS_USER:
-                signUpFragment = SignUpFragment.newInstance(Constants.USER, "إنشاء حساب كمستخدم");
+                signUpFragment = SignUpFragment.newInstance(Constants.USER, "إنشاء حساب, ");
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, signUpFragment).commit();
                 break;
             case Constants.ACTIVITY_LOGIN:

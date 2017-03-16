@@ -10,10 +10,19 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.adapters.GVCategoriesAdapter;
 import com.sunmediaeg.offers.dataModel.Category;
+import com.sunmediaeg.offers.dataModel.categories.CategoriesResponse;
+import com.sunmediaeg.offers.utilities.ApiError;
 import com.sunmediaeg.offers.utilities.Constants;
+import com.sunmediaeg.offers.utilities.Logger;
+import com.sunmediaeg.offers.utilities.Service;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -88,8 +97,41 @@ public class CategoriesFragment extends Fragment {
         view.findViewById(R.id.ibBack).setVisibility(View.GONE);
         view.findViewById(R.id.ibSearch).setVisibility(View.GONE);
         gvCategories = (GridView) view.findViewById(R.id.gvCategories);
-        GVCategoriesAdapter categoriesAdapter = new GVCategoriesAdapter(getContext(), categories());
+        final GVCategoriesAdapter categoriesAdapter = new GVCategoriesAdapter(getContext(), categories());
         gvCategories.setAdapter(categoriesAdapter);
+
+        getAllCategories();
+    }
+
+    private void getAllCategories() {
+        try {
+            Service.getInstance(getContext()).getResponse(Request.Method.GET, Constants.GET_ALL_CATEGORIES, new JSONObject(), new Service.ServiceResponse() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Gson gson = new Gson();
+                    CategoriesResponse categoriesResponse = gson.fromJson(response.toString(), CategoriesResponse.class);
+                    if (categoriesResponse.isSuccess()) {
+
+                    } else {
+                        ApiError apiError = new ApiError(categoriesResponse.getCode());
+                        Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
+                        Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                    }
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+
+                @Override
+                public void updateUIOnNetworkUnavailable(String noInternetMessage) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private ArrayList<Category> categories() {

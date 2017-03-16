@@ -107,8 +107,6 @@ public class GVCategoriesAdapter extends BaseAdapter {
             ibTileImage.setOnTouchListener(this);
             llMainRowItem.setOnTouchListener(this);
             tvTileTitle.setOnTouchListener(this);
-
-
         }
 
         @Override
