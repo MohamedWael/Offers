@@ -17,11 +17,14 @@ import com.sunmediaeg.offers.activities.OffersGeneralActivity;
 import com.sunmediaeg.offers.dataModel.myOffersResponse.Feed;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.views.TimerView;
+<<<<<<< HEAD
 import com.sunmediaeg.offers.views.TimerViewCounter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+=======
+>>>>>>> 59b61d577581db28b230470fc946cbd1661169b2
 
 /**
  * Created by moham on 1/26/2017.

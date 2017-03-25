@@ -280,7 +280,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                     if (responseCode == 200) {
                                         LoginResponse loginResponse = gson.fromJson(response.toString(), LoginResponse.class);
 
+<<<<<<< HEAD
                                         if (finalUrl.equals(Constants.USER)) {
+=======
+                                        if (finalUrl.equals(Constants.REGISTER_USER)) {
+>>>>>>> 59b61d577581db28b230470fc946cbd1661169b2
                                             loginResponse.getData().getUser().setUserType(Constants.TYPE_USER);
                                         } else {
                                             loginResponse.getData().getUser().setUserType(Constants.TYPE_VENDOR);

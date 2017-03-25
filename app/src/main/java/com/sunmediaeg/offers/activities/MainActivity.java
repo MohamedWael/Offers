@@ -24,8 +24,11 @@ import com.sunmediaeg.offers.fragment.SettingsFragment;
 import com.sunmediaeg.offers.utilities.CacheManager;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
+<<<<<<< HEAD
 import com.sunmediaeg.offers.utilities.NetworkStateReceiver;
 import com.sunmediaeg.offers.utilities.Service;
+=======
+>>>>>>> 59b61d577581db28b230470fc946cbd1661169b2
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -62,13 +65,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
         Bundle bundle = getIntent().getExtras();
+<<<<<<< HEAD
         NetworkStateReceiver receiver = NetworkStateReceiver.getInstance();
         registerReceiver(receiver, receiver.getIntentFilter());
+=======
+>>>>>>> 59b61d577581db28b230470fc946cbd1661169b2
         SharedPreferencesManager prefesManager = SharedPreferencesManager.getInstance(this);
         CacheManager manager = CacheManager.getInstance();
         haveAccount = prefesManager.initSharedPreferences().getBoolean(Constants.HAVE_ACCOUNT, false);
         if (haveAccount) {
+<<<<<<< HEAD
             cacheUserData();
+=======
+>>>>>>> 59b61d577581db28b230470fc946cbd1661169b2
             manager.chacheObject(Constants.NAME, prefesManager.getPrefs().getString(Constants.NAME, ""));
             manager.chacheObject(Constants.EMAIL, prefesManager.getPrefs().getString(Constants.EMAIL, ""));
             manager.chacheObject(Constants.USER_ID, prefesManager.getPrefs().getLong(Constants.USER_ID, 0));

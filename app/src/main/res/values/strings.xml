@@ -59,5 +59,8 @@
     <string name="btnForgetPassword">طلب إستعادة كلمة السر</string>
     <string name="loginError">من فضلك تأكد من إدخال جميع الحقول بشكل صحيح\n" + "يجب ألا تقل كلمة السر عن 6 أحرف</string>
     <string name="loginError2">حدث خطأ ما من فضلك حاول فى وقت لاحق</string>
+<<<<<<< HEAD
     <string name="connection">من فضلك تأكد من إتصالك بالإنتر نت</string>
+=======
+>>>>>>> 59b61d577581db28b230470fc946cbd1661169b2
 </resources>
