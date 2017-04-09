@@ -1,14 +1,18 @@
 package com.sunmediaeg.offers.utilities;
 
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.util.Base64;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -25,6 +29,7 @@ import java.net.URLEncoder;
  */
 public class VolleySingleton {
 
+    public static int GALLERY_INTENT_REQUEST = 100;
     private int GALLERY_INTENT_CALLED = 9;
     private int GALLERY_KITKAT_INTENT_CALLED = 10;
     private static VolleySingleton mInstance;
@@ -81,24 +86,56 @@ public class VolleySingleton {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
         byte[] byteFormat = stream.toByteArray();
         // get the base 64 string
-        String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
-
-        return imgString;
+        return Base64.encodeToString(byteFormat, Base64.NO_WRAP);
     }
 
 
-    public String getStringImage(Bitmap bmp) {
-        byte[] imageBytes = convertBitmaptoBytes(bmp);
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return encodedImage;
+    public String getStringImageJPG(Bitmap bmp) {
+        return Base64.encodeToString(convertBitmapToBytesJPG(bmp), Base64.DEFAULT);
     }
 
-    public byte[] convertBitmaptoBytes(Bitmap bmp) {
+    public String getStringImagePNG(Bitmap bmp) {
+        return Base64.encodeToString(convertBitmapToBytesPNG(bmp), Base64.DEFAULT);
+    }
+
+    public String getReducedStringImagePNG(Bitmap bmp) {
+        return Base64.encodeToString(convertBitmapToBytesPNG(reduceImageSizePNG(bmp)), Base64.DEFAULT);
+    }
+
+    public String getReducedStringImageJPG(Bitmap bmp) {
+        return Base64.encodeToString(convertBitmapToBytesJPG(reduceImageSizeJPG(bmp)), Base64.DEFAULT);
+    }
+
+    public Bitmap reduceImageSizePNG(Bitmap bmp) {
+        return reduceImageSize(convertBitmapToBytesPNG(bmp));
+    }
+
+    public Bitmap reduceImageSizeJPG(Bitmap bmp) {
+        return reduceImageSize(convertBitmapToBytesPNG(bmp));
+    }
+
+    public Bitmap reduceImageSize(byte[] data) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8;
+        return BitmapFactory.decodeByteArray(data, 0, data.length, options);
+    }
+
+    public byte[] convertBitmapToBytesJPG(Bitmap bmp) {
+        return convertBitmapToBytes(bmp, Bitmap.CompressFormat.JPEG, 0);
+    }
+
+    public byte[] convertBitmapToBytesPNG(Bitmap bmp) {
+        return convertBitmapToBytes(bmp, Bitmap.CompressFormat.PNG, 0);
+    }
+
+    public byte[] convertBitmapToBytes(Bitmap bmp, Bitmap.CompressFormat format, int quality) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 0, stream);
-        byte[] byteArray = stream.toByteArray();
-        return byteArray;
+        bmp.compress(format, quality, stream);
+        return stream.toByteArray();
     }
+
+
+
 
     public Intent getPictureFromGalleryIntent() {
         //This takes images directly from gallery
@@ -114,10 +151,24 @@ public class VolleySingleton {
             gallerypickerIntent.putExtra("BuildVersion", GALLERY_KITKAT_INTENT_CALLED);
         }
         gallerypickerIntent.setType("image/*");
-
         return gallerypickerIntent;
     }
 
+    public Intent getPictureFromGalleryIntent(Fragment fragment) {
+        Intent gallerypickerIntent = getPictureFromGalleryIntent();
+        fragment.startActivityForResult(gallerypickerIntent, GALLERY_INTENT_REQUEST);
+        return gallerypickerIntent;
+    }
+
+    public Intent getPictureFromGalleryIntent(Activity activity) {
+        Intent gallerypickerIntent = getPictureFromGalleryIntent();
+        activity.startActivityForResult(gallerypickerIntent, GALLERY_INTENT_REQUEST);
+        return gallerypickerIntent;
+    }
+
+    public Bitmap getBitmap(ImageView imageView) {
+        return ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+    }
 
     public Bitmap handleResultFromChooser(Intent onActivityResultIntent) {
 

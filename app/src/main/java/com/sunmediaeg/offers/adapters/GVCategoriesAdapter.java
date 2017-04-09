@@ -12,13 +12,15 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.OffersGeneralActivity;
-import com.sunmediaeg.offers.dataModel.Category;
+import com.sunmediaeg.offers.dataModel.categories.Category;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Nourhan on 1/28/2017.
@@ -27,11 +29,11 @@ import java.util.ArrayList;
 public class GVCategoriesAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<Category> categories;
+    private List<Category> categories;
     private boolean isCategoriesFragment = true;
     private Intent intent;
 
-    public GVCategoriesAdapter(Context mContext, ArrayList<Category> categories) {
+    public GVCategoriesAdapter(Context mContext, List<Category> categories) {
         this.mContext = mContext;
         this.categories = categories;
     }
@@ -54,7 +56,7 @@ public class GVCategoriesAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return categories.get(i).getIntentID();
+        return categories.get(i).getId();
     }
 
     @Override
@@ -76,17 +78,9 @@ public class GVCategoriesAdapter extends BaseAdapter {
         }
 
         final GridViewHolder viewHolder = (GridViewHolder) view.getTag();
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Logger.d("onClick", "view");
-            }
-        });
-
-        viewHolder.tvTileTitle.setText(item.getTileTitle());
-        viewHolder.ibTileImage.setImageResource(item.getTileImage());
-
-
+        viewHolder.setCategoryID(item.getId());
+        viewHolder.tvTileTitle.setText(item.getName());
+        Picasso.with(mContext).load(item.getImage()).placeholder(R.drawable.logo).into(viewHolder.ibTileImage);
         return view;
     }
 
@@ -96,6 +90,7 @@ public class GVCategoriesAdapter extends BaseAdapter {
         final private RelativeLayout llMainRowItem;
         final private ImageButton ibTileImage;
         final private TextView tvTileTitle;
+        private int categoryID = -1;
 
         public GridViewHolder(RelativeLayout llMainRowItem, ImageButton ibTileImage, TextView tvTileTitle) {
             this.llMainRowItem = llMainRowItem;
@@ -113,8 +108,14 @@ public class GVCategoriesAdapter extends BaseAdapter {
         public void onClick(View view) {
             Intent intent = new Intent(mContext, OffersGeneralActivity.class);
             intent.putExtra(Constants.ACTIVITY, Constants.ACTIVITY_CATEGORY_COMPANIES);
-            intent.putExtra("Category", tvTileTitle.getText().toString());
+            intent.putExtra(Constants.CATEGORY_TITLE, tvTileTitle.getText().toString());
+            Logger.d(Constants.CATEGORY_ID, categoryID + "");
+            intent.putExtra(Constants.CATEGORY_ID, categoryID);
             mContext.startActivity(intent);
+        }
+
+        public void setCategoryID(int categoryID) {
+            this.categoryID = categoryID;
         }
 
         @Override

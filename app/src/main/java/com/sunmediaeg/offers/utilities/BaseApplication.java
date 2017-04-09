@@ -19,6 +19,7 @@ public class BaseApplication extends Application {
     private VolleySingleton volleySingleton;
     private RequestQueue requestQueue;
     private RequestQueue downloadQueue;
+//    private RealmDB realmDB;
 
     @Override
     public void onCreate() {
@@ -26,7 +27,7 @@ public class BaseApplication extends Application {
         Logger.d("Application", "Created");
         TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_KEY, Constants.TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
-        RealmDB.getInstance(this);
+//        realmDB = RealmDB.getInstance(this);
         SharedPreferencesManager prefesManager = SharedPreferencesManager.getInstance(getApplicationContext());
         CacheManager manager = CacheManager.getInstance();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
@@ -43,10 +44,12 @@ public class BaseApplication extends Application {
             manager.cacheObject(Constants.NAME, prefesManager.getPrefs().getString(Constants.NAME, ""));
             manager.cacheObject(Constants.EMAIL, prefesManager.getPrefs().getString(Constants.EMAIL, ""));
             manager.cacheObject(Constants.USER_ID, prefesManager.getPrefs().getLong(Constants.USER_ID, 0));
+            manager.cacheObject(Constants.TOKEN, prefesManager.getPrefs().getString(Constants.TOKEN, ""));
             manager.cacheObject(Constants.HAVE_ACCOUNT, true);
-//            Logger.d("NAME", manager.getCachedObject(Constants.NAME) + "");
-//            Logger.d("EMAIL", manager.getCachedObject(Constants.EMAIL) + "");
-//            Logger.d("USER_ID", manager.getCachedObject(Constants.USER_ID) + "");
+            Logger.d("AppNAME", manager.getCachedObject(Constants.NAME) + "");
+            Logger.d("AppEMAIL", manager.getCachedObject(Constants.EMAIL) + "");
+            Logger.d("AppUSER_ID", manager.getCachedObject(Constants.USER_ID) + "");
+            Logger.d("AppToken", manager.getCachedObject(Constants.TOKEN) + "");
         }
 
         volleySingleton = VolleySingleton.getInstance(this);
@@ -56,7 +59,6 @@ public class BaseApplication extends Application {
         downloadQueue.start();
 
     }
-
 
     @Override
     public void onTerminate() {

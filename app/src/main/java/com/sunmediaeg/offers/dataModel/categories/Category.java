@@ -4,22 +4,29 @@ package com.sunmediaeg.offers.dataModel.categories;
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class Category {
+public class Category  extends RealmObject{
 
+    @PrimaryKey
     @SerializedName("id")
-    private Long mId;
+    private int mId;
     @SerializedName("image")
     private String mImage;
     @SerializedName("name")
     private String mName;
 
-    public Long getId() {
+    public Category() {
+    }
+
+    public int getId() {
         return mId;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         mId = id;
     }
 

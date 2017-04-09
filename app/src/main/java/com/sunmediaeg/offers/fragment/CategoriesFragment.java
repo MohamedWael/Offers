@@ -4,10 +4,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -15,7 +17,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.adapters.GVCategoriesAdapter;
-import com.sunmediaeg.offers.dataModel.Category;
+import com.sunmediaeg.offers.dataModel.APIResponse;
 import com.sunmediaeg.offers.dataModel.categories.CategoriesResponse;
 import com.sunmediaeg.offers.utilities.ApiError;
 import com.sunmediaeg.offers.utilities.Constants;
@@ -23,8 +25,6 @@ import com.sunmediaeg.offers.utilities.Logger;
 import com.sunmediaeg.offers.utilities.Service;
 
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +47,8 @@ public class CategoriesFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private TextView tvTitle;
     private GridView gvCategories;
+    private ProgressBar pbCategories;
+    private SwipeRefreshLayout srlRefresh;
     private static CategoriesFragment fragment;
 
     public CategoriesFragment() {
@@ -93,40 +95,54 @@ public class CategoriesFragment extends Fragment {
 
     private void initComponents(View view) {
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
+        pbCategories = (ProgressBar) view.findViewById(R.id.pbCategories);
+        srlRefresh = (SwipeRefreshLayout) view.findViewById(R.id.srlRefresh);
+
         tvTitle.setText(mParam1);
         view.findViewById(R.id.ibBack).setVisibility(View.GONE);
         view.findViewById(R.id.ibSearch).setVisibility(View.GONE);
         gvCategories = (GridView) view.findViewById(R.id.gvCategories);
-        final GVCategoriesAdapter categoriesAdapter = new GVCategoriesAdapter(getContext(), categories());
-        gvCategories.setAdapter(categoriesAdapter);
 
+        srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getAllCategories();
+            }
+        });
         getAllCategories();
     }
 
     private void getAllCategories() {
         try {
+            showProgressBar(true);
             Service.getInstance(getContext()).getResponse(Request.Method.GET, Constants.GET_ALL_CATEGORIES, new JSONObject(), new Service.ServiceResponse() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    showProgressBar(false);
                     Gson gson = new Gson();
-                    CategoriesResponse categoriesResponse = gson.fromJson(response.toString(), CategoriesResponse.class);
-                    if (categoriesResponse.isSuccess()) {
+                    APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
+                    if (apiResponse.isSuccess()) {
+                        CategoriesResponse categoriesResponse = gson.fromJson(response.toString(), CategoriesResponse.class);
+
+                        final GVCategoriesAdapter categoriesAdapter = new GVCategoriesAdapter(getContext(), categoriesResponse.getData().getCategories());
+                        gvCategories.setAdapter(categoriesAdapter);
 
                     } else {
-                        ApiError apiError = new ApiError(categoriesResponse.getCode());
+                        ApiError apiError = new ApiError(apiResponse.getCode());
                         Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
                         Constants.toastMsg(getContext(), apiError.getErrorMsg());
                     }
+                    if (srlRefresh.isRefreshing()) srlRefresh.setRefreshing(false);
                 }
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    if (srlRefresh.isRefreshing()) srlRefresh.setRefreshing(false);
                 }
 
                 @Override
                 public void updateUIOnNetworkUnavailable(String noInternetMessage) {
-
+                    if (srlRefresh.isRefreshing()) srlRefresh.setRefreshing(false);
                 }
             });
         } catch (Exception e) {
@@ -134,29 +150,6 @@ public class CategoriesFragment extends Fragment {
         }
     }
 
-    private ArrayList<Category> categories() {
-        ArrayList<Category> categories = new ArrayList<>();
-        Category electronics = new Category(Constants.ELECTRONICS, R.drawable.computer, getString(R.string.electronics));
-        Category travel = new Category(Constants.TRAVEL, R.drawable.travel, getString(R.string.travel));
-        Category airplanes = new Category(Constants.AIRPLANE, R.drawable.plane, getString(R.string.airplanes));
-        Category cars = new Category(Constants.CARS, R.drawable.cars, getString(R.string.cars));
-        Category communications = new Category(Constants.COMMUNICATIONS, R.drawable.electronics, getString(R.string.communications));
-        Category furniture = new Category(Constants.FURNITURE, R.drawable.furniture, getString(R.string.furniture));
-        Category restaurant = new Category(Constants.RESTAURANTS, R.drawable.restaurant, getString(R.string.resteraunts));
-        Category health = new Category(Constants.HEALTH, R.drawable.fitness, getString(R.string.health));
-        Category clothes = new Category(Constants.CLOTHES, R.drawable.clothes, getString(R.string.clothes));
-
-        categories.add(electronics);
-        categories.add(travel);
-        categories.add(airplanes);
-        categories.add(cars);
-        categories.add(communications);
-        categories.add(furniture);
-        categories.add(restaurant);
-        categories.add(health);
-        categories.add(clothes);
-        return categories;
-    }
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -178,6 +171,11 @@ public class CategoriesFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void showProgressBar(boolean show) {
+        if (show) pbCategories.setVisibility(View.VISIBLE);
+        else pbCategories.setVisibility(View.GONE);
     }
 
     /**

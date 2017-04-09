@@ -2,13 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/back_logo"
     tools:context="com.sunmediaeg.offers.fragment.SignUpFragment">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/back_logo" />
 
     <include
         android:id="@+id/lAppBar"
@@ -114,7 +110,6 @@
             android:layout_marginRight="20dp"
             android:background="@drawable/facebook"
             android:elevation="5dp" />
-
 
 
         <ImageButton

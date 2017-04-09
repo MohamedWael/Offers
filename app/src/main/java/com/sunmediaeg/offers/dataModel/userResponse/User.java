@@ -1,9 +1,10 @@
 
 package com.sunmediaeg.offers.dataModel.userResponse;
 
-import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
-import com.sunmediaeg.offers.utilities.Constants;
+import com.sunmediaeg.offers.utilities.Service;
+
+import javax.annotation.Generated;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -12,18 +13,25 @@ import io.realm.annotations.PrimaryKey;
 @SuppressWarnings("unused")
 public class User extends RealmObject {
 
-    @SerializedName("email")
-    private String mEmail;
     @PrimaryKey
     @SerializedName("id")
-    private Long mId;
+    private long mId;
+    @SerializedName("email")
+    private String mEmail;
     @SerializedName("image")
     private String mImage;
     @SerializedName("is_admin")
-    private Long mIsAdmin;
+    private int mIsAdmin;
     @SerializedName("name")
     private String mName;
+    @SerializedName("token")
+    private String token;
+    @SerializedName("city_id")
+    private String city;
+
+    @Deprecated
     private int userType;
+
 
     public User() {
     }
@@ -36,11 +44,11 @@ public class User extends RealmObject {
         mEmail = email;
     }
 
-    public Long getId() {
+    public long getId() {
         return mId;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         mId = id;
     }
 
@@ -52,11 +60,11 @@ public class User extends RealmObject {
         mImage = image;
     }
 
-    public Long getIsAdmin() {
+    public int getIsAdmin() {
         return mIsAdmin;
     }
 
-    public void setIsAdmin(Long isAdmin) {
+    public void setIsAdmin(int isAdmin) {
         mIsAdmin = isAdmin;
     }
 
@@ -68,7 +76,20 @@ public class User extends RealmObject {
         mName = name;
     }
 
+    @Deprecated
     public void setUserType(int userType) {
         this.userType = userType;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getCity() {
+        return city;
     }
 }

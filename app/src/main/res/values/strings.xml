@@ -7,9 +7,13 @@
     <string name="btnSignUpAsUser">إنشاء حساب</string>
     <string name="btnSignUpAsVendor">إنشاء حساب كبائع</string>
     <string name="btnLogin">تسجيل الدخول</string>
-    <string name="etUserName">إسم المستخدم...</string>
-    <string name="etMail">البريد الإلكترونى...</string>
-    <string name="etPassword">كلمة المرور...</string>
+    <string name="etUserName">إسم المستخدم</string>
+    <string name="etMail">البريد الإلكترونى</string>
+    <string name="etCity">المدينة</string>
+    <string name="etPassword">كلمة المرور</string>
+    <string name="etPhoneNo">رقم الهاتف</string>
+    <string name="etAddress">العنوان</string>
+    <string name="btnModifyAccountData">إرسال</string>
     <string name="btnSend">إرسال</string>
     <string name="tvCreateAccount">إنشاء حساب</string>
     <string name="btnHaveAccoutn"><u>سجل الآن</u></string>
@@ -29,6 +33,13 @@
     <string name="health">الصحة واللياقة</string>
     <string name="clothes">الملابس</string>
     <string name="offerDetails">تفاصيل العرض</string>
+    <string name="noOffer">ليس لديه عروض</string>
+    <string name="oneOffer">عرض واحد</string>
+    <string name="twoOffer">عرضين</string>
+    <string name="lessThan10Offers">عروض</string>
+    <string name="moreThan10Offers">عرض</string>
+    <string name="cancel">إلغاء</string>
+    <string name="ok">نعم</string>
 
 
     <string name="egyptAir">مصر للطيران</string>
@@ -56,7 +67,7 @@
     <string name="tvSearchForOffers">إبحث عن العروض</string>
     <string name="btnContactUs">راسلنا</string>
     <string name="btnAdvertise">أعلن معنا</string>
-    <string name="btnSignUp">التسجيل</string>
+    <string name="btnSignUp">إعدادات الحساب</string>
     <string name="btnForgetPassword">طلب إستعادة كلمة السر</string>
     <string name="loginError">من فضلك تأكد من إدخال جميع الحقول بشكل صحيح\n" + "يجب ألا تقل كلمة السر عن 6 أحرف</string>
     <string name="loginError2">حدث خطأ ما من فضلك حاول فى وقت لاحق</string>
@@ -64,4 +75,7 @@
     <string name="connection">من فضلك تأكد من إتصالك بالإنتر نت</string>
     <string name="connectionError">حدث خطأ ما من فضلك حاول فى وقت لاحق</string>
     <string name="dateError">حدث خطأ فى نمط التاريخ</string>
+    <string name="followingError">لما تقم بإتباع أى بائح حتى الآن</string>
+    <string name="btnShare">شارك العرض</string>
+    <string name="onlyOnOffers">فقط على أوفرز</string>
 </resources>

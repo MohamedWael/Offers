@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.sunmediaeg.offers.fragment.OffersFragment">
-2
+    2
+
     <include
         android:id="@+id/iAppBar"
         layout="@layout/app_bar_layout"
@@ -12,30 +13,36 @@
 
     <ProgressBar
         android:id="@+id/pbMyOFFers"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
-    <ScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srlRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/iAppBar">
 
-        <RelativeLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/iAppBar">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvOffers"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_marginTop="5dp"
-                android:paddingBottom="10dp" />
+                android:layout_height="wrap_content">
 
-        </RelativeLayout>
-    </ScrollView>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvOffers"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingBottom="10dp" />
 
+            </RelativeLayout>
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.sunmediaeg.offers.adapters.RVOffersAdapter;
 import com.sunmediaeg.offers.dataModel.Company;
 import com.sunmediaeg.offers.dataModel.offers.OffersResponse;
 import com.sunmediaeg.offers.utilities.ApiError;
+import com.sunmediaeg.offers.utilities.CacheManager;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
 import com.sunmediaeg.offers.utilities.Service;
@@ -50,6 +52,7 @@ public class HomeFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private RecyclerView rvCompanies, rvOffers;
     private TextView tvTitle;
+    private SwipeRefreshLayout srlRefresh;
     private ProgressBar pbHomeOffers;
     private static HomeFragment fragment;
 
@@ -82,8 +85,6 @@ public class HomeFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-
-
         }
     }
 
@@ -93,15 +94,28 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         setRetainInstance(true);
         initComponents(view);
+        final long userID = (long) CacheManager.getInstance().getCachedObject(Constants.USER_ID, 0L);
+//        if (userID != null && userID != 0)
+//            getAllOffers(Constants.SHOW_ALL_OFFERS + userID);
+//        else getAllOffers(Constants.removeLastSlash(Constants.SHOW_ALL_OFFERS));
+        getAllOffers(Constants.removeLastSlash(Constants.SHOW_ALL_OFFERS) + Constants.ADD_USER_ID + userID);
+
+        srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getAllOffers(Constants.removeLastSlash(Constants.SHOW_ALL_OFFERS) + Constants.ADD_USER_ID + userID);
+
+            }
+        });
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        setRetainInstance(true);
         RVCompaniesAdapter companiesAdapter = new RVCompaniesAdapter(getContext(), initCompaniesData());
         rvCompanies.setAdapter(companiesAdapter);
-        getAllOffers();
     }
 
     private void initComponents(View view) {
@@ -109,16 +123,18 @@ public class HomeFragment extends Fragment {
         tvTitle = (TextView) view.findViewById(R.id.tvTitle);
         tvTitle.setText(mParam1);
         view.findViewById(R.id.ibBack).setVisibility(View.GONE);
+        srlRefresh = (SwipeRefreshLayout) view.findViewById(R.id.srlRefresh);
         rvOffers = (RecyclerView) view.findViewById(R.id.rvHomeOffers);
         rvOffers.setLayoutManager(new LinearLayoutManager(getContext()));
         rvCompanies = (RecyclerView) view.findViewById(R.id.rvCompanies);
         rvCompanies.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
     }
 
-    private void getAllOffers() {
+    private void getAllOffers(String url) {
         try {
             pbHomeOffers.setVisibility(View.VISIBLE);
-            Service.getInstance(getContext()).getResponse(Request.Method.GET, Constants.removeLastSlash(Constants.SHOW_ALL_OFFERS), new JSONObject(), new Service.ServiceResponse() {
+            JSONObject body = new JSONObject();
+            Service.getInstance(getContext()).getResponse(Request.Method.GET, url, body, new Service.ServiceResponse() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Gson gson = new Gson();
@@ -126,21 +142,23 @@ public class HomeFragment extends Fragment {
                     if (offersResponse != null && offersResponse.isSuccess()) {
                         RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), offersResponse.getData().getOffers());
                         rvOffers.setAdapter(offersAdapter);
+                        if (srlRefresh.isRefreshing()) srlRefresh.setRefreshing(false);
                     } else {
                         ApiError apiError = new ApiError(offersResponse.getCode());
                         Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
+                        Constants.toastMsg(getContext(), apiError.getErrorMsg());
                     }
                     pbHomeOffers.setVisibility(View.GONE);
                 }
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    if (srlRefresh.isRefreshing()) srlRefresh.setRefreshing(false);
                 }
 
                 @Override
                 public void updateUIOnNetworkUnavailable(String noInternetMessage) {
-
+                    if (srlRefresh.isRefreshing()) srlRefresh.setRefreshing(false);
                 }
             });
         } catch (Exception e) {

@@ -24,6 +24,7 @@ public class TimerView extends LinearLayout {
 
     private TextView tvRemainingDate, tvDay, tvHour, tvSecond, tvMinuit;
     private View view;
+    private boolean timeOut = false;
 
     public TimerView(Context context) {
         super(context);
@@ -63,6 +64,14 @@ public class TimerView extends LinearLayout {
         tvMinuit = (TextView) findViewById(R.id.tvMinuit);
     }
 
+    public void setTimeOut(boolean timeOut) {
+        this.timeOut = timeOut;
+    }
+
+    public boolean isTimeOut() {
+        return timeOut;
+    }
+
     public void setTime(long startDate, long endDate, TimerViewCounter.RemainingTime remainingTime) {
         setTime(new Date(startDate), new Date(endDate), remainingTime);
     }
@@ -74,14 +83,13 @@ public class TimerView extends LinearLayout {
 
     public void setTime(Date startDate, Date endDate, final TimerViewCounter.RemainingTime time) {
         SimpleDateFormat format = new SimpleDateFormat(TimerViewCounter.STANDARD_DATE_FORMAT);
-        if (endDate.getTime() < System.currentTimeMillis())
-            tvRemainingDate.setText(getContext().getString(R.string.timeUp));
-        else
-            tvRemainingDate.setText(format.format(endDate));
+        if (endDate.getTime() < System.currentTimeMillis()) tvRemainingDate.setText(getContext().getString(R.string.timeUp));
+        else tvRemainingDate.setText(format.format(endDate));
         final TimerViewCounter counter = new TimerViewCounter(startDate, endDate);
         counter.calculateRemainingTime(getContext(), new TimerViewCounter.RemainingTime() {
             @Override
             public void onTimeOut() {
+                timeOut = true;
                 if (time != null) time.onTimeOut();
             }
 

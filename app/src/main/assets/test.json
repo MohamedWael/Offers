@@ -1,26 +1,14 @@
 {
-  "message": "success",
   "data": {
-    "offers": [
-      {
-        "id": 2,
-        "ShortDesc": "",
-        "image": "http:\/\/api.sunmediaeg.com\/offer\/public\/uploads\/offer\/test",
-        "end_date": 1484006400,
-        "title": "testing update",
-        "CategoryName": "test",
-        "start_date": 1483228800
-      },
-      {
-        "id": 3,
-        "ShortDesc": "",
-        "image": "http:\/\/api.sunmediaeg.com\/offer\/public\/uploads\/offer\/t2",
-        "end_date": 1484784000,
-        "title": "t2",
-        "CategoryName": "test",
-        "start_date": 1483401600
-      }
-    ]
+    "user": {
+      "id": 23,
+      "name": "Mohamed Wael ",
+      "email": "mohamed.wael@yahoo.com",
+      "image": "",
+      "is_admin": "0",
+      "token": "95d8663f3a39f30918b0f14c253ae039"
+    }
   },
+  "message": "success",
   "code": 200
 }

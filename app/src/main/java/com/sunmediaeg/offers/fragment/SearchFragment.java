@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.adapters.GVCategoriesAdapter;
-import com.sunmediaeg.offers.dataModel.Category;
 import com.sunmediaeg.offers.utilities.Constants;
 
 import java.util.ArrayList;
@@ -86,28 +85,28 @@ public class SearchFragment extends Fragment {
         view.findViewById(R.id.ibBack).setVisibility(View.GONE);
         view.findViewById(R.id.ibSearch).setVisibility(View.GONE);
         gvCategories = (GridView) view.findViewById(R.id.gvCategories);
-        GVCategoriesAdapter categoriesAdapter = new GVCategoriesAdapter(getContext(), categories(), false);
-        gvCategories.setAdapter(categoriesAdapter);
+//        GVCategoriesAdapter categoriesAdapter = new GVCategoriesAdapter(getContext(), categories(), false);
+//        gvCategories.setAdapter(categoriesAdapter);
     }
 
 
-    private ArrayList<Category> categories() {
-        ArrayList<Category> categories = new ArrayList<>();
-        Category electronics = new Category(Constants.ELECTRONICS, R.drawable.computer, getString(R.string.electronics));
-        Category travel = new Category(Constants.TRAVEL, R.drawable.travel, getString(R.string.travel));
-        Category airplanes = new Category(Constants.AIRPLANE, R.drawable.plane, getString(R.string.airplanes));
-        Category cars = new Category(Constants.CARS, R.drawable.cars, getString(R.string.cars));
-        Category furniture = new Category(Constants.FURNITURE, R.drawable.furniture, getString(R.string.furniture));
-        Category restaurant = new Category(Constants.RESTAURANTS, R.drawable.restaurant, getString(R.string.resteraunts));
-
-        categories.add(electronics);
-        categories.add(travel);
-        categories.add(airplanes);
-        categories.add(cars);
-        categories.add(furniture);
-        categories.add(restaurant);
-        return categories;
-    }
+//    private ArrayList<Category> categories() {
+//        ArrayList<Category> categories = new ArrayList<>();
+//        Category electronics = new Category(Constants.ELECTRONICS, R.drawable.computer, getString(R.string.electronics));
+//        Category travel = new Category(Constants.TRAVEL, R.drawable.travel, getString(R.string.travel));
+//        Category airplanes = new Category(Constants.AIRPLANE, R.drawable.plane, getString(R.string.airplanes));
+//        Category cars = new Category(Constants.CARS, R.drawable.cars, getString(R.string.cars));
+//        Category furniture = new Category(Constants.FURNITURE, R.drawable.furniture, getString(R.string.furniture));
+//        Category restaurant = new Category(Constants.RESTAURANTS, R.drawable.restaurant, getString(R.string.resteraunts));
+//
+//        categories.add(electronics);
+//        categories.add(travel);
+//        categories.add(airplanes);
+//        categories.add(cars);
+//        categories.add(furniture);
+//        categories.add(restaurant);
+//        return categories;
+//    }
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

@@ -33,9 +33,9 @@ import com.sunmediaeg.offers.dataModel.APIResponse;
 import com.sunmediaeg.offers.dataModel.jsonModels.FbProfileData;
 import com.sunmediaeg.offers.dataModel.jsonModels.LoginResponse;
 import com.sunmediaeg.offers.utilities.ApiError;
+import com.sunmediaeg.offers.utilities.CacheManager;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
-import com.sunmediaeg.offers.utilities.RealmDB;
 import com.sunmediaeg.offers.utilities.Service;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 import com.sunmediaeg.offers.utilities.SignUpUtility;
@@ -89,6 +89,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private TwitterAuthClient twitterAuthClient;
     private String token;
     private String secret;
+    private CacheManager manager;
 //    private com.sunmediaeg.offers.utilities.TwitterLoginButton btnTwitterLogin;
 
 
@@ -121,6 +122,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        manager = CacheManager.getInstance();
         gson = new Gson();
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -275,13 +277,18 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                         } else {
                                             loginResponse.getData().getUser().setUserType(Constants.TYPE_VENDOR);
                                         }
-                                        RealmDB.getInstance(getContext()).createOrUpdate(loginResponse.getData().getUser());
+//                                        RealmDB.getInstance(getContext()).createOrUpdate(loginResponse.getData().getUser());
                                         Logger.d("user", loginResponse.getData().getUser().toString());
                                         editor.putString(Constants.NAME, loginResponse.getData().getUser().getName());
                                         editor.putString(Constants.EMAIL, loginResponse.getData().getUser().getEmail());
                                         editor.putLong(Constants.USER_ID, loginResponse.getData().getUser().getId());
                                         editor.putBoolean(Constants.HAVE_ACCOUNT, true);
                                         editor.commit();
+                                        manager.cacheObject(Constants.NAME, loginResponse.getData().getUser().getName());
+                                        manager.cacheObject(Constants.EMAIL, loginResponse.getData().getUser().getEmail());
+                                        manager.cacheObject(Constants.TOKEN, loginResponse.getData().getUser().getToken());
+                                        manager.cacheObject(Constants.USER_ID, loginResponse.getData().getUser().getId());
+                                        manager.cacheObject(Constants.HAVE_ACCOUNT, true);
                                         Intent intent = new Intent(getActivity(), MainActivity.class);
                                         intent.putExtra(Constants.IS_COMPANY_PROFILE, false); // <-- this extra is related only to the MainActivity
                                         getActivity().startActivity(intent);

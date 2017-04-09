@@ -10,15 +10,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.adapters.RVOffersAdapter;
-import com.sunmediaeg.offers.dataModel.myOffersResponse.Feed;
+import com.sunmediaeg.offers.dataModel.APIResponse;
+import com.sunmediaeg.offers.dataModel.categoryVendors.Vendor;
+import com.sunmediaeg.offers.dataModel.vendor.VendorResponse;
+import com.sunmediaeg.offers.utilities.CacheManager;
+import com.sunmediaeg.offers.utilities.Constants;
+import com.sunmediaeg.offers.utilities.Service;
 
-import java.util.ArrayList;
-
-import io.realm.RealmList;
+import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,8 +49,11 @@ public class CompanyProfileFragment extends Fragment implements View.OnClickList
 
     private OnFragmentInteractionListener mListener;
     private TextView tvTitle;
+    private ImageView ivBrochureImage, ivVendorLogo;
     private ImageButton ibBack;
     private RecyclerView rvCompanyOffers;
+    private Vendor vendor;
+    private ProgressBar pbVendorProfile;
 
     public CompanyProfileFragment() {
         // Required empty public constructor
@@ -79,21 +91,63 @@ public class CompanyProfileFragment extends Fragment implements View.OnClickList
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_company_profile, container, false);
         initComponents(view);
-
+        initVendor();
         return view;
     }
 
-    private void initComponents(View v) {
-        tvTitle = (TextView) v.findViewById(R.id.tvTitle);
-        tvTitle.setText(mParam1);
-        ibBack = (ImageButton) v.findViewById(R.id.ibBackCP);
-        ibBack.setOnClickListener(this);
-        rvCompanyOffers = (RecyclerView) v.findViewById(R.id.rvCompanyOffers);
-        rvCompanyOffers.setLayoutManager(new LinearLayoutManager(getContext()));
-        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), new RealmList<Feed>());
-        rvCompanyOffers.setAdapter(offersAdapter);
+    private void initVendor() {
+        try {
+            final int vendorID = Integer.parseInt(mParam1);
+//            long userID = (long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
+            JSONObject body = new JSONObject();
+//            body.put(Constants.USER_ID,userID);
+            Service.getInstance(getContext()).getResponse(Request.Method.GET, Constants.VENDOR + vendorID, body, new Service.ServiceResponse() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Gson gson = new Gson();
+                    APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
+                    if (apiResponse.isSuccess()) {
+                        VendorResponse vendorResponse = gson.fromJson(response.toString(), VendorResponse.class);
+                        setupVendor(vendorResponse.getData().getVendor());
+                    }
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+
+                @Override
+                public void updateUIOnNetworkUnavailable(String noInternetMessage) {
+
+                }
+            });
+        } catch (NumberFormatException e) {
+            vendor = (Vendor) CacheManager.getInstance().getCachedObject(Constants.CATEGORY_VENDORS);
+            setupVendor(vendor);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    private void initComponents(View v) {
+        pbVendorProfile = (ProgressBar) v.findViewById(R.id.pbVendorProfile);
+        tvTitle = (TextView) v.findViewById(R.id.tvTitle);
+        ibBack = (ImageButton) v.findViewById(R.id.ibBackCP);
+        ivVendorLogo = (ImageView) v.findViewById(R.id.ivVendorLogo);
+        ivBrochureImage = (ImageView) v.findViewById(R.id.ivBrochureImage);
+        rvCompanyOffers = (RecyclerView) v.findViewById(R.id.rvCompanyOffers);
+        rvCompanyOffers.setLayoutManager(new LinearLayoutManager(getContext()));
+        ibBack.setOnClickListener(this);
+    }
+
+    private void setupVendor(Vendor vendor) {
+        tvTitle.setText(vendor.getName());
+        Picasso.with(getContext()).load(vendor.getBrochureImage()).placeholder(R.drawable.photo_replacement).into(ivBrochureImage);
+        Picasso.with(getContext()).load(vendor.getImage()).placeholder(R.drawable.logo).into(ivVendorLogo);
+        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), vendor.getOffers());
+        rvCompanyOffers.setAdapter(offersAdapter);
+    }
 
     @Override
     public void onClick(View v) {

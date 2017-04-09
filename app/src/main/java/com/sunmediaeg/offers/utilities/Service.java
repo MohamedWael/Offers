@@ -18,6 +18,7 @@ public class Service implements NetworkStateReceiver.NetworkStateReceiverListene
     private static Service ourInstance;
     private final VolleySingleton volley;
     private final Context mContext;
+    private static DialogUtil dialogUtil;
     private ArrayList<ServiceRequest> requests;
     private ServiceRequest request;
     private int numberOfRetryingToGetResponse = 0;
@@ -25,6 +26,7 @@ public class Service implements NetworkStateReceiver.NetworkStateReceiverListene
 
 
     public static Service getInstance(Context mContext) {
+        dialogUtil = new DialogUtil(mContext);
         if (ourInstance == null) {
             Logger.d("Service", "new Service");
             ourInstance = new Service(mContext);
@@ -50,9 +52,14 @@ public class Service implements NetworkStateReceiver.NetworkStateReceiverListene
             public void onResponse(JSONObject response) {
                 Logger.d("Response", response.toString());
                 serviceResponse.onResponse(response);
+//                Gson gson = new Gson();
+//                APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
+//                if (apiResponse.isSuccess()) {
+//                    serviceResponse.onResponseSuccess(response);
+//                }
             }
         }, new Response.ErrorListener() {
-            private boolean cached = false;
+//            private boolean cached = false;
 
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -69,12 +76,14 @@ public class Service implements NetworkStateReceiver.NetworkStateReceiverListene
                     numberOfRetryingToGetResponse++;
                 } else if (volleyErrorStr.contains("com.android.volley.NoConnectionError")) {
                     Logger.e("elseIf", volleyErrorStr);
-                    Constants.toastMsg(mContext, mContext.getString(R.string.connection));
+//                    Constants.toastMsg(mContext, mContext.getString(R.string.connection));
+                    dialogUtil.showMessage(mContext.getString(R.string.connection));
                     serviceResponse.updateUIOnNetworkUnavailable(mContext.getString(R.string.connection));
 //                    if (!cached) cacheRequest(request);
                 } else {
                     Logger.e("volleyErrorStr", volleyErrorStr);
-                    Constants.toastMsg(mContext, mContext.getString(R.string.connectionError));
+//                    Constants.toastMsg(mContext, mContext.getString(R.string.connectionError));
+                    dialogUtil.showMessage(mContext.getString(R.string.connectionError));
                 }
                 Logger.d("VolleyError", error.toString());
             }
@@ -134,11 +143,14 @@ public class Service implements NetworkStateReceiver.NetworkStateReceiverListene
 
     @Override
     public void networkUnavailable() {
-        Constants.toastMsg(mContext, mContext.getString(R.string.connection));
+//        Constants.toastMsg(mContext, mContext.getString(R.string.connection));
+        dialogUtil.showMessage(mContext.getString(R.string.connection));
     }
 
     public interface ServiceResponse {
         void onResponse(JSONObject response);
+
+        //        void onResponseSuccess(JSONObject response);
 
         void onErrorResponse(VolleyError error);
 

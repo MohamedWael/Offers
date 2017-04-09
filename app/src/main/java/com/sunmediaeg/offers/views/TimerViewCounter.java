@@ -58,7 +58,7 @@ public class TimerViewCounter {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            Logger.d("OnTimeOut", "Time Out");
+//                            Logger.d("OnTimeOut", "Time Out");
                             time.onTimeOut();
                         }
                     });

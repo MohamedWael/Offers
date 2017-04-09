@@ -12,6 +12,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.dataModel.APIResponse;
 import com.sunmediaeg.offers.dataModel.userResponse.UserResponse;
 import com.sunmediaeg.offers.fragment.CategoriesFragment;
 import com.sunmediaeg.offers.fragment.CompanyProfileFragment;
@@ -21,6 +22,7 @@ import com.sunmediaeg.offers.fragment.LoginFragment;
 import com.sunmediaeg.offers.fragment.OffersFragment;
 import com.sunmediaeg.offers.fragment.SearchFragment;
 import com.sunmediaeg.offers.fragment.SettingsFragment;
+import com.sunmediaeg.offers.utilities.ApiError;
 import com.sunmediaeg.offers.utilities.CacheManager;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
@@ -194,37 +196,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void cacheUserData() {
-        Long userID = (Long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
-        Logger.d("userID", userID.toString());
-        if (userID != 0) {
-            try {
-                Service.getInstance(this).getResponse(Request.Method.GET, Constants.USER + userID, new JSONObject(), new Service.ServiceResponse() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Logger.d("UserCache", response.toString());
-                        Gson gson = new Gson();
-                        UserResponse userResponse = gson.fromJson(response.toString(), UserResponse.class);
-                        if (userResponse != null && userResponse.isSuccess()) {
-                            CacheManager.getInstance().cacheObject(Constants.USER, userResponse.getData().getUser());
-                        }
-                    }
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-
-                    @Override
-                    public void updateUIOnNetworkUnavailable(String noInternetMessage) {
-
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     private void toolbarVisibility(int status) {
         findViewById(R.id.tbToolBar).setVisibility(status);
@@ -237,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void networkAvailable() {
-        cacheUserData();
+
     }
 
     @Override

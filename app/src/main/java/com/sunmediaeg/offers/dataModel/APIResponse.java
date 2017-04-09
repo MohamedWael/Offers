@@ -8,7 +8,6 @@ import io.realm.RealmObject;
 
 public class APIResponse {
     private String message;
-    //    private String errors;
     private int code;
 
     public APIResponse() {
@@ -34,12 +33,4 @@ public class APIResponse {
     public void setCode(int code) {
         this.code = code;
     }
-//
-//    public String getStringErrors() {
-//        return errors;
-//    }
-//
-//    public void setStringErrors(String errors) {
-//        this.errors = errors;
-//    }
 }

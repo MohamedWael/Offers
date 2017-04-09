@@ -25,9 +25,9 @@ import com.sunmediaeg.offers.activities.MainActivity;
 import com.sunmediaeg.offers.dataModel.APIResponse;
 import com.sunmediaeg.offers.dataModel.jsonModels.LoginResponse;
 import com.sunmediaeg.offers.utilities.ApiError;
+import com.sunmediaeg.offers.utilities.CacheManager;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
-import com.sunmediaeg.offers.utilities.RealmDB;
 import com.sunmediaeg.offers.utilities.Service;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 
@@ -68,6 +68,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
     private SharedPreferences.Editor editor;
     private SignUpFragment signUpFragment;
     private ForgetPasswordFragment forgetPassworsFragment;
+    private CacheManager manager;
 
     public LoginFragment() {
     }
@@ -159,22 +160,29 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
                         JSONObject body = new JSONObject();
                         body.put(Constants.EMAIL, email);
                         body.put(Constants.PASSWORD, password);
+
                         try {
+                            manager = CacheManager.getInstance();
                             requests.getResponse(Request.Method.POST, Constants.USER_LOGIN, body, new Service.ServiceResponse() {
                                 @Override
                                 public void onResponse(JSONObject response) {
-
                                     Gson gson = new Gson();
                                     APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
                                     if (apiResponse.isSuccess()) {
                                         LoginResponse login = gson.fromJson(response.toString(), LoginResponse.class);
-                                        RealmDB.getInstance(getContext()).createOrUpdate(login.getData().getUser());
+//                                        RealmDB.getInstance(getContext()).createOrUpdate(login.getData().getUser());
                                         editor.putString(Constants.NAME, login.getData().getUser().getName());
                                         editor.putString(Constants.EMAIL, login.getData().getUser().getEmail());
                                         editor.putLong(Constants.USER_ID, login.getData().getUser().getId());
-                                        Logger.d("UserID", login.getData().getUser().getId().toString());
+                                        editor.putString(Constants.TOKEN, login.getData().getUser().getToken());
+                                        Logger.d(Constants.USER_ID, login.getData().getUser().getId()+"");
                                         editor.putBoolean(Constants.HAVE_ACCOUNT, true);
                                         editor.commit();
+                                        manager.cacheObject(Constants.NAME, login.getData().getUser().getName());
+                                        manager.cacheObject(Constants.EMAIL, login.getData().getUser().getEmail());
+                                        manager.cacheObject(Constants.TOKEN, login.getData().getUser().getToken());
+                                        manager.cacheObject(Constants.USER_ID, login.getData().getUser().getId());
+                                        manager.cacheObject(Constants.HAVE_ACCOUNT, true);
                                         Intent intent = new Intent(getActivity(), MainActivity.class);
                                         intent.putExtra(Constants.IS_COMPANY_PROFILE, false); // <-- this extra is related only to the MainActivity
                                         getActivity().startActivity(intent);
@@ -194,25 +202,30 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
                                     Logger.d("LoginError", error.toString());
+                                    editor.putBoolean(Constants.HAVE_ACCOUNT, false);
                                     progressBar.setVisibility(View.INVISIBLE);
                                 }
 
                                 @Override
                                 public void updateUIOnNetworkUnavailable(String noInternetMessage) {
+                                    editor.putBoolean(Constants.HAVE_ACCOUNT, false);
                                     tvNotification.setText(noInternetMessage);
                                 }
                             });
                         } catch (Exception e) {
+                            editor.putBoolean(Constants.HAVE_ACCOUNT, false);
                             e.printStackTrace();
                         }
                         preferencesManager.initEditor().putBoolean(Constants.HAVE_ACCOUNT, true).commit();
                     } else {
                         progressBar.setVisibility(View.INVISIBLE);
+                        editor.putBoolean(Constants.HAVE_ACCOUNT, false);
                         String msg = getString(R.string.loginError);
                         tvNotification.setText(msg);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    editor.putBoolean(Constants.HAVE_ACCOUNT, false);
                     String msg = getString(R.string.loginError2);
                     tvNotification.setText(msg);
                 }
