@@ -45,11 +45,11 @@ public class OffersGeneralActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, signUpFragment).commit();
                 break;
             case Constants.ACTIVITY_SIGN_UP_AS_USER:
-                signUpFragment = SignUpFragment.newInstance(Constants.USER, "إنشاء حساب, ");
+                signUpFragment = SignUpFragment.newInstance(Constants.USER, getString(R.string.tvCreateAccount));
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, signUpFragment).commit();
                 break;
             case Constants.ACTIVITY_LOGIN:
-                loginFragment = LoginFragment.newInstance("تسجيل الدخول", "");
+                loginFragment = LoginFragment.newInstance(getString(R.string.btnLogin), "");
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, loginFragment).commit();
                 break;
             case Constants.ACTIVITY_PRODUCT_DETAILS:

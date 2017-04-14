@@ -1,19 +1,19 @@
 package com.sunmediaeg.offers.activities;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
-import com.android.volley.Request;
-import com.android.volley.VolleyError;
-import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
-import com.sunmediaeg.offers.dataModel.APIResponse;
-import com.sunmediaeg.offers.dataModel.userResponse.UserResponse;
 import com.sunmediaeg.offers.fragment.CategoriesFragment;
 import com.sunmediaeg.offers.fragment.CompanyProfileFragment;
 import com.sunmediaeg.offers.fragment.HomeFragment;
@@ -22,17 +22,13 @@ import com.sunmediaeg.offers.fragment.LoginFragment;
 import com.sunmediaeg.offers.fragment.OffersFragment;
 import com.sunmediaeg.offers.fragment.SearchFragment;
 import com.sunmediaeg.offers.fragment.SettingsFragment;
-import com.sunmediaeg.offers.utilities.ApiError;
 import com.sunmediaeg.offers.utilities.CacheManager;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
 import com.sunmediaeg.offers.utilities.NetworkStateReceiver;
-import com.sunmediaeg.offers.utilities.Service;
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -46,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FrameLayout flMainFragment;
     private ArrayList<ImageButton> imageButtons;
     private ImageButton ibHome, ibList, ibLogo, ibGrid, ibSetting;
-    private OffersFragment offersFragment;
+    private OffersFragment offersFragment, cityFragment;
     private LoginFragment loginFragment;
     private HomeFragment homeFragment;
     private CategoriesFragment categoriesFragment;
@@ -55,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CompanyProfileFragment companyProfileFragment;
     private boolean isCompanyProfile = false;
     private boolean haveAccount = false;
+    private Toolbar tbToolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.ibHome:
                 changeBackground(ibHome, HOME);
-
                 getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, homeFragment).commit();
                 break;
             case R.id.ibOffers:
@@ -98,7 +94,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.ibLogo:
                 changeBackground(ibLogo, LOGO);
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, searchFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, cityFragment).commit();
+//                getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, searchFragment).commit();
                 break;
             case R.id.ibCategories:
                 changeBackground(ibGrid, GRID);
@@ -132,13 +129,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ibSetting.setOnClickListener(this);
             flMainFragment = (FrameLayout) findViewById(R.id.flMainFragment);
 
-
             if (!isCompanyProfile) {
                 toolbarVisibility(View.VISIBLE);
+//                tbToolBar = (Toolbar) findViewById(R.id.tbToolBar);
+//                setSupportActionBar(tbToolBar);
+
                 homeFragment = HomeFragment.newInstance(getString(R.string.onViewStuff), "");
                 getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, homeFragment).commit();
 
                 offersFragment = OffersFragment.newInstance(getString(R.string.offers), "");
+                cityFragment = OffersFragment.newInstance(getString(R.string.stuffInCity), "");
                 loginFragment = LoginFragment.newInstance("", "");
                 categoriesFragment = CategoriesFragment.newInstance(getString(R.string.categories), "");
                 searchFragment = SearchFragment.newInstance(getString(R.string.search), "");

@@ -1,15 +1,23 @@
 package com.sunmediaeg.offers.fragment;
 
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -17,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.activities.SearchActivity;
 import com.sunmediaeg.offers.adapters.RVCompaniesAdapter;
 import com.sunmediaeg.offers.adapters.RVOffersAdapter;
 import com.sunmediaeg.offers.dataModel.Company;
@@ -42,8 +51,11 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    public static final int TYPE_OFFERS = 1;
+    public static final int TYPE_CITIES = 2;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private int offerType;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -55,6 +67,8 @@ public class HomeFragment extends Fragment {
     private SwipeRefreshLayout srlRefresh;
     private ProgressBar pbHomeOffers;
     private static HomeFragment fragment;
+    private Toolbar mToolbar;
+    private ImageButton ibSearch;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -94,6 +108,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         setRetainInstance(true);
         initComponents(view);
+//        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
         final long userID = (long) CacheManager.getInstance().getCachedObject(Constants.USER_ID, 0L);
 //        if (userID != null && userID != 0)
 //            getAllOffers(Constants.SHOW_ALL_OFFERS + userID);
@@ -110,6 +125,7 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -118,16 +134,24 @@ public class HomeFragment extends Fragment {
         rvCompanies.setAdapter(companiesAdapter);
     }
 
-    private void initComponents(View view) {
-        pbHomeOffers = (ProgressBar) view.findViewById(R.id.pbHomeOffers);
-        tvTitle = (TextView) view.findViewById(R.id.tvTitle);
+    private void initComponents(View v) {
+        pbHomeOffers = (ProgressBar) v.findViewById(R.id.pbHomeOffers);
+        tvTitle = (TextView) v.findViewById(R.id.tvTitle);
         tvTitle.setText(mParam1);
-        view.findViewById(R.id.ibBack).setVisibility(View.GONE);
-        srlRefresh = (SwipeRefreshLayout) view.findViewById(R.id.srlRefresh);
-        rvOffers = (RecyclerView) view.findViewById(R.id.rvHomeOffers);
+        v.findViewById(R.id.ibBack).setVisibility(View.GONE);
+        srlRefresh = (SwipeRefreshLayout) v.findViewById(R.id.srlRefresh);
+        rvOffers = (RecyclerView) v.findViewById(R.id.rvHomeOffers);
         rvOffers.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvCompanies = (RecyclerView) view.findViewById(R.id.rvCompanies);
+        rvCompanies = (RecyclerView) v.findViewById(R.id.rvCompanies);
+        mToolbar = (Toolbar) v.findViewById(R.id.mToolbar);
+        ibSearch = (ImageButton) v.findViewById(R.id.ibSearch);
         rvCompanies.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        ibSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), SearchActivity.class));
+            }
+        });
     }
 
     private void getAllOffers(String url) {
@@ -172,6 +196,10 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    public void setOfferType(int offerType) {
+        this.offerType = offerType;
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -186,6 +214,18 @@ public class HomeFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.option_menu, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+
     }
 
     /**

@@ -44,7 +44,7 @@ public class Feed extends RealmObject implements Comparable<Feed> {
     @SerializedName("vendor_id")
     private long vendorId;
     @SerializedName("category_id")
-    private long categoryId;
+    private int categoryId;
     @SerializedName("liked")
     private int liked;
 
@@ -155,11 +155,11 @@ public class Feed extends RealmObject implements Comparable<Feed> {
         this.vendorId = vendorId;
     }
 
-    public long getCategoryId() {
+    public int getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(long categoryId) {
+    public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
 

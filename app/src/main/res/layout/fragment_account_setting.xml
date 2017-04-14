@@ -63,16 +63,26 @@
             android:inputType="textPassword" />
 
 
-        <EditText
-            android:id="@+id/etCity"
+        <!--<EditText-->
+        <!--android:id="@+id/etCity"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:drawablePadding="5dp"-->
+        <!--android:ems="10"-->
+        <!--android:gravity="right"-->
+        <!--android:hint="@string/etCity"-->
+        <!--android:inputType="text" />-->
+
+        <Spinner
+            android:id="@+id/sCities"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_marginTop="10dp"
-            android:drawablePadding="5dp"
-            android:ems="10"
-            android:gravity="right"
-            android:hint="@string/etCity"
-            android:inputType="text" />
+            tools:listheader="@layout/spinner_item"
+            tools:listitem="@layout/spinner_item" />
 
         <EditText
             android:id="@+id/etEmail"
@@ -90,12 +100,12 @@
             android:id="@+id/tvSuccess"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="تمت العملية بنجاح"
             android:textColor="@color/colorPrimaryDark"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="invisible" />
 
     </LinearLayout>
 

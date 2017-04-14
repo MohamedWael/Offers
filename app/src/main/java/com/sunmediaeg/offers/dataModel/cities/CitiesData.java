@@ -1,22 +1,33 @@
 
 package com.sunmediaeg.offers.dataModel.cities;
 
-import java.util.List;
-import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Generated;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
 public class CitiesData {
 
     @SerializedName("cities")
-    private List<City> mCities;
+    private ArrayList<City> mCities;
 
-    public List<City> getCities() {
+    public ArrayList<City> getCities() {
         return mCities;
     }
 
-    public void setCities(List<City> cities) {
+    public ArrayList<String> getCitiesNames() {
+        ArrayList<String> citiesNames = new ArrayList<>();
+        for (City city : getCities()) {
+            citiesNames.add(city.getName());
+        }
+        return citiesNames;
+    }
+
+    public void setCities(ArrayList<City> cities) {
         mCities = cities;
     }
 

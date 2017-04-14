@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.OffersGeneralActivity;
 import com.sunmediaeg.offers.utilities.Constants;
+import com.sunmediaeg.offers.utilities.VolleySingleton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -117,8 +118,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnContactUs:
+                VolleySingleton.openEmailClient(getContext(), "mohamed.wael9371@gmail.com", "contact us ", "this is a message");
                 break;
             case R.id.btnAdvertise:
+                VolleySingleton.openEmailClient(getContext(), "mohamed.wael9371@gmail.com", "Advert with us", "this is a message");
                 break;
             case R.id.btnAccountSetting:
                 Intent intent = new Intent(getActivity(), OffersGeneralActivity.class);

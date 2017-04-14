@@ -27,7 +27,6 @@ import com.sunmediaeg.offers.dataModel.myOffersResponse.Feed;
 import com.sunmediaeg.offers.utilities.CacheManager;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
-//import com.sunmediaeg.offers.utilities.RealmDB;
 import com.sunmediaeg.offers.utilities.Service;
 import com.sunmediaeg.offers.utilities.VolleySingleton;
 import com.sunmediaeg.offers.views.TimerView;
@@ -40,6 +39,8 @@ import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
 import io.realm.RealmList;
+
+//import com.sunmediaeg.offers.utilities.RealmDB;
 
 /**
  * Created by moham on 1/26/2017.
@@ -107,18 +108,24 @@ public class RVOffersAdapter extends RecyclerView.Adapter<RVOffersAdapter.Offers
         holder.ibOfferCategoryImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mContext, OffersGeneralActivity.class);
+                intent.putExtra(Constants.ACTIVITY, Constants.ACTIVITY_CATEGORY_COMPANIES);
+                intent.putExtra(Constants.CATEGORY_ID, feed.getCategoryId());
+                mContext.startActivity(intent);
+            }
+        });
 
+        holder.tvOfferCompanyName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openVendorProfile(feed);
             }
         });
 
         holder.ibOfferCompanyLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, MainActivity.class);
-                intent.putExtra(Constants.IS_COMPANY_PROFILE, true);
-                intent.putExtra(Constants.COMPANY_PROFILE_TITLE, feed.getVendorId() + "");
-
-                mContext.startActivity(intent);
+                openVendorProfile(feed);
             }
         });
 
@@ -178,6 +185,13 @@ public class RVOffersAdapter extends RecyclerView.Adapter<RVOffersAdapter.Offers
                 }
             }
         });
+    }
+
+    private void openVendorProfile(Feed feed) {
+        Intent intent = new Intent(mContext, MainActivity.class);
+        intent.putExtra(Constants.IS_COMPANY_PROFILE, true);
+        intent.putExtra(Constants.COMPANY_PROFILE_TITLE, feed.getVendorId() + "");
+        mContext.startActivity(intent);
     }
 
     @Override

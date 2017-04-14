@@ -220,9 +220,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        if (callbackManager != null)
+            callbackManager.onActivityResult(requestCode, resultCode, data);
         Logger.d("OnActivityResult", "checked");
-        twitterAuthClient.onActivityResult(requestCode, resultCode, data);
+        if (twitterAuthClient != null)
+            twitterAuthClient.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

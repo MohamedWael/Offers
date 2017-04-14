@@ -135,8 +135,6 @@ public class VolleySingleton {
     }
 
 
-
-
     public Intent getPictureFromGalleryIntent() {
         //This takes images directly from gallery
         Intent gallerypickerIntent;
@@ -216,10 +214,10 @@ public class VolleySingleton {
     }
 
 
-    public void openEmailClient(Context mContext, /*String mailto,*/ String mail, String subject, String msg) {
-        Intent mailIntent = new Intent(Intent.ACTION_SEND/*, Uri.parse("mailto:" + mailto)*/);
+    public static void openEmailClient(Context mContext, /*String mailto,*/ String mail, String subject, String msg) {
+        Intent mailIntent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:" + mail));
         mailIntent.setType("text/html");
-        mailIntent.putExtra(Intent.EXTRA_EMAIL, mail);
+        mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{mail});
         mailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
         mailIntent.putExtra(Intent.EXTRA_TEXT, msg);
         try {

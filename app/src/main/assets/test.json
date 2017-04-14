@@ -1,14 +1,21 @@
 {
   "data": {
-    "user": {
-      "id": 23,
-      "name": "Mohamed Wael ",
-      "email": "mohamed.wael@yahoo.com",
-      "image": "",
-      "is_admin": "0",
-      "token": "95d8663f3a39f30918b0f14c253ae039"
-    }
-  },
-  "message": "success",
-  "code": 200
-}
+    "feeds": [
+      {
+        "id": 6,
+        "title": "عرض في السيارات رقم 1",
+        "image": "http:\/\/api.sunmediaeg.com\/offer\/public\/uploads\/offer\/pG7NnAUedwAW9QO9WW45ZzmxvHRcCDGXWIPbH8WP4aTjGVVjAp55ylnaPT2S.jpg",
+        "start_date": 1488742140,
+        "end_date": 1495049340,
+        "desc": "لوريم إيبسوم(Lorem Ipsum) هو ببساطة نص شكلي (بمعنى أن الغاية هي الشكل وليس المحتوى) ويُستخدم في صناعات المطابع ودور النشر. كان لوريم إيبسوم ولايزال المعيار للنص الشكلي منذ القرن الخامس عشر عندما قامت مطبعة مجهولة برص مجموعة من الأحرف بشكل عشوائي أخذتها من نص، لتكوّن كتيّب بمثابة دليل أو مرجع شكلي لهذه الأحرف. خمسة قرون من الزمن لم تقضي على هذا النص، بل انه حتى صار مستخدماً وبشكله الأصلي في الطباعة والتنضيد الإلكتروني. انتشر بشكل كبير في ستينيّات هذا القرن مع إصدار رقائق \"ليتراسيت\" (Letraset) البلاستيكية تحوي مقاطع من هذا النص، وعاد لينتشر مرة أخرى مؤخراَ مع ظهور برامج النشر الإلكتروني مثل \"ألدوس بايج مايكر\" (Aldus PageMaker) والتي حوت أيضاً على نسخ من نص لوريم إيبسوم.",
+        "price": "200.00",
+        "discount": "4",
+        "vendor_id": "4",
+        "category_id": "3",
+        "category_name": "السيارات",
+        "short_desc": "لوريم إيبسوم(Lorem Ipsum) هو ببساطة نص شكلي (بمعنى أن الغاية هي الشكل وليس المحتوى) ويُستخدم في صناع",
+        "category_image": "http:\/\/api.sunmediaeg.com\/offer\/public\/uploads\/category\/S5UvLDluqyAlbyvyUnTAO0zMIc1ZsflnorIIRvLa7OmCtRt3Hq2eSrAC7HRm.png",
+        "vendor_image": "http:\/\/api.sunmediaeg.com\/offer\/public\/uploads\/vendor\/WJtgjGYkhkO82C4rk8jvfM9FBBaoQmLwyewt0t0sSNAXQM8joTGkdnKtu7lE.jpg",
+        "vendor_name": "البائع رقم 1",
+        "liked": 0
+      }

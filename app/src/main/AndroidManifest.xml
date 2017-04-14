@@ -14,13 +14,13 @@
         android:allowBackup="true"
         android:icon="@drawable/offers_icon"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:largeHeap="true"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
         <receiver android:name=".utilities.NetworkStateReceiver" />
 
         <activity
@@ -38,14 +38,15 @@
         <activity
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
@@ -54,6 +55,14 @@
             android:name="io.fabric.ApiKey"
             android:value="f9690f3b21477fb1b3e9c3f9aff2b581d23f7444" />
 
+        <activity
+            android:name=".activities.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme">
+
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
     </application>
 
 </manifest>

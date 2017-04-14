@@ -82,6 +82,9 @@ public final class Constants {
     public static final String USER_FEEDS = USER + "feeds/";
     public static final String VENDOR = API_Base_URL + "vendor/";//{vendor_id}
     public static final String GET_CITIES = API_Base_URL + "cities";
+    public static final String SEARCH = API_Base_URL + "search";
+    public static final String SEARCH_KEY = "search";
+    public static final String CITIY_OFFERS = API_Base_URL + "city/offers/";
 
     public static final String REGISTER_VENDOR = API_Base_URL + "vendor";
 

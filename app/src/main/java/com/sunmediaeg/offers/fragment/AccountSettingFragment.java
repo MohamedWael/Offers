@@ -9,10 +9,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -20,7 +23,10 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.adapters.SpinnerAdapter;
 import com.sunmediaeg.offers.dataModel.APIResponse;
+import com.sunmediaeg.offers.dataModel.cities.CitiesResponse;
+import com.sunmediaeg.offers.dataModel.cities.City;
 import com.sunmediaeg.offers.dataModel.userResponse.User;
 import com.sunmediaeg.offers.dataModel.userResponse.UserResponse;
 import com.sunmediaeg.offers.utilities.ApiError;
@@ -32,6 +38,8 @@ import com.sunmediaeg.offers.utilities.Service;
 import com.sunmediaeg.offers.utilities.VolleySingleton;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,12 +54,14 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private EditText etUserName, etPassword, etCity, etEmail;
+    private EditText etUserName, etPassword, etEmail;
     private Button btnModifyAccountData;
     private ImageView ivAccountPhoto;
     private VolleySingleton volley;
     private JSONObject body;
     private ProgressBar pbAccountSetting;
+    private Spinner sCities;
+    private OnCitiesResponseListener citiesResponseListener;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -106,16 +116,40 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
         return view;
     }
 
-    private void initView(View v) {
+    private void initView(final View v) {
         tvSuccess = (TextView) v.findViewById(R.id.tvSuccess);
         ivAccountPhoto = (ImageView) v.findViewById(R.id.ivAccountPhoto);
         pbAccountSetting = (ProgressBar) v.findViewById(R.id.pbAccountSetting);
         etUserName = (EditText) v.findViewById(R.id.etUserName);
         etPassword = (EditText) v.findViewById(R.id.etPassword);
-        etCity = (EditText) v.findViewById(R.id.etCity);
+//        etCity = (EditText) v.findViewById(R.id.etCity);
         etEmail = (EditText) v.findViewById(R.id.etEmail);
         btnModifyAccountData = (Button) v.findViewById(R.id.btnModifyAccountData);
+        sCities = (Spinner) v.findViewById(R.id.sCities);
 
+        citiesResponseListener = new OnCitiesResponseListener() {
+            @Override
+            public void onSuccess(final ArrayList<City> cities) {
+                sCities.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String currentCity =parent.getItemAtPosition(position).toString();
+                        for (City city : cities) {
+                            if (currentCity.equals(city.getName())){
+
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+            }
+        };
+//        getCities();
         cacheUserData();
 
         volley = VolleySingleton.getInstance(getContext());
@@ -128,10 +162,40 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
         if (user != null) {
             etUserName.setText(user.getName());
             etEmail.setText(user.getEmail());
-            etCity.setText(user.getCity());
             if (!user.getImage().isEmpty())
                 Picasso.with(getContext()).load(volley.uriEncoder(user.getImage())).error(R.drawable.profile_avatar_placeholder_large)
                         .placeholder(R.drawable.profile_avatar_placeholder_large).into(ivAccountPhoto);
+        }
+    }
+
+    private void getCities() {
+        try {
+            Service.getInstance(getContext()).getResponse(Request.Method.GET, Constants.GET_CITIES, new JSONObject(), new Service.ServiceResponse() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Gson gson = new Gson();
+                    APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
+                    if (apiResponse.isSuccess()) {
+                        CitiesResponse citiesResponse = gson.fromJson(response.toString(), CitiesResponse.class);
+                        citiesResponseListener.onSuccess(citiesResponse.getData().getCities());
+//                        SpinnerAdapter adapter = new SpinnerAdapter(getContext(),citiesResponse.getData().getCities());
+                        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, citiesResponse.getData().getCitiesNames());
+                        sCities.setAdapter(spinnerAdapter);
+                    }
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+
+                @Override
+                public void updateUIOnNetworkUnavailable(String noInternetMessage) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -192,7 +256,7 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
                         try {
                             String userName = getStieng(etUserName);
                             String password = getStieng(etPassword);
-                            String city = getStieng(etCity);
+//                            String city = getStieng(etCity);
                             String email = getStieng(etEmail);
                             long userID = (long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
                             String token = (String) CacheManager.getInstance().getCachedObject(Constants.TOKEN);
@@ -203,7 +267,7 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
                             body.put(Constants.NAME, userName);
                             body.put(Constants.EMAIL, email);
                             body.put(Constants.PASSWORD, password);
-                            body.put(Constants.CITY, city);
+//                            body.put(Constants.CITY, city);
 //                    String image = volley.getReducedStringImagePNG(volley.getBitmap(ivAccountPhoto));
                             body.put(Constants.IMAGE, image);
                             Logger.d("Image", image + "Image");
@@ -301,5 +365,9 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private interface OnCitiesResponseListener {
+        void onSuccess(ArrayList<City> cities);
     }
 }

@@ -94,12 +94,17 @@ public class OffersFragment extends Fragment {
         setRetainInstance(true);
         final Long userID = (Long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
         initComponents(view);
-        getMyOffers(Constants.USER_FEEDS + userID);
+
+        if (mParam1.equals(getString(R.string.stuffInCity)))
+            getOffers(Constants.removeLastSlash(Constants.CITIY_OFFERS) + Constants.ADD_USER_ID + userID);
+        else getOffers(Constants.USER_FEEDS + userID);
 
         srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getMyOffers(Constants.USER_FEEDS + userID);
+                if (mParam1.equals(getString(R.string.stuffInCity)))
+                    getOffers(Constants.removeLastSlash(Constants.CITIY_OFFERS) + Constants.ADD_USER_ID + userID);
+                else getOffers(Constants.USER_FEEDS + userID);
             }
         });
         return view;
@@ -128,7 +133,7 @@ public class OffersFragment extends Fragment {
         }
     }
 
-    public void getMyOffers(String url) {
+    public void getOffers(String url) {
         showProgressBar(true);
         JSONObject body = new JSONObject();
         try {
@@ -148,15 +153,16 @@ public class OffersFragment extends Fragment {
                         RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), myOffersResponse.getData().getFeeds());
                         rvOffers.setAdapter(offersAdapter);
 
+                    } else if (apiResponse.getCode() == Constants.CODE_NOT_FOUND && mParam1.equals(getString(R.string.stuffInCity))) {
+                        Constants.toastMsg(getContext(), getString(R.string.cityError));
+                    } else if (apiResponse.getCode() == Constants.CODE_NOT_FOUND && !mParam1.equals(getString(R.string.stuffInCity))) {
+                        Constants.toastMsg(getContext(), getString(R.string.followingError));
                     } else {
-                        if (apiResponse.getCode() == Constants.CODE_NOT_FOUND) {
-                            Constants.toastMsg(getContext(), getString(R.string.followingError));
-                        } else {
-                            ApiError apiError = new ApiError(apiResponse.getCode());
-                            Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
-                            Constants.toastMsg(getContext(), apiError.getErrorMsg());
-                        }
+                        ApiError apiError = new ApiError(apiResponse.getCode());
+                        Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
+                        Constants.toastMsg(getContext(), apiError.getErrorMsg());
                     }
+
                     if (srlRefresh.isRefreshing()) srlRefresh.setRefreshing(false);
                 }
 
