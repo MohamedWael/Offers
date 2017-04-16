@@ -86,4 +86,6 @@
     <string name="search_hint">إبحث عن عروض</string>
     <string name="title_activity_search">إبحث عن عروض</string>
     <string name="tvNoResult">لا يوجد نتائج لهذا البحث</string>
+    <string name="tvNotification">من فضلك ادخل البريد الإلكترونى بشكل صحيح</string>
+    <string name="tvNotificationResponse">تم إرسال كلمة السر إلى البريد الإلكترونى</string>
 </resources>

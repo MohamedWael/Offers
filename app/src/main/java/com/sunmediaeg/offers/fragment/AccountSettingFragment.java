@@ -23,7 +23,6 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.sunmediaeg.offers.R;
-import com.sunmediaeg.offers.adapters.SpinnerAdapter;
 import com.sunmediaeg.offers.dataModel.APIResponse;
 import com.sunmediaeg.offers.dataModel.cities.CitiesResponse;
 import com.sunmediaeg.offers.dataModel.cities.City;
@@ -70,6 +69,9 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
     private OnFragmentInteractionListener mListener;
     private User user;
     private TextView tvSuccess;
+    private ArrayList<String> cities;
+    private ArrayAdapter<String> spinnerAdapter;
+    private int cityId;
 
 
     public AccountSettingFragment() {
@@ -108,11 +110,7 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account_setting, container, false);
         initView(view);
-        CacheManager manager = CacheManager.getInstance();
-//        user = (User) manager.getCachedObject(Constants.USER);
-//        if (user == null) {
-//            cacheUserData();
-//        }
+        cacheUserData();
         return view;
     }
 
@@ -126,6 +124,10 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
         etEmail = (EditText) v.findViewById(R.id.etEmail);
         btnModifyAccountData = (Button) v.findViewById(R.id.btnModifyAccountData);
         sCities = (Spinner) v.findViewById(R.id.sCities);
+        cities = new ArrayList<>();
+        spinnerAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, cities);
+
+        sCities.setAdapter(spinnerAdapter);
 
         citiesResponseListener = new OnCitiesResponseListener() {
             @Override
@@ -133,10 +135,10 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
                 sCities.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        String currentCity =parent.getItemAtPosition(position).toString();
+                        String currentCity = parent.getItemAtPosition(position).toString();
                         for (City city : cities) {
-                            if (currentCity.equals(city.getName())){
-
+                            if (currentCity.equals(city.getName())) {
+                                cityId = city.getId();
                             }
                         }
 
@@ -149,8 +151,7 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
                 });
             }
         };
-//        getCities();
-        cacheUserData();
+
 
         volley = VolleySingleton.getInstance(getContext());
         body = new JSONObject();
@@ -162,9 +163,14 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
         if (user != null) {
             etUserName.setText(user.getName());
             etEmail.setText(user.getEmail());
+            cities.add(user.getCity());
+            spinnerAdapter.notifyDataSetChanged();
+            getCities();
             if (!user.getImage().isEmpty())
                 Picasso.with(getContext()).load(volley.uriEncoder(user.getImage())).error(R.drawable.profile_avatar_placeholder_large)
                         .placeholder(R.drawable.profile_avatar_placeholder_large).into(ivAccountPhoto);
+            else
+                Picasso.with(getContext()).load(R.drawable.profile_avatar_placeholder_large).into(ivAccountPhoto);
         }
     }
 
@@ -178,9 +184,16 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
                     if (apiResponse.isSuccess()) {
                         CitiesResponse citiesResponse = gson.fromJson(response.toString(), CitiesResponse.class);
                         citiesResponseListener.onSuccess(citiesResponse.getData().getCities());
-//                        SpinnerAdapter adapter = new SpinnerAdapter(getContext(),citiesResponse.getData().getCities());
-                        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, citiesResponse.getData().getCitiesNames());
-                        sCities.setAdapter(spinnerAdapter);
+
+                        if (citiesResponse.getData().getCitiesNames().contains(cities.get(0))) {
+                            int cityIndex = citiesResponse.getData().getCitiesNames().indexOf(cities.get(0));
+                            cityId = citiesResponse.getData().getCity(cityIndex).getId();
+                            citiesResponse.getData().getCitiesNames().remove(cities.get(0));
+                        }
+                        cities.addAll(citiesResponse.getData().getCitiesNames());
+                        spinnerAdapter.notifyDataSetChanged();
+
+//                        sCities.setAdapter(spinnerAdapter);
                     }
                 }
 
@@ -267,7 +280,8 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
                             body.put(Constants.NAME, userName);
                             body.put(Constants.EMAIL, email);
                             body.put(Constants.PASSWORD, password);
-//                            body.put(Constants.CITY, city);
+                            body.put(Constants.CITY, cityId);
+                            Logger.d("CityID", cityId + "");
 //                    String image = volley.getReducedStringImagePNG(volley.getBitmap(ivAccountPhoto));
                             body.put(Constants.IMAGE, image);
                             Logger.d("Image", image + "Image");

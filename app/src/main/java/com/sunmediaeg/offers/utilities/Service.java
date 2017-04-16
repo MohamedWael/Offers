@@ -4,8 +4,10 @@ import android.content.Context;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.dataModel.APIResponse;
 
 import org.json.JSONObject;
 
@@ -52,11 +54,14 @@ public class Service implements NetworkStateReceiver.NetworkStateReceiverListene
             public void onResponse(JSONObject response) {
                 Logger.d("Response", response.toString());
                 serviceResponse.onResponse(response);
-//                Gson gson = new Gson();
-//                APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
-//                if (apiResponse.isSuccess()) {
-//                    serviceResponse.onResponseSuccess(response);
-//                }
+                Gson gson = new Gson();
+                APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
+                if (apiResponse.getCode() == Constants.CODE_VALIDATION_ERRORS) {
+                    Logger.d("VALIDATION_ERRORS", "VALIDATION_ERRORS 402");
+                    String email = SharedPreferencesManager.getInstance(mContext).initSharedPreferences().getString(Constants.EMAIL, "");
+                    String password = SharedPreferencesManager.getInstance(mContext).initSharedPreferences().getString(Constants.PASSWORD, "");
+                    LoginService.getInstance(mContext, email, password).reLogIn();
+                }
             }
         }, new Response.ErrorListener() {
 //            private boolean cached = false;

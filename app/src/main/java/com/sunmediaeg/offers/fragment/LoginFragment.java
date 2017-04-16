@@ -163,6 +163,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
 
                         try {
                             manager = CacheManager.getInstance();
+                            editor.putString(Constants.PASSWORD, password);
                             requests.getResponse(Request.Method.POST, Constants.USER_LOGIN, body, new Service.ServiceResponse() {
                                 @Override
                                 public void onResponse(JSONObject response) {
@@ -175,7 +176,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
                                         editor.putString(Constants.EMAIL, login.getData().getUser().getEmail());
                                         editor.putLong(Constants.USER_ID, login.getData().getUser().getId());
                                         editor.putString(Constants.TOKEN, login.getData().getUser().getToken());
-                                        Logger.d(Constants.USER_ID, login.getData().getUser().getId()+"");
+                                        Logger.d(Constants.USER_ID, login.getData().getUser().getId() + "");
                                         editor.putBoolean(Constants.HAVE_ACCOUNT, true);
                                         editor.commit();
                                         manager.cacheObject(Constants.NAME, login.getData().getUser().getName());

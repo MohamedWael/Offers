@@ -226,5 +226,11 @@ public class VolleySingleton {
             Toast.makeText(mContext, "No email clients installed.", Toast.LENGTH_SHORT).show();
         }
     }
-
+    public static boolean isValidEmail(CharSequence target) {
+        if (target == null) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
+    }
 }

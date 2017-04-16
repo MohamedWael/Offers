@@ -87,6 +87,7 @@ public final class Constants {
     public static final String CITIY_OFFERS = API_Base_URL + "city/offers/";
 
     public static final String REGISTER_VENDOR = API_Base_URL + "vendor";
+    public static final String FORGET_PASSWORD = API_Base_URL + "password/forget";
 
     public static final String HAVE_ACCOUNT = "haveAccount";
 

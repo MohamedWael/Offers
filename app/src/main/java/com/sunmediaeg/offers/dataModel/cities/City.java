@@ -9,15 +9,15 @@ import com.google.gson.annotations.SerializedName;
 public class City {
 
     @SerializedName("id")
-    private Long mId;
+    private int mId;
     @SerializedName("name")
     private String mName;
 
-    public Long getId() {
+    public int getId() {
         return mId;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         mId = id;
     }
 

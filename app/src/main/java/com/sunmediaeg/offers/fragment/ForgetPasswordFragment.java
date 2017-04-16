@@ -7,11 +7,23 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.dataModel.APIResponse;
 import com.sunmediaeg.offers.utilities.Constants;
+import com.sunmediaeg.offers.utilities.Service;
+import com.sunmediaeg.offers.utilities.VolleySingleton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +46,10 @@ public class ForgetPasswordFragment extends Fragment implements View.OnClickList
     private OnFragmentInteractionListener mListener;
     private TextView tvTitle;
     private ImageButton ibBack;
+    private EditText etMail;
+    private Button btnSignUp;
+    private TextView tvNotification;
+    private ProgressBar progressBar;
 
     public ForgetPasswordFragment() {
         // Required empty public constructor
@@ -80,7 +96,70 @@ public class ForgetPasswordFragment extends Fragment implements View.OnClickList
         tvTitle = (TextView) v.findViewById(R.id.tvTitle);
         tvTitle.setText(mParam1);
         ibBack = (ImageButton) v.findViewById(R.id.ibBack);
+        etMail = (EditText) v.findViewById(R.id.etMail);
+        tvNotification = (TextView) v.findViewById(R.id.tvNotification);
+        btnSignUp = (Button) v.findViewById(R.id.btnSignUp);
+        progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         ibBack.setOnClickListener(this);
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = etMail.getText().toString();
+                if (VolleySingleton.isValidEmail(email)) {
+                    getPassword(Constants.FORGET_PASSWORD, email);
+                    showNotification(false);
+                } else {
+                    setNotificationMsg(getString(R.string.tvNotification));
+                }
+            }
+        });
+    }
+
+    private void setNotificationMsg(String msg) {
+        tvNotification.setText(msg);
+        showNotification(true);
+    }
+
+    private void showNotification(boolean show) {
+        tvNotification.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    private void showProgress(boolean show) {
+        progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    private void getPassword(String url, String email) {
+        JSONObject body = new JSONObject();
+        try {
+            showProgress(true);
+            body.put(Constants.EMAIL, email);
+            Service.getInstance(getContext()).getResponse(Request.Method.POST, url, body, new Service.ServiceResponse() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    showProgress(false);
+                    Gson gson = new Gson();
+                    APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
+                    if (apiResponse.isSuccess()) {
+                        setNotificationMsg(getString(R.string.tvNotificationResponse));
+                    }
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    showProgress(false);
+                }
+
+                @Override
+                public void updateUIOnNetworkUnavailable(String noInternetMessage) {
+                    showProgress(false);
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

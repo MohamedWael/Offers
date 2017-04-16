@@ -63,16 +63,15 @@
             android:inputType="textPassword" />
 
 
-        <!--<EditText-->
-        <!--android:id="@+id/etCity"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:drawablePadding="5dp"-->
-        <!--android:ems="10"-->
-        <!--android:gravity="right"-->
-        <!--android:hint="@string/etCity"-->
-        <!--android:inputType="text" />-->
+        <TextView
+        android:id="@+id/tvCity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:drawablePadding="5dp"
+        android:ems="10"
+        android:gravity="right"
+        android:text="@string/etCity" />
 
         <Spinner
             android:id="@+id/sCities"

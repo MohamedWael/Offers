@@ -264,6 +264,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                         }
                         final String finalUrl = url;
                         Logger.d("Register", url + "");
+                        editor.putString(Constants.PASSWORD, password);
                         //NOTE Registration as a vendor is removed form the backend
                         requests.getResponse(Request.Method.POST, url, body, new Service.ServiceResponse() {
                             @Override

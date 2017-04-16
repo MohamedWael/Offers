@@ -2,7 +2,6 @@
 package com.sunmediaeg.offers.dataModel.userResponse;
 
 import com.google.gson.annotations.SerializedName;
-import com.sunmediaeg.offers.utilities.Service;
 
 import javax.annotation.Generated;
 
@@ -26,8 +25,10 @@ public class User extends RealmObject {
     private String mName;
     @SerializedName("token")
     private String token;
-    @SerializedName("city_id")
+    @SerializedName("city_name")
     private String city;
+    @SerializedName("city_id")
+    private int cityID;
 
     @Deprecated
     private int userType;
@@ -91,5 +92,13 @@ public class User extends RealmObject {
 
     public String getCity() {
         return city;
+    }
+
+    public int getCityID() {
+        return cityID;
+    }
+
+    public void setCityID(int cityID) {
+        this.cityID = cityID;
     }
 }

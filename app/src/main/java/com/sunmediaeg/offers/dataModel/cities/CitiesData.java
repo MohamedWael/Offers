@@ -4,7 +4,6 @@ package com.sunmediaeg.offers.dataModel.cities;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.Generated;
 
@@ -14,17 +13,24 @@ public class CitiesData {
 
     @SerializedName("cities")
     private ArrayList<City> mCities;
+    private ArrayList<String> citiesNames;
 
     public ArrayList<City> getCities() {
         return mCities;
     }
 
     public ArrayList<String> getCitiesNames() {
-        ArrayList<String> citiesNames = new ArrayList<>();
-        for (City city : getCities()) {
-            citiesNames.add(city.getName());
+        if (citiesNames == null) {
+            citiesNames = new ArrayList<>();
+            for (City city : getCities()) {
+                citiesNames.add(city.getName());
+            }
         }
         return citiesNames;
+    }
+
+    public City getCity(int index) {
+        return getCities().get(index);
     }
 
     public void setCities(ArrayList<City> cities) {
