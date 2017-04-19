@@ -1,0 +1,126 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sunmediaeg.offers.fragment.AccountSettingFragment">
+
+    <RelativeLayout
+        android:id="@+id/rlOrganizerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/ivAccountPhoto"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:focusable="true"
+            android:src="@drawable/profile_avatar_placeholder_large" />
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/pbAccountSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlOrganizerContainer"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/llOrganizerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pbAccountSetting"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="14dp"
+        android:focusable="false"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:drawablePadding="5dp"
+            android:gravity="right"
+            android:hint="@string/etUserName"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:drawablePadding="5dp"
+            android:ems="10"
+            android:gravity="right"
+            android:hint="@string/etPassword"
+            android:inputType="textPassword" />
+
+
+        <TextView
+        android:id="@+id/tvCity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:drawablePadding="5dp"
+        android:ems="10"
+        android:gravity="right"
+        android:text="@string/etCity" />
+
+        <Spinner
+            android:id="@+id/sCities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            tools:listheader="@layout/spinner_item"
+            tools:listitem="@layout/spinner_item" />
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:drawablePadding="5dp"
+            android:ems="10"
+            android:gravity="right"
+            android:hint="@string/etMail"
+            android:inputType="textEmailAddress" />
+
+
+        <TextView
+            android:id="@+id/tvSuccess"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="تمت العملية بنجاح"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btnModifyAccountData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10sp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/colorLightOrange"
+        android:text="@string/btnModifyAccountData"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp" />
+
+</RelativeLayout>

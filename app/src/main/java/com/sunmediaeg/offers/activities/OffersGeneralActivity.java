@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.fragment.AccountSettingFragment;
 import com.sunmediaeg.offers.fragment.CategoryCompaniesFragment;
 import com.sunmediaeg.offers.fragment.DetailsFragment;
 import com.sunmediaeg.offers.fragment.LoginFragment;
 import com.sunmediaeg.offers.fragment.SignUpFragment;
 import com.sunmediaeg.offers.utilities.Constants;
+import com.sunmediaeg.offers.utilities.Logger;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
@@ -24,6 +26,7 @@ public class OffersGeneralActivity extends AppCompatActivity {
     private SignUpFragment signUpFragment;
     private DetailsFragment detailsFragment;
     private CategoryCompaniesFragment categoryCompaniesFragment;
+    private AccountSettingFragment accountSettingFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,20 +45,25 @@ public class OffersGeneralActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, signUpFragment).commit();
                 break;
             case Constants.ACTIVITY_SIGN_UP_AS_USER:
-                signUpFragment = SignUpFragment.newInstance(Constants.USER, "إنشاء حساب كمستخدم");
+                signUpFragment = SignUpFragment.newInstance(Constants.USER, getString(R.string.tvCreateAccount));
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, signUpFragment).commit();
                 break;
             case Constants.ACTIVITY_LOGIN:
-                loginFragment = LoginFragment.newInstance("تسجيل الدخول", "");
+                loginFragment = LoginFragment.newInstance(getString(R.string.btnLogin), "");
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, loginFragment).commit();
                 break;
             case Constants.ACTIVITY_PRODUCT_DETAILS:
-                detailsFragment = DetailsFragment.newInstance(getString(R.string.offerDetails), "");
+                detailsFragment = DetailsFragment.newInstance(getString(R.string.offerDetails), data.getInt(Constants.ITEM_POSITION));
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, detailsFragment).commit();
                 break;
             case Constants.ACTIVITY_CATEGORY_COMPANIES:
-                categoryCompaniesFragment = CategoryCompaniesFragment.newInstance(data.getString("Category"), "");
+                categoryCompaniesFragment = CategoryCompaniesFragment.newInstance(data.getString(Constants.CATEGORY_TITLE), data.getInt(Constants.CATEGORY_ID));
+                Logger.d(Constants.CATEGORY_ID, data.getInt(Constants.CATEGORY_ID) + "");
                 getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, categoryCompaniesFragment).commit();
+                break;
+            case Constants.ACTIVITY_ACCOUNT_SETTING:
+                accountSettingFragment = AccountSettingFragment.newInstance(getString(R.string.btnSignUp), "");
+                getSupportFragmentManager().beginTransaction().replace(R.id.flLogin, accountSettingFragment).commit();
                 break;
         }
 
@@ -69,6 +77,10 @@ public class OffersGeneralActivity extends AppCompatActivity {
         if (signUpFragment != null) {
             signUpFragment.onActivityResult(requestCode, resultCode, data);
         }
+//        if (accountSettingFragment != null) {
+//            accountSettingFragment.onActivityResult(requestCode, resultCode, data);
+//        }
+
     }
 
     @Override

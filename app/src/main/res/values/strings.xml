@@ -7,14 +7,19 @@
     <string name="btnSignUpAsUser">إنشاء حساب</string>
     <string name="btnSignUpAsVendor">إنشاء حساب كبائع</string>
     <string name="btnLogin">تسجيل الدخول</string>
-    <string name="etUserName">إسم المستخدم...</string>
-    <string name="etMail">البريد الإلكترونى...</string>
-    <string name="etPassword">كلمة المرور...</string>
+    <string name="etUserName">إسم المستخدم</string>
+    <string name="etMail">البريد الإلكترونى</string>
+    <string name="etCity">المدينة</string>
+    <string name="etPassword">كلمة المرور</string>
+    <string name="etPhoneNo">رقم الهاتف</string>
+    <string name="etAddress">العنوان</string>
+    <string name="btnModifyAccountData">إرسال</string>
     <string name="btnSend">إرسال</string>
     <string name="tvCreateAccount">إنشاء حساب</string>
     <string name="btnHaveAccoutn"><u>سجل الآن</u></string>
     <string name="tvHaveAccoutn">ليس لديك حساب؟</string>
     <string name="onViewStuff">المعروضات</string>
+    <string name="stuffInCity">المعروضات فى مدينتك</string>
     <string name="offers">أوفرز</string>
     <string name="categories">التصنيفات</string>
     <string name="search">بحث</string>
@@ -29,6 +34,13 @@
     <string name="health">الصحة واللياقة</string>
     <string name="clothes">الملابس</string>
     <string name="offerDetails">تفاصيل العرض</string>
+    <string name="noOffer">ليس لديه عروض</string>
+    <string name="oneOffer">عرض واحد</string>
+    <string name="twoOffer">عرضين</string>
+    <string name="lessThan10Offers">عروض</string>
+    <string name="moreThan10Offers">عرض</string>
+    <string name="cancel">إلغاء</string>
+    <string name="ok">نعم</string>
 
 
     <string name="egyptAir">مصر للطيران</string>
@@ -38,7 +50,8 @@
     <string name="tvOfferDescription">غرفة معيشة متكاملة مكونة من كنبة وكريسسن وترابيزة</string>
     <string name="tvOfferPrice">10.000 ج</string>
     <string name="tvOfferCompany">كارفور مول</string>
-    <string name="tvRemainingDate">2017-02-03</string>
+    <string name="tvRemainingDate">yyyy-mm-dd</string>
+    <string name="timeUp">إنتهى الوقت</string>
     <string name="day">يوم</string>
     <string name="hour">ساعة</string>
     <string name="minuite">دقيقة</string>
@@ -55,12 +68,24 @@
     <string name="tvSearchForOffers">إبحث عن العروض</string>
     <string name="btnContactUs">راسلنا</string>
     <string name="btnAdvertise">أعلن معنا</string>
-    <string name="btnSignUp">التسجيل</string>
+    <string name="btnSignUp">إعدادات الحساب</string>
     <string name="btnForgetPassword">طلب إستعادة كلمة السر</string>
     <string name="loginError">من فضلك تأكد من إدخال جميع الحقول بشكل صحيح\n" + "يجب ألا تقل كلمة السر عن 6 أحرف</string>
     <string name="loginError2">حدث خطأ ما من فضلك حاول فى وقت لاحق</string>
-<<<<<<< HEAD
+    <string name="loginError3">خطأ فى البريد الإلكترونى أو كلمة السر</string>
     <string name="connection">من فضلك تأكد من إتصالك بالإنتر نت</string>
-=======
->>>>>>> 59b61d577581db28b230470fc946cbd1661169b2
+    <string name="connectionError">حدث خطأ ما من فضلك حاول فى وقت لاحق</string>
+    <string name="dateError">حدث خطأ فى نمط التاريخ</string>
+    <string name="followingError">لما تقم بإتباع أى بائح حتى الآن</string>
+    <string name="cityError">يجب أن تدخل المدينة من الأعدادات</string>
+    <string name="btnShare">شارك العرض</string>
+    <string name="onlyOnOffers">فقط على أوفرز</string>
+    <string name="title_search">بحث</string>
+    <string name="title_dashboard">اللوحة</string>
+    <string name="title_notifications">تنبيهات</string>
+    <string name="search_hint">إبحث عن عروض</string>
+    <string name="title_activity_search">إبحث عن عروض</string>
+    <string name="tvNoResult">لا يوجد نتائج لهذا البحث</string>
+    <string name="tvNotification">من فضلك ادخل البريد الإلكترونى بشكل صحيح</string>
+    <string name="tvNotificationResponse">تم إرسال كلمة السر إلى البريد الإلكترونى</string>
 </resources>

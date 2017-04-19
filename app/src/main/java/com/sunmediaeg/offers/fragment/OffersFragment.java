@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.adapters.RVOffersAdapter;
+import com.sunmediaeg.offers.dataModel.APIResponse;
 import com.sunmediaeg.offers.dataModel.myOffersResponse.MyOffersResponse;
 import com.sunmediaeg.offers.utilities.ApiError;
 import com.sunmediaeg.offers.utilities.CacheManager;
@@ -50,6 +52,7 @@ public class OffersFragment extends Fragment {
     private RecyclerView rvCompanies, rvOffers;
     private TextView tvTitle;
     private ProgressBar pbMyOFFers;
+    private SwipeRefreshLayout srlRefresh;
     private Service service;
 
     public OffersFragment() {
@@ -89,10 +92,21 @@ public class OffersFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_offers, container, false);
         setRetainInstance(true);
-        Long userID = (Long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
+        final Long userID = (Long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
         initComponents(view);
-        getMyOffers(Constants.USER_FEEDS + userID);
-        Logger.d("executed", "onCreate");
+
+        if (mParam1.equals(getString(R.string.stuffInCity)))
+            getOffers(Constants.removeLastSlash(Constants.CITIY_OFFERS) + Constants.ADD_USER_ID + userID);
+        else getOffers(Constants.USER_FEEDS + userID);
+
+        srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (mParam1.equals(getString(R.string.stuffInCity)))
+                    getOffers(Constants.removeLastSlash(Constants.CITIY_OFFERS) + Constants.ADD_USER_ID + userID);
+                else getOffers(Constants.USER_FEEDS + userID);
+            }
+        });
         return view;
     }
 
@@ -100,8 +114,6 @@ public class OffersFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Logger.d("executed", "onResume");
-
-
     }
 
     private void initComponents(View view) {
@@ -111,6 +123,7 @@ public class OffersFragment extends Fragment {
         view.findViewById(R.id.ibSearch).setVisibility(View.GONE);
         rvOffers = (RecyclerView) view.findViewById(R.id.rvOffers);
         pbMyOFFers = (ProgressBar) view.findViewById(R.id.pbMyOFFers);
+        srlRefresh = (SwipeRefreshLayout) view.findViewById(R.id.srlRefresh);
         rvOffers.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
@@ -120,7 +133,7 @@ public class OffersFragment extends Fragment {
         }
     }
 
-    public void getMyOffers(String url) {
+    public void getOffers(String url) {
         showProgressBar(true);
         JSONObject body = new JSONObject();
         try {
@@ -128,28 +141,44 @@ public class OffersFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        service.getResponse(Request.Method.GET, url, body, new Service.ServiceResponse() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Gson gson = new Gson();
-                MyOffersResponse myOffersResponse = gson.fromJson(response.toString(), MyOffersResponse.class);
-                if (myOffersResponse.isSuccess()) {
-                    RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), myOffersResponse.getData().getFeeds());
-                    rvOffers.setAdapter(offersAdapter);
+        try {
+            service.getResponse(Request.Method.GET, url, body, new Service.ServiceResponse() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Gson gson = new Gson();
                     showProgressBar(false);
+                    APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
+                    if (apiResponse.isSuccess()) {
+                        MyOffersResponse myOffersResponse = gson.fromJson(response.toString(), MyOffersResponse.class);
+                        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), myOffersResponse.getData().getFeeds());
+                        rvOffers.setAdapter(offersAdapter);
 
-                } else {
-                    ApiError apiError = new ApiError(myOffersResponse.getCode());
-                    Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
-                    Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                    } else if (apiResponse.getCode() == Constants.CODE_NOT_FOUND && mParam1.equals(getString(R.string.stuffInCity))) {
+                        Constants.toastMsg(getContext(), getString(R.string.cityError));
+                    } else if (apiResponse.getCode() == Constants.CODE_NOT_FOUND && !mParam1.equals(getString(R.string.stuffInCity))) {
+                        Constants.toastMsg(getContext(), getString(R.string.followingError));
+                    } else {
+                        ApiError apiError = new ApiError(apiResponse.getCode());
+                        Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
+                        Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                    }
+
+                    if (srlRefresh.isRefreshing()) srlRefresh.setRefreshing(false);
                 }
-            }
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (srlRefresh.isRefreshing()) srlRefresh.setRefreshing(false);
+                }
 
-            }
-        });
+                @Override
+                public void updateUIOnNetworkUnavailable(String noInternetMessage) {
+                    if (srlRefresh.isRefreshing()) srlRefresh.setRefreshing(false);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

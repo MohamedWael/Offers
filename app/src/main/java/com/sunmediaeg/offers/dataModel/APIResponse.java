@@ -1,5 +1,7 @@
 package com.sunmediaeg.offers.dataModel;
 
+import io.realm.RealmObject;
+
 /**
  * Created by moham on 3/13/2017.
  */
@@ -8,6 +10,8 @@ public class APIResponse {
     private String message;
     private int code;
 
+    public APIResponse() {
+    }
 
     public boolean isSuccess() {
         if (code == 200) return true;

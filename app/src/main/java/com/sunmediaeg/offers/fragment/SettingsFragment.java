@@ -1,15 +1,20 @@
 package com.sunmediaeg.offers.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.sunmediaeg.offers.R;
+import com.sunmediaeg.offers.activities.OffersGeneralActivity;
+import com.sunmediaeg.offers.utilities.Constants;
+import com.sunmediaeg.offers.utilities.VolleySingleton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,7 +24,7 @@ import com.sunmediaeg.offers.R;
  * Use the {@link SettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,6 +36,7 @@ public class SettingsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private TextView tvTitle;
+    private Button btnContactUs, btnAdvertise, btnAccountSetting;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -77,6 +83,13 @@ public class SettingsFragment extends Fragment {
         tvTitle.setText(mParam1);
         view.findViewById(R.id.ibBack).setVisibility(View.GONE);
         view.findViewById(R.id.ibSearch).setVisibility(View.GONE);
+
+        btnContactUs = (Button) view.findViewById(R.id.btnContactUs);
+        btnContactUs.setOnClickListener(this);
+        btnAdvertise = (Button) view.findViewById(R.id.btnAdvertise);
+        btnAdvertise.setOnClickListener(this);
+        btnAccountSetting = (Button) view.findViewById(R.id.btnAccountSetting);
+        btnAccountSetting.setOnClickListener(this);
     }
 
     public void onButtonPressed(Uri uri) {
@@ -99,6 +112,23 @@ public class SettingsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnContactUs:
+                VolleySingleton.openEmailClient(getContext(), "mohamed.wael9371@gmail.com", "contact us ", "this is a message");
+                break;
+            case R.id.btnAdvertise:
+                VolleySingleton.openEmailClient(getContext(), "mohamed.wael9371@gmail.com", "Advert with us", "this is a message");
+                break;
+            case R.id.btnAccountSetting:
+                Intent intent = new Intent(getActivity(), OffersGeneralActivity.class);
+                intent.putExtra(Constants.ACTIVITY, Constants.ACTIVITY_ACCOUNT_SETTING);
+                getContext().startActivity(intent);
+                break;
+        }
     }
 
     /**

@@ -1,23 +1,41 @@
 
 package com.sunmediaeg.offers.dataModel.userResponse;
 
-import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
+
+import javax.annotation.Generated;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class User {
+public class User extends RealmObject {
 
+    @PrimaryKey
+    @SerializedName("id")
+    private long mId;
     @SerializedName("email")
     private String mEmail;
-    @SerializedName("id")
-    private Long mId;
     @SerializedName("image")
     private String mImage;
     @SerializedName("is_admin")
-    private Long mIsAdmin;
+    private int mIsAdmin;
     @SerializedName("name")
     private String mName;
+    @SerializedName("token")
+    private String token;
+    @SerializedName("city_name")
+    private String city;
+    @SerializedName("city_id")
+    private int cityID;
+
+    @Deprecated
+    private int userType;
+
+
+    public User() {
+    }
 
     public String getEmail() {
         return mEmail;
@@ -27,11 +45,11 @@ public class User {
         mEmail = email;
     }
 
-    public Long getId() {
+    public long getId() {
         return mId;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         mId = id;
     }
 
@@ -43,11 +61,11 @@ public class User {
         mImage = image;
     }
 
-    public Long getIsAdmin() {
+    public int getIsAdmin() {
         return mIsAdmin;
     }
 
-    public void setIsAdmin(Long isAdmin) {
+    public void setIsAdmin(int isAdmin) {
         mIsAdmin = isAdmin;
     }
 
@@ -59,4 +77,28 @@ public class User {
         mName = name;
     }
 
+    @Deprecated
+    public void setUserType(int userType) {
+        this.userType = userType;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public int getCityID() {
+        return cityID;
+    }
+
+    public void setCityID(int cityID) {
+        this.cityID = cityID;
+    }
 }

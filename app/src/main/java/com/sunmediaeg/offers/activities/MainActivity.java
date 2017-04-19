@@ -1,18 +1,19 @@
 package com.sunmediaeg.offers.activities;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
-import com.android.volley.Request;
-import com.android.volley.VolleyError;
-import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
-import com.sunmediaeg.offers.dataModel.userResponse.UserResponse;
 import com.sunmediaeg.offers.fragment.CategoriesFragment;
 import com.sunmediaeg.offers.fragment.CompanyProfileFragment;
 import com.sunmediaeg.offers.fragment.HomeFragment;
@@ -24,16 +25,10 @@ import com.sunmediaeg.offers.fragment.SettingsFragment;
 import com.sunmediaeg.offers.utilities.CacheManager;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
-<<<<<<< HEAD
 import com.sunmediaeg.offers.utilities.NetworkStateReceiver;
-import com.sunmediaeg.offers.utilities.Service;
-=======
->>>>>>> 59b61d577581db28b230470fc946cbd1661169b2
 import com.sunmediaeg.offers.utilities.SharedPreferencesManager;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -47,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FrameLayout flMainFragment;
     private ArrayList<ImageButton> imageButtons;
     private ImageButton ibHome, ibList, ibLogo, ibGrid, ibSetting;
-    private OffersFragment offersFragment;
+    private OffersFragment offersFragment, cityFragment;
     private LoginFragment loginFragment;
     private HomeFragment homeFragment;
     private CategoriesFragment categoriesFragment;
@@ -56,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CompanyProfileFragment companyProfileFragment;
     private boolean isCompanyProfile = false;
     private boolean haveAccount = false;
+    private Toolbar tbToolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,22 +61,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
         Bundle bundle = getIntent().getExtras();
-<<<<<<< HEAD
         NetworkStateReceiver receiver = NetworkStateReceiver.getInstance();
         registerReceiver(receiver, receiver.getIntentFilter());
-=======
->>>>>>> 59b61d577581db28b230470fc946cbd1661169b2
         SharedPreferencesManager prefesManager = SharedPreferencesManager.getInstance(this);
         CacheManager manager = CacheManager.getInstance();
         haveAccount = prefesManager.initSharedPreferences().getBoolean(Constants.HAVE_ACCOUNT, false);
         if (haveAccount) {
-<<<<<<< HEAD
-            cacheUserData();
-=======
->>>>>>> 59b61d577581db28b230470fc946cbd1661169b2
-            manager.chacheObject(Constants.NAME, prefesManager.getPrefs().getString(Constants.NAME, ""));
-            manager.chacheObject(Constants.EMAIL, prefesManager.getPrefs().getString(Constants.EMAIL, ""));
-            manager.chacheObject(Constants.USER_ID, prefesManager.getPrefs().getLong(Constants.USER_ID, 0));
+//            cacheUserData();
+            manager.cacheObject(Constants.NAME, prefesManager.getPrefs().getString(Constants.NAME, ""));
+            manager.cacheObject(Constants.EMAIL, prefesManager.getPrefs().getString(Constants.EMAIL, ""));
+            manager.cacheObject(Constants.USER_ID, prefesManager.getPrefs().getLong(Constants.USER_ID, 0));
             Logger.d("NAME", manager.getCachedObject(Constants.NAME) + "");
             Logger.d("EMAIL", manager.getCachedObject(Constants.EMAIL) + "");
             Logger.d("USER_ID", manager.getCachedObject(Constants.USER_ID) + "");
@@ -94,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.ibHome:
                 changeBackground(ibHome, HOME);
-
                 getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, homeFragment).commit();
                 break;
             case R.id.ibOffers:
@@ -105,7 +94,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.ibLogo:
                 changeBackground(ibLogo, LOGO);
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, searchFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, cityFragment).commit();
+//                getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, searchFragment).commit();
                 break;
             case R.id.ibCategories:
                 changeBackground(ibGrid, GRID);
@@ -139,13 +129,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ibSetting.setOnClickListener(this);
             flMainFragment = (FrameLayout) findViewById(R.id.flMainFragment);
 
-
             if (!isCompanyProfile) {
                 toolbarVisibility(View.VISIBLE);
+//                tbToolBar = (Toolbar) findViewById(R.id.tbToolBar);
+//                setSupportActionBar(tbToolBar);
+
                 homeFragment = HomeFragment.newInstance(getString(R.string.onViewStuff), "");
                 getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, homeFragment).commit();
 
                 offersFragment = OffersFragment.newInstance(getString(R.string.offers), "");
+                cityFragment = OffersFragment.newInstance(getString(R.string.stuffInCity), "");
                 loginFragment = LoginFragment.newInstance("", "");
                 categoriesFragment = CategoriesFragment.newInstance(getString(R.string.categories), "");
                 searchFragment = SearchFragment.newInstance(getString(R.string.search), "");
@@ -203,25 +196,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void cacheUserData() {
-        Long userID = (Long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
-        Service.getInstance(this).getResponse(Request.Method.GET, Constants.USER + userID, new JSONObject(), new Service.ServiceResponse() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Logger.d("UserCache", response.toString());
-                Gson gson = new Gson();
-                UserResponse userResponse = gson.fromJson(response.toString(), UserResponse.class);
-                if (userResponse != null && userResponse.isSuccess()) {
-                    CacheManager.getInstance().chacheObject(Constants.USER, userResponse.getData().getUser());
-                }
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-    }
 
     private void toolbarVisibility(int status) {
         findViewById(R.id.tbToolBar).setVisibility(status);
@@ -234,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void networkAvailable() {
-        cacheUserData();
+
     }
 
     @Override

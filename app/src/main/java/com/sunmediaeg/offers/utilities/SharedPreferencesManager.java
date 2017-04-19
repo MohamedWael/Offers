@@ -27,14 +27,17 @@ public class SharedPreferencesManager {
 
 
     public SharedPreferences initSharedPreferences() {
-        return prefs = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+        if (prefs == null) {
+            prefs = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+        }
+        return prefs;
     }
 
     public SharedPreferences.Editor initEditor() {
         if (prefs == null) {
             initSharedPreferences();
         }
-       return editor = prefs.edit();
+        return editor = prefs.edit();
     }
 
     public SharedPreferences.Editor getEditor() {

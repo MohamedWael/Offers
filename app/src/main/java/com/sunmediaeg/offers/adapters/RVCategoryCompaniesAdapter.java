@@ -12,10 +12,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.MainActivity;
-import com.sunmediaeg.offers.dataModel.Company;
+import com.sunmediaeg.offers.dataModel.APIResponse;
+import com.sunmediaeg.offers.dataModel.categoryVendors.Vendor;
+import com.sunmediaeg.offers.utilities.CacheManager;
 import com.sunmediaeg.offers.utilities.Constants;
+import com.sunmediaeg.offers.utilities.Service;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -26,9 +36,9 @@ import java.util.ArrayList;
 public class RVCategoryCompaniesAdapter extends RecyclerView.Adapter<RVCategoryCompaniesAdapter.CategoryCompanyViewHolder> {
 
     private Context mContext;
-    private ArrayList<Company> companies;
+    private ArrayList<Vendor> companies;
 
-    public RVCategoryCompaniesAdapter(Context mContext, ArrayList<Company> companies) {
+    public RVCategoryCompaniesAdapter(Context mContext, ArrayList<Vendor> companies) {
         this.mContext = mContext;
         this.companies = companies;
     }
@@ -41,33 +51,100 @@ public class RVCategoryCompaniesAdapter extends RecyclerView.Adapter<RVCategoryC
 
     @Override
     public void onBindViewHolder(final CategoryCompanyViewHolder holder, int position) {
-        final Company company = companies.get(position);
-
+        final Vendor vendor = companies.get(position);
+        holder.tvCompanyName.setText(vendor.getName());
+        if (vendor.getOffers().size() == 0) {
+            holder.tvNumberOfOffers.setText(mContext.getString(R.string.noOffer));
+        } else if (vendor.getOffers().size() == 1) {
+            holder.tvNumberOfOffers.setText(mContext.getString(R.string.oneOffer));
+        } else if (vendor.getOffers().size() == 2) {
+            holder.tvNumberOfOffers.setText(mContext.getString(R.string.twoOffer));
+        } else if (vendor.getOffers().size() > 2 && vendor.getOffers().size() <= 10) {
+            holder.tvNumberOfOffers.setText(" " + vendor.getOffers().size() + " " + mContext.getString(R.string.lessThan10Offers));
+        } else {
+            holder.tvNumberOfOffers.setText(" " + vendor.getOffers().size() + " " + mContext.getString(R.string.moreThan10Offers));
+        }
+        Picasso.with(mContext).load(vendor.getImage()).placeholder(R.drawable.logo).into(holder.ivCompanyLogo);
 
         holder.cvCompany.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, MainActivity.class);
                 intent.putExtra(Constants.IS_COMPANY_PROFILE, true);
-                intent.putExtra(Constants.COMPANY_PROFILE_TITLE, company.getCompanyName());
-
+                intent.putExtra(Constants.COMPANY_PROFILE_TITLE, vendor.getName());
+                CacheManager.getInstance().cacheObject(Constants.CATEGORY_VENDORS, vendor);
                 mContext.startActivity(intent);
             }
         });
+
+        if (vendor.isFollowed()){
+            holder.btnFollow.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
+            holder.btnFollow.setTextColor(ContextCompat.getColor(mContext, R.color.colorBackground));
+        }else {
+            holder.btnFollow.setBackgroundResource(R.drawable.button_border);
+            holder.btnFollow.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
+        }
+
         holder.btnFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!company.isFollwed()) {
+                if (!vendor.isFollowed()) {
                     holder.btnFollow.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
                     holder.btnFollow.setTextColor(ContextCompat.getColor(mContext, R.color.colorBackground));
-                    company.setFollwed(true);
+                    follow(vendor);
                 } else {
-                    company.setFollwed(false);
+                    follow(vendor);
                     holder.btnFollow.setBackgroundResource(R.drawable.button_border);
                     holder.btnFollow.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
                 }
             }
         });
+    }
+
+    private void follow(final Vendor vendor) {
+        try {
+            long userID = (long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
+            String token = (String) CacheManager.getInstance().getCachedObject(Constants.TOKEN);
+            if (!token.isEmpty() && userID != 0) {
+                JSONObject body = new JSONObject();
+                body.put(Constants.USER_ID, userID);
+                body.put(Constants.TOKEN, token);
+                body.put(Constants.VENDOR_ID, vendor.getId());
+                Service.getInstance(mContext).getResponse(Request.Method.POST, Constants.FOLLOW_VENDOR, body, new Service.ServiceResponse() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Gson gson = new Gson();
+                        APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
+                        if (apiResponse.isSuccess()) {
+                            try {
+                                int follow = response.getInt("data");
+                                if (follow >= 1) {
+                                    vendor.follow(true);
+                                } else if (follow <= 0) {
+                                    vendor.follow(false);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+
+                    @Override
+                    public void updateUIOnNetworkUnavailable(String noInternetMessage) {
+
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

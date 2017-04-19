@@ -11,20 +11,33 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
 
-    <GridView
-        android:id="@+id/gvCategories"
+    <ProgressBar
+        android:id="@+id/pbCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srlRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/lAppBar"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:columnWidth="100dp"
-        android:gravity="center"
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth"
-        tools:listitem="@layout/companies_item_layout" />
+        android:layout_below="@+id/lAppBar">
 
+        <GridView
+            android:id="@+id/gvCategories"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/lAppBar"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:columnWidth="100dp"
+            android:gravity="center"
+            android:numColumns="auto_fit"
+            android:stretchMode="columnWidth"
+            tools:listitem="@layout/companies_item_layout" />
 
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

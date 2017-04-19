@@ -2,53 +2,27 @@
 package com.sunmediaeg.offers.dataModel.jsonModels;
 
 import com.google.gson.annotations.SerializedName;
+import com.sunmediaeg.offers.dataModel.APIResponse;
 
 import javax.annotation.Generated;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class LoginResponse {
+public class LoginResponse extends APIResponse {
 
-    @SerializedName("code")
-    private Long mCode;
     @SerializedName("data")
     private UserData mUserData;
-    @SerializedName("vendor")
-    private UserData mVendorData;
-    @SerializedName("message")
-    private String mMessage;
     @SerializedName("errors")
     private SignUpErrors errors;
 
-    public Long getCode() {
-        return mCode;
-    }
-
-    public void setCode(Long code) {
-        mCode = code;
-    }
-
     public UserData getData() {
-        if (mVendorData == null) {
-            return mUserData;
-        } else {
-            return mVendorData;
-        }
+        return mUserData;
     }
 
 
     public void setData(UserData userData) {
         mUserData = userData;
     }
-
-    public String getMessage() {
-        return mMessage;
-    }
-
-    public void setMessage(String message) {
-        mMessage = message;
-    }
-
 
     public SignUpErrors getErrors() {
         if (mUserData == null)

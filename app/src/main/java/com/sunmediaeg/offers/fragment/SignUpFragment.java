@@ -29,9 +29,11 @@ import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.activities.MainActivity;
+import com.sunmediaeg.offers.dataModel.APIResponse;
 import com.sunmediaeg.offers.dataModel.jsonModels.FbProfileData;
 import com.sunmediaeg.offers.dataModel.jsonModels.LoginResponse;
 import com.sunmediaeg.offers.utilities.ApiError;
+import com.sunmediaeg.offers.utilities.CacheManager;
 import com.sunmediaeg.offers.utilities.Constants;
 import com.sunmediaeg.offers.utilities.Logger;
 import com.sunmediaeg.offers.utilities.Service;
@@ -87,6 +89,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private TwitterAuthClient twitterAuthClient;
     private String token;
     private String secret;
+    private CacheManager manager;
 //    private com.sunmediaeg.offers.utilities.TwitterLoginButton btnTwitterLogin;
 
 
@@ -119,6 +122,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        manager = CacheManager.getInstance();
         gson = new Gson();
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -216,9 +220,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        if (callbackManager != null)
+            callbackManager.onActivityResult(requestCode, resultCode, data);
         Logger.d("OnActivityResult", "checked");
-        twitterAuthClient.onActivityResult(requestCode, resultCode, data);
+        if (twitterAuthClient != null)
+            twitterAuthClient.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -249,59 +255,64 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                         body.put(Constants.NAME, signUp.getUserName());
                         body.put(Constants.EMAIL, signUp.getEmail());
                         body.put(Constants.PASSWORD, signUp.getPassword());
+//                        body.put(Constants._METHOD, Constants._METHOD_POST);
                         String url = "";
                         if (mParam1.equals(Constants.USER)) {
-                            url = Constants.USER;
+                            url = Constants.USER.substring(0, Constants.USER.length() - 1);
                         } else {
                             url = Constants.REGISTER_VENDOR;
                         }
                         final String finalUrl = url;
                         Logger.d("Register", url + "");
+                        editor.putString(Constants.PASSWORD, password);
                         //NOTE Registration as a vendor is removed form the backend
                         requests.getResponse(Request.Method.POST, url, body, new Service.ServiceResponse() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Logger.d("response", response.toString());
                                 try {
-                                    String emailMsg = "", passwordMsg = "";
-                                    int responseCode = response.getInt("code");
-                                    if (response.has("errors")) {
-                                        JSONObject errors = response.getJSONObject("errors");
-                                        if (errors.has("email")) {
-                                            emailMsg = errors.getString("email");
-                                        } else if (errors.has("password")) {
-                                            passwordMsg = errors.getString("password");
-                                        } else {
-                                            ApiError apiError = new ApiError(responseCode);
-                                            Constants.toastMsg(getContext(), apiError.getErrorMsg());
-                                        }
-                                    }
-
-                                    if (responseCode == 200) {
+                                    APIResponse aPIResponse = gson.fromJson(response.toString(), APIResponse.class);
+                                    if (aPIResponse.isSuccess()) {
                                         LoginResponse loginResponse = gson.fromJson(response.toString(), LoginResponse.class);
 
-<<<<<<< HEAD
-                                        if (finalUrl.equals(Constants.USER)) {
-=======
-                                        if (finalUrl.equals(Constants.REGISTER_USER)) {
->>>>>>> 59b61d577581db28b230470fc946cbd1661169b2
+                                        if (finalUrl.contains(Constants.USER)) {
                                             loginResponse.getData().getUser().setUserType(Constants.TYPE_USER);
                                         } else {
                                             loginResponse.getData().getUser().setUserType(Constants.TYPE_VENDOR);
                                         }
+//                                        RealmDB.getInstance(getContext()).createOrUpdate(loginResponse.getData().getUser());
                                         Logger.d("user", loginResponse.getData().getUser().toString());
                                         editor.putString(Constants.NAME, loginResponse.getData().getUser().getName());
                                         editor.putString(Constants.EMAIL, loginResponse.getData().getUser().getEmail());
                                         editor.putLong(Constants.USER_ID, loginResponse.getData().getUser().getId());
                                         editor.putBoolean(Constants.HAVE_ACCOUNT, true);
                                         editor.commit();
+                                        manager.cacheObject(Constants.NAME, loginResponse.getData().getUser().getName());
+                                        manager.cacheObject(Constants.EMAIL, loginResponse.getData().getUser().getEmail());
+                                        manager.cacheObject(Constants.TOKEN, loginResponse.getData().getUser().getToken());
+                                        manager.cacheObject(Constants.USER_ID, loginResponse.getData().getUser().getId());
+                                        manager.cacheObject(Constants.HAVE_ACCOUNT, true);
                                         Intent intent = new Intent(getActivity(), MainActivity.class);
                                         intent.putExtra(Constants.IS_COMPANY_PROFILE, false); // <-- this extra is related only to the MainActivity
                                         getActivity().startActivity(intent);
                                         getActivity().finish();
                                         progressBar.setVisibility(View.INVISIBLE);
                                     } else {
-                                        Constants.toastMsg(getContext(), emailMsg + "\n" + passwordMsg);
+                                        String emailMsg = "", passwordMsg = "";
+                                        int responseCode = response.getInt("code");
+                                        if (response.has("errors")) {
+                                            JSONObject errors = response.getJSONObject("errors");
+                                            if (errors.has("email")) {
+                                                emailMsg = errors.getString("email");
+                                            } else if (errors.has("password")) {
+                                                passwordMsg = errors.getString("password");
+                                            } else {
+                                                ApiError apiError = new ApiError(responseCode);
+                                                Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                                            }
+                                        }
+                                        tvNotification.setText(emailMsg + "\n" + passwordMsg);
+//                                        Constants.toastMsg(getContext(), emailMsg + "\n" + passwordMsg);
                                         progressBar.setVisibility(View.INVISIBLE);
                                     }
                                 } catch (JSONException e) {
@@ -311,8 +322,18 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                progressBar.setVisibility(View.INVISIBLE);
+                                editor.putBoolean(Constants.HAVE_ACCOUNT, false);
+                                editor.commit();
                                 Logger.d("VolleyError", error.toString());
+                                if (error.getMessage() != null)
+                                    Logger.d("VolleyError", error.getMessage());
+                                progressBar.setVisibility(View.INVISIBLE);
+
+                            }
+
+                            @Override
+                            public void updateUIOnNetworkUnavailable(String noInternetMessage) {
+                                tvNotification.setText(noInternetMessage);
                             }
                         });
 

@@ -39,7 +39,7 @@
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/btnOpenSignUp"
+        android:id="@+id/btnAccountSetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnAdvertise"

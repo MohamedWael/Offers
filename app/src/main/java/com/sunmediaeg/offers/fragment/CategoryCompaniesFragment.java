@@ -10,13 +10,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.sunmediaeg.offers.R;
 import com.sunmediaeg.offers.adapters.RVCategoryCompaniesAdapter;
-import com.sunmediaeg.offers.dataModel.Company;
+import com.sunmediaeg.offers.dataModel.APIResponse;
+import com.sunmediaeg.offers.dataModel.categoryVendors.CategoryVendorsResponse;
+import com.sunmediaeg.offers.utilities.ApiError;
+import com.sunmediaeg.offers.utilities.CacheManager;
+import com.sunmediaeg.offers.utilities.Constants;
+import com.sunmediaeg.offers.utilities.Logger;
+import com.sunmediaeg.offers.utilities.Service;
 
-import java.util.ArrayList;
+import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,17 +40,18 @@ public class CategoryCompaniesFragment extends Fragment implements View.OnClickL
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String CATEGORY_ID_KEY = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String categoryTitle;
+    private int categoryID;
 
     private OnFragmentInteractionListener mListener;
     private RecyclerView rvCategoryCompanies;
     private RVCategoryCompaniesAdapter categoryCompaniesAdapter;
     private TextView tvTitle;
     private ImageButton ibBack;
+    private ProgressBar pbCategoryVendors;
 
     public CategoryCompaniesFragment() {
         // Required empty public constructor
@@ -50,16 +61,16 @@ public class CategoryCompaniesFragment extends Fragment implements View.OnClickL
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param param1     Parameter 1.
+     * @param categoryID Parameter 2.
      * @return A new instance of fragment CategoryCompaniesFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CategoryCompaniesFragment newInstance(String param1, String param2) {
+    public static CategoryCompaniesFragment newInstance(String param1, int categoryID) {
         CategoryCompaniesFragment fragment = new CategoryCompaniesFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(CATEGORY_ID_KEY, categoryID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,8 +79,9 @@ public class CategoryCompaniesFragment extends Fragment implements View.OnClickL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            categoryTitle = getArguments().getString(ARG_PARAM1);
+            categoryID = getArguments().getInt(CATEGORY_ID_KEY);
+            Logger.d(CATEGORY_ID_KEY, categoryID + "");
         }
     }
 
@@ -78,28 +90,53 @@ public class CategoryCompaniesFragment extends Fragment implements View.OnClickL
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category_companies, container, false);
         initComponents(view);
+        try {
+            JSONObject body = new JSONObject();
+            long userID = (long) CacheManager.getInstance().getCachedObject(Constants.USER_ID,0L);
+            body.put(Constants.KEY_LIMIT, Constants.LIMIT_VALUE);
+            Service.getInstance(getContext()).getResponse(Request.Method.GET, Constants.CATEGORY_VENDORS + categoryID + Constants.ADD_USER_ID + userID, body, new Service.ServiceResponse() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    showProgressBar(false);
+                    Gson gson = new Gson();
+                    APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
+                    if (apiResponse.isSuccess()) {
+                        CategoryVendorsResponse categoryVendorsResponse = gson.fromJson(response.toString(), CategoryVendorsResponse.class);
+                        categoryCompaniesAdapter = new RVCategoryCompaniesAdapter(getContext(), categoryVendorsResponse.getData().getVendors());
+                        rvCategoryCompanies.setAdapter(categoryCompaniesAdapter);
 
+                    } else {
+                        ApiError apiError = new ApiError(apiResponse.getCode());
+                        Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
+                        Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                    }
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+
+                @Override
+                public void updateUIOnNetworkUnavailable(String noInternetMessage) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return view;
     }
 
     private void initComponents(View v) {
         tvTitle = (TextView) v.findViewById(R.id.tvTitle);
-        tvTitle.setText(mParam1);
+        tvTitle.setText(categoryTitle);
         ibBack = (ImageButton) v.findViewById(R.id.ibBack);
+        pbCategoryVendors = (ProgressBar) v.findViewById(R.id.pbCategoryVendors);
+        showProgressBar(true);
         ibBack.setOnClickListener(this);
         rvCategoryCompanies = (RecyclerView) v.findViewById(R.id.rvCategoryCompanies);
         rvCategoryCompanies.setLayoutManager(new LinearLayoutManager(getContext()));
-        ArrayList<Company> companies = new ArrayList<>();
-        Company company = new Company(0, R.drawable.egypt_air, 14, getString(R.string.egyptAir), "", false);
-        Company company1 = new Company(0, R.drawable.egypt_air, 14, getString(R.string.egyptAir), "", false);
-        Company company2 = new Company(0, R.drawable.egypt_air, 14, getString(R.string.egyptAir), "", false);
-        Company company3 = new Company(0, R.drawable.egypt_air, 14, getString(R.string.egyptAir), "", false);
-        companies.add(company);
-        companies.add(company1);
-        companies.add(company2);
-        companies.add(company3);
-        categoryCompaniesAdapter = new RVCategoryCompaniesAdapter(getContext(), companies);
-        rvCategoryCompanies.setAdapter(categoryCompaniesAdapter);
     }
 
     public void onButtonPressed(Uri uri) {
@@ -131,6 +168,11 @@ public class CategoryCompaniesFragment extends Fragment implements View.OnClickL
                 getActivity().finish();
                 break;
         }
+    }
+
+    private void showProgressBar(boolean show) {
+        if (show) pbCategoryVendors.setVisibility(View.VISIBLE);
+        else pbCategoryVendors.setVisibility(View.GONE);
     }
 
     /**
