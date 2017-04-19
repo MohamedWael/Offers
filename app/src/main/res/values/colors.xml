@@ -2,13 +2,15 @@
 <resources>
     <color name="colorPrimary">#b9c0a4</color>
     <color name="colorPrimaryDark">#29434b</color>
+    <color name="colorPrimaryDarkMain">#2980b9</color>
     <color name="colorPrimaryDarkWithTransparency">#8d29434b</color>
     <color name="colorAccent">#f4695d</color>
 
     <color name="orangeBackground">#FF8000</color>
 
     <color name="colorPrimaryDarker">#0e2f3f</color>
-    <color name="colorBackground">#efd6a2</color>
+    <color name="colorBackground">#ecf0f1</color>
+    <color name="colorBackgroundOld">#efd6a2</color>
     <color name="colorButton">#b9c0a4</color>
     <color name="colorSelected">#a2eceff1</color>
     <color name="colorLightRed">#f1b18b</color>

@@ -22,7 +22,7 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/flMainFragment"
         android:layout_weight="1"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorPrimaryDarkMain"
         android:contentInsetEnd="0dp"
         android:contentInsetLeft="0dp"
         android:contentInsetRight="0dp"
