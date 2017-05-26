@@ -28,7 +28,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
         return instance;
     }
 
-    private NetworkStateReceiver() {
+    public NetworkStateReceiver() {
         listeners = new ArrayList<NetworkStateReceiverListener>();
         connected = null;
     }

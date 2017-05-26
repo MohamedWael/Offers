@@ -24,6 +24,20 @@ repositories {
 }
 
 android {
+    signingConfigs {
+        offers {
+            keyAlias 'keyOffers'
+            keyPassword 'keyOffers'
+            storeFile file('D:/FCIS/Dropbox/Data/Android/AndroidStudio/Offers/RealeaseData/offersCertificate.jks')
+            storePassword 'sumn3dia'
+        }
+        config {
+            keyAlias 'keyOffers'
+            keyPassword 'sumn3dia'
+            storeFile file('D:/FCIS/Dropbox/Data/Android/AndroidStudio/Offers/RealeaseData/offersCertificate.jks')
+            storePassword 'keyOffers'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -31,15 +45,24 @@ android {
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0"
+        versionName 'OffersZero'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            versionNameSuffix 'OffersZero'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+    }
+    productFlavors {
     }
 }
 
@@ -48,7 +71,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     compile('com.twitter.sdk.android:twitter:2.3.1@aar') {
         transitive = true;
     }
