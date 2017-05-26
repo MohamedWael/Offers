@@ -8,12 +8,12 @@
 
     <ImageButton
         android:id="@+id/ibTileImage"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:background="@android:color/transparent"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:src="@drawable/logo" />
 
     <TextView
@@ -22,6 +22,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/ibTileImage"
         android:layout_centerHorizontal="true"
+        android:maxLines="1"
         android:layout_gravity="center"
         android:layout_marginTop="4dp"
         android:gravity="center"

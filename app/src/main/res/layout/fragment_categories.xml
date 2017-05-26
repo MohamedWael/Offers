@@ -18,6 +18,7 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srlRefresh"
         android:layout_width="match_parent"
@@ -40,4 +41,6 @@
             tools:listitem="@layout/companies_item_layout" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
+
 </RelativeLayout>
