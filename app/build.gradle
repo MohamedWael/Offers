@@ -37,6 +37,12 @@ android {
             storeFile file('D:/FCIS/Dropbox/Data/Android/AndroidStudio/Offers/RealeaseData/offersCertificate.jks')
             storePassword 'keyOffers'
         }
+        offer_release {
+            keyAlias 'offers_release'
+            keyPassword '@offers_Play'
+            storeFile file('D:/FCIS/Dropbox/Data/Android/AndroidStudio/Offers/RealeaseData/offers_release_certificate.jks')
+            storePassword '@offers_Play'
+        }
     }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -57,6 +63,10 @@ android {
             jniDebuggable false
             renderscriptDebuggable false
             versionNameSuffix 'OffersZero'
+            signingConfig signingConfigs.offer_release
+        }
+        debug {
+            signingConfig signingConfigs.offer_release
         }
     }
     compileOptions {
