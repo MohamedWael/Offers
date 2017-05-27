@@ -1,5 +1,12 @@
 package com.mowael.offers.utilities;
 
+import android.media.MediaCodec;
+import android.os.PatternMatcher;
+import android.util.Patterns;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by moham on 2/1/2017.
  */
@@ -98,9 +105,12 @@ public class SignUpUtility {
     }
 
     public static boolean isMailValid(String email) {
-        return email.matches(REGEX_Mail);
+        if (email == null) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        }
     }
-
 
     public boolean isNotEmpty(String userName) {
         return !userName.isEmpty();

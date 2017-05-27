@@ -26,7 +26,7 @@ public final class Constants {
     public static final String TWITTER_SECRET = "q8ZWVv4nBCC9FhbvuyV7whR4U1ap4o3FxlMl9dfOnlKnrbDSrb";
 
     public static final int SPLASH_TIME_OUT = 3000;
-    public static final boolean LOG_TOGGLE = false;
+    public static final boolean LOG_TOGGLE = true;
 
     public static final String PLAIN_TEXT = "text/plain";
     public static final String IMAGE_JPG = "image/jpeg";
