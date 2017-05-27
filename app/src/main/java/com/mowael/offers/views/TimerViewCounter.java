@@ -1,9 +1,7 @@
-package com.sunmediaeg.offers.views;
+package com.mowael.offers.views;
 
 import android.content.Context;
 import android.os.Handler;
-
-import com.sunmediaeg.offers.utilities.Logger;
 
 import java.util.Date;
 import java.util.HashMap;

@@ -141,7 +141,7 @@
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/cvProductImage">
 
-            <com.sunmediaeg.offers.views.TimerView
+            <com.mowael.offers.views.TimerView
                 android:id="@+id/timerView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

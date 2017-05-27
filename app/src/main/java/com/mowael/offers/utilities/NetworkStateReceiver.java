@@ -1,4 +1,4 @@
-package com.sunmediaeg.offers.utilities;
+package com.mowael.offers.utilities;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

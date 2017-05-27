@@ -158,7 +158,7 @@
 
     </TableLayout>
 
-    <com.sunmediaeg.offers.views.TimerView
+    <com.mowael.offers.views.TimerView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_below="@+id/tbllyot"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sunmediaeg.offers">
+    package="com.mowael.offers">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".utilities.BaseApplication"
+        android:name="com.mowael.offers.utilities.BaseApplication"
         android:allowBackup="true"
         android:icon="@drawable/offers_icon"
         android:label="@string/app_name"
@@ -21,10 +21,10 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <receiver android:name=".utilities.NetworkStateReceiver" />
+        <receiver android:name="com.mowael.offers.utilities.NetworkStateReceiver" />
 
         <activity
-            android:name=".activities.SplashScreenActivity"
+            android:name="com.mowael.offers.activities.SplashScreenActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -34,11 +34,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.OffersGeneralActivity"
+            android:name="com.mowael.offers.activities.OffersGeneralActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.mowael.offers.activities.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
@@ -60,7 +60,7 @@
             android:value="f9690f3b21477fb1b3e9c3f9aff2b581d23f7444" />
 
         <activity
-            android:name=".activities.SearchActivity"
+            android:name="com.mowael.offers.activities.SearchActivity"
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan">

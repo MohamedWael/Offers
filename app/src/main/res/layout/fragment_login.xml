@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/back_logo"
-    tools:context="com.sunmediaeg.offers.fragment.LoginFragment">
+    tools:context="com.mowael.offers.fragment.LoginFragment">
 
     <include
         android:id="@+id/lAppBar"

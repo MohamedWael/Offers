@@ -284,7 +284,7 @@
 
             </RelativeLayout>
 
-            <com.sunmediaeg.offers.views.TimerView
+            <com.mowael.offers.views.TimerView
                 android:id="@+id/timerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
