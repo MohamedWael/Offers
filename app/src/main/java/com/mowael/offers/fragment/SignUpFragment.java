@@ -242,9 +242,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                     password = etPassword.getText().toString();
 
                     if (userName.toCharArray().length >= 6 && userName.toCharArray().length <= 255 &&
-                            password.toCharArray().length >= 6 && password.toCharArray().length <= 255) {
-                        progressBar.setVisibility(View.VISIBLE);
-                        SignUpUtility signUp = SignUpUtility.getInstance(userName, mail, password);
+                            password.toCharArray().length >= 6 && password.toCharArray().length <= 255
+                            &&!mail.isEmpty()) {
+                        SignUpUtility signUp = SignUpUtility.newInstance(userName, mail, password);
                         if (!SignUpUtility.isFirstTime()) {
                             signUp.setUserName(userName);
                             signUp.setEmail(mail);
@@ -266,6 +266,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                         Logger.d("Register", url + "");
                         editor.putString(Constants.PASSWORD, password);
                         //NOTE Registration as a vendor is removed form the backend
+                        progressBar.setVisibility(View.VISIBLE);
                         requests.getResponse(Request.Method.POST, url, body, new Service.ServiceResponse() {
                             @Override
                             public void onResponse(JSONObject response) {

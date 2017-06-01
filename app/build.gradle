@@ -50,8 +50,8 @@ android {
         applicationId "com.mowael.offers"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 1
-        versionName 'OffersZero'
+        versionCode 2
+        versionName 'OffersBetaZero'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
