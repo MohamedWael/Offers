@@ -51,16 +51,16 @@ public class SignUpUtility {
                             return newInstance;
                         }
                     } else {
-                        nullPointerEx(email + " is not valid email");
+                        nullPointerEx(Errors.EMAIL.getTitle());
                     }
                 } else {
-                    nullPointerEx("password is empty");
+                    nullPointerEx(Errors.PASSWORD.getTitle());
                 }
             } else {
-                nullPointerEx("email is empty");
+                nullPointerEx(Errors.EMAIL.getTitle());
             }
         } else {
-            nullPointerEx("userName is empty");
+            nullPointerEx(Errors.USERNAME.getTitle());
         }
 
         Logger.d("newInstance", "no");
@@ -102,7 +102,7 @@ public class SignUpUtility {
         newInstance = null;
         Toaster.getInstance().toast(msg);
         Logger.e("SIGN_UP", msg);
-        throw new NullPointerException(msg);
+//        throw new NullPointerException(msg);
     }
 
     public void setContext(Context context) {
