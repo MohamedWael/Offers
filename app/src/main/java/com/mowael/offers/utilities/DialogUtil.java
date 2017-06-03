@@ -11,20 +11,29 @@ import com.mowael.offers.R;
  */
 
 public class DialogUtil {
-    private AlertDialog.Builder dialog;
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog alertDialog;
 
     public DialogUtil(Context context) {
-        this.dialog = new AlertDialog.Builder(context);
-        dialog.setPositiveButton(context.getText(R.string.cancel), new DialogInterface.OnClickListener() {
+        this.dialogBuilder = new AlertDialog.Builder(context);
+
+        dialogBuilder.setPositiveButton(context.getText(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
+        alertDialog = dialogBuilder.create();
     }
 
     public void showMessage(String msg) {
-        dialog.setMessage(msg);
-        dialog.show();
+        dialogBuilder.setMessage(msg);
+        dialogBuilder.show();
     }
+
+    public void hide() {
+        alertDialog.dismiss();
+    }
+
+
 }

@@ -30,6 +30,7 @@ import com.mowael.offers.utilities.Constants;
 import com.mowael.offers.utilities.Logger;
 import com.mowael.offers.utilities.Service;
 import com.mowael.offers.utilities.SharedPreferencesManager;
+import com.mowael.offers.utilities.UserUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -167,36 +168,46 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
                             requests.getResponse(Request.Method.POST, Constants.USER_LOGIN, body, new Service.ServiceResponse() {
                                 @Override
                                 public void onResponse(JSONObject response) {
-                                    Gson gson = new Gson();
-                                    APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
-                                    if (apiResponse.isSuccess()) {
-                                        LoginResponse login = gson.fromJson(response.toString(), LoginResponse.class);
-//                                        RealmDB.getInstance(getContext()).createOrUpdate(login.getData().getUser());
-                                        editor.putString(Constants.NAME, login.getData().getUser().getName());
-                                        editor.putString(Constants.EMAIL, login.getData().getUser().getEmail());
-                                        editor.putLong(Constants.USER_ID, login.getData().getUser().getId());
-                                        editor.putString(Constants.TOKEN, login.getData().getUser().getToken());
-                                        Logger.d(Constants.USER_ID, login.getData().getUser().getId() + "");
-                                        editor.putBoolean(Constants.HAVE_ACCOUNT, true);
-                                        editor.commit();
-                                        manager.cacheObject(Constants.NAME, login.getData().getUser().getName());
-                                        manager.cacheObject(Constants.EMAIL, login.getData().getUser().getEmail());
-                                        manager.cacheObject(Constants.TOKEN, login.getData().getUser().getToken());
-                                        manager.cacheObject(Constants.USER_ID, login.getData().getUser().getId());
-                                        manager.cacheObject(Constants.HAVE_ACCOUNT, true);
-                                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                                        intent.putExtra(Constants.IS_COMPANY_PROFILE, false); // <-- this extra is related only to the MainActivity
-                                        getActivity().startActivity(intent);
-                                        getActivity().finish();
-                                        progressBar.setVisibility(View.INVISIBLE);
-                                    } else {
-                                        ApiError apiError = new ApiError(apiResponse.getCode());
-                                        progressBar.setVisibility(View.INVISIBLE);
-                                        editor.putBoolean(Constants.HAVE_ACCOUNT, false);
-                                        editor.commit();
-                                        if (apiResponse.getCode() == Constants.CODE_AUTH_FAILED)
-                                            tvNotification.setText(getString(R.string.loginError3));
-                                        else tvNotification.setText(apiError.getErrorMsg());
+                                    try {
+                                        Gson gson = new Gson();
+                                        int responseCode = response.getInt("code");
+                                        APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
+                                        if (responseCode == 200) {
+                                            LoginResponse login = gson.fromJson(response.toString(), LoginResponse.class);
+
+//                                        editor.putString(Constants.NAME, login.getData().getUser().getName());
+//                                        editor.putString(Constants.EMAIL, login.getData().getUser().getEmail());
+//                                        editor.putLong(Constants.USER_ID, login.getData().getUser().getId());
+//                                        editor.putString(Constants.TOKEN, login.getData().getUser().getToken());
+                                            UserUtil.getInstance().saveUser(login.getData().getUser().getName(),
+                                                    login.getData().getUser().getEmail(),
+                                                    login.getData().getUser().getId(),
+                                                    login.getData().getUser().getToken());
+
+                                            Logger.d(Constants.USER_ID, login.getData().getUser().getId() + "");
+//                                        editor.putBoolean(Constants.HAVE_ACCOUNT, true);
+//                                        editor.commit();
+                                            manager.cacheObject(Constants.NAME, login.getData().getUser().getName());
+                                            manager.cacheObject(Constants.EMAIL, login.getData().getUser().getEmail());
+                                            manager.cacheObject(Constants.TOKEN, login.getData().getUser().getToken());
+                                            manager.cacheObject(Constants.USER_ID, login.getData().getUser().getId());
+                                            manager.cacheObject(Constants.HAVE_ACCOUNT, true);
+                                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                                            intent.putExtra(Constants.IS_COMPANY_PROFILE, false); // <-- this extra is related only to the MainActivity
+                                            getActivity().startActivity(intent);
+                                            getActivity().finish();
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                        } else {
+                                            ApiError apiError = new ApiError(apiResponse.getCode());
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            editor.putBoolean(Constants.HAVE_ACCOUNT, false);
+                                            editor.commit();
+                                            if (apiResponse.getCode() == Constants.CODE_AUTH_FAILED)
+                                                tvNotification.setText(getString(R.string.loginError3));
+                                            else tvNotification.setText(apiError.getErrorMsg());
+                                        }
+                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
                                     }
                                 }
 

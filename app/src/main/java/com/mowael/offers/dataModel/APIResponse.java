@@ -12,8 +12,7 @@ public class APIResponse {
     }
 
     public boolean isSuccess() {
-        if (code == 200) return true;
-        else return false;
+        return getCode() == 200;
     }
 
     public String getMessage() {

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.mowael.offers.utilities.UserUtil;
 import com.squareup.picasso.Picasso;
 import com.mowael.offers.R;
 import com.mowael.offers.dataModel.APIResponse;
@@ -191,9 +192,12 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
 
     private void like(final Feed feed, boolean like) {
         try {
-            long userID = (long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
-            Logger.d(Constants.USER_ID, userID + "");
-            String token = (String) CacheManager.getInstance().getCachedObject(Constants.TOKEN);
+//            long userID = (long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
+//            Logger.d(Constants.USER_ID, userID + "");
+//            String token = (String) CacheManager.getInstance().getCachedObject(Constants.TOKEN);
+            long userID = UserUtil.getInstance().getId();
+            String token = UserUtil.getInstance().getToken();
+
             Logger.d(Constants.TOKEN, token + "");
             if (!token.isEmpty() && userID != 0) {
                 JSONObject body = new JSONObject();

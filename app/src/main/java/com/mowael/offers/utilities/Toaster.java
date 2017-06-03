@@ -18,9 +18,27 @@ public class Toaster {
         return toaster;
     }
 
-    public void toast(String msg) {
-        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+    public void toast(String msg, int length) {
+        Toast.makeText(context, msg, length).show();
     }
+
+    public void toast(String msg) {
+        toast(msg, Toast.LENGTH_LONG);
+    }
+
+    public void toast(int stirngRes) {
+        toast(context.getString(stirngRes));
+    }
+
+
+    public void toastShort(String msg) {
+        toast(msg, Toast.LENGTH_SHORT);
+    }
+
+    public void toastShort(int stirngRes) {
+        toastShort(context.getString(stirngRes));
+    }
+
 
     public void setContext(Context context) {
         this.context = context;

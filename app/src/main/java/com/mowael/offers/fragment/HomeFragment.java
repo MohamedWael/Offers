@@ -34,6 +34,7 @@ import com.mowael.offers.utilities.CacheManager;
 import com.mowael.offers.utilities.Constants;
 import com.mowael.offers.utilities.Logger;
 import com.mowael.offers.utilities.Service;
+import com.mowael.offers.utilities.Toaster;
 
 import org.json.JSONObject;
 
@@ -185,7 +186,8 @@ public class HomeFragment extends Fragment {
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            Toaster.getInstance().toast(e.getMessage());
+//            e.printStackTrace();
         }
     }
 

@@ -23,12 +23,9 @@ import com.mowael.offers.utilities.Constants;
 import com.mowael.offers.utilities.Logger;
 import com.mowael.offers.utilities.NetworkStateReceiver;
 import com.mowael.offers.utilities.SharedPreferencesManager;
-import com.twitter.sdk.android.Twitter;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
 
 import java.util.ArrayList;
 
-import io.fabric.sdk.android.Fabric;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -53,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        FacebookSdk.sdkInitialize(this);
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_KEY, Constants.TWITTER_SECRET);
-        Fabric.with(this, new Twitter(authConfig));
+//        TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_KEY, Constants.TWITTER_SECRET);
+//        Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
         Bundle bundle = getIntent().getExtras();
         NetworkStateReceiver receiver = NetworkStateReceiver.getInstance();
@@ -67,12 +64,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             manager.cacheObject(Constants.NAME, prefesManager.getPrefs().getString(Constants.NAME, ""));
             manager.cacheObject(Constants.EMAIL, prefesManager.getPrefs().getString(Constants.EMAIL, ""));
             manager.cacheObject(Constants.USER_ID, prefesManager.getPrefs().getLong(Constants.USER_ID, 0));
-            Logger.d("NAME", manager.getCachedObject(Constants.NAME) + "");
-            Logger.d("EMAIL", manager.getCachedObject(Constants.EMAIL) + "");
-            Logger.d("USER_ID", manager.getCachedObject(Constants.USER_ID) + "");
+//            Logger.d("NAME", manager.getCachedObject(Constants.NAME) + "");
+//            Logger.d("EMAIL", manager.getCachedObject(Constants.EMAIL) + "");
+//            Logger.d("USER_ID", manager.getCachedObject(Constants.USER_ID) + "");
         }
-        isCompanyProfile = bundle.getBoolean(Constants.IS_COMPANY_PROFILE, false);
-        initComponents(bundle);
+        if (bundle != null) {
+            isCompanyProfile = bundle.getBoolean(Constants.IS_COMPANY_PROFILE, false);
+            initComponents(bundle);
+        }
     }
 
     @Override
@@ -84,28 +83,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.ibOffers:
                 changeBackground(ibList, LIST);
-
                 getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, offersFragment).commit();
                 break;
             case R.id.ibLogo:
                 changeBackground(ibLogo, LOGO);
-
                 getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, cityFragment).commit();
 //                getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, searchFragment).commit();
                 break;
             case R.id.ibCategories:
                 changeBackground(ibGrid, GRID);
-
                 getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, categoriesFragment).commit();
                 break;
             case R.id.ibSetting:
                 getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, settingsFragment).commit();
-
-                /*
-                CompanyProfileFragment companyProfileFragment = CompanyProfileFragment.newInstance("", "");
-                getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragment, companyProfileFragment).commit();
-                * */
-
                 changeBackground(ibSetting, SETTING);
                 break;
         }

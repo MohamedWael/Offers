@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 import com.mowael.offers.R;
 import com.mowael.offers.dataModel.APIResponse;
 import com.mowael.offers.dataModel.cities.CitiesResponse;
@@ -34,7 +33,9 @@ import com.mowael.offers.utilities.Constants;
 import com.mowael.offers.utilities.ImageConverter;
 import com.mowael.offers.utilities.Logger;
 import com.mowael.offers.utilities.Service;
+import com.mowael.offers.utilities.UserUtil;
 import com.mowael.offers.utilities.VolleySingleton;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -271,8 +272,9 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
                             String password = getStieng(etPassword);
 //                            String city = getStieng(etCity);
                             String email = getStieng(etEmail);
-                            long userID = (long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
-                            String token = (String) CacheManager.getInstance().getCachedObject(Constants.TOKEN);
+
+                            long userID = UserUtil.getInstance().getId();//CacheManager.getInstance().getCachedObject(Constants.USER_ID);
+                            String token = UserUtil.getInstance().getToken();// (String) CacheManager.getInstance().getCachedObject(Constants.TOKEN);
 
                             body.put(Constants.ID, userID);
                             body.put(Constants.TOKEN, token);

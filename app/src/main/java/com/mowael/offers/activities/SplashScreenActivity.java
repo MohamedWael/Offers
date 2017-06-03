@@ -32,7 +32,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_screen);
         cacheUserData();
-//        refineFeed();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -45,79 +45,42 @@ public class SplashScreenActivity extends AppCompatActivity {
         }, Constants.SPLASH_TIME_OUT);
     }
 
-//    private void refineFeed() {
-//        RealmDB realmDB = RealmDB.getInstance(this);
-//        final RealmResults<Feed> localFeeds = realmDB.getAllWithPrimaryKey(Feed.class, "mId");
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Looper.prepare();
-//                Looper.loop();
-//                Realm realm = RealmDB.reInitRealm();
-//
-//                realm.executeTransactionAsync(new Realm.Transaction() {
-//                    @Override
-//                    public void execute(Realm realm) {
-//                        int i = 0;
-//
-//                        for (Iterator<Feed> iterator = localFeeds.iterator(); iterator.hasNext(); ) {
-//                            Feed feed = iterator.next();
-//                            if (feed.getEndDate() < System.currentTimeMillis()) {
-//                                Logger.d("Feed" + feed.getId(), "deleted");
-//                                iterator.remove();
-//                            }
-//                        }
-//                    }
-//                }, new Realm.Transaction.OnSuccess() {
-//                    @Override
-//                    public void onSuccess() {
-//
-//                    }
-//                });
-//            }
-//        }).start();
-//    }
-
-
     private void cacheUserData() {
-        Long userID = (Long) CacheManager.getInstance().getCachedObject(Constants.USER_ID, 0L);
-        if (userID != null) {
-            Logger.d("userID", userID.toString());
-            if (userID != 0) {
-                try {
-                    Service.getInstance(this).getResponse(Request.Method.GET, Constants.USER + userID, new JSONObject(), new Service.ServiceResponse() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Logger.d("UserCache", response.toString());
-                            Gson gson = new Gson();
-                            APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
-                            if (apiResponse.isSuccess()) {
-                                UserResponse userResponse = gson.fromJson(response.toString(), UserResponse.class);
-                                CacheManager.getInstance().cacheObject(Constants.USER, userResponse.getData().getUser());
-                            } else {
-                                ApiError apiError = new ApiError(apiResponse.getCode());
-                                Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
-                                Constants.toastMsg(SplashScreenActivity.this, apiError.getErrorMsg());
-                            }
+        long userID = (long) CacheManager.getInstance().getCachedObject(Constants.USER_ID, 0L);
+        Logger.d("userID", userID + "");
+        if (userID != 0) {
+            try {
+                Service.getInstance(this).getResponse(Request.Method.GET, Constants.USER + userID, new JSONObject(), new Service.ServiceResponse() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Logger.d("UserCache", response.toString());
+                        Gson gson = new Gson();
+                        APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
+                        if (apiResponse.isSuccess()) {
+                            UserResponse userResponse = gson.fromJson(response.toString(), UserResponse.class);
+                            CacheManager.getInstance().cacheObject(Constants.USER, userResponse.getData().getUser());
+                        } else {
+                            ApiError apiError = new ApiError(apiResponse.getCode());
+                            Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
+                            Constants.toastMsg(SplashScreenActivity.this, apiError.getErrorMsg());
                         }
+                    }
 
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
 
-                        }
+                    }
 
-                        @Override
-                        public void updateUIOnNetworkUnavailable(String noInternetMessage) {
+                    @Override
+                    public void updateUIOnNetworkUnavailable(String noInternetMessage) {
 
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
-
 
     @Override
     protected void attachBaseContext(Context newBase) {

@@ -47,10 +47,10 @@ public class BaseApplication extends Application {
             manager.cacheObject(Constants.USER_ID, prefesManager.getPrefs().getLong(Constants.USER_ID, 0));
             manager.cacheObject(Constants.TOKEN, prefesManager.getPrefs().getString(Constants.TOKEN, ""));
             manager.cacheObject(Constants.HAVE_ACCOUNT, true);
-            Logger.d("AppNAME", manager.getCachedObject(Constants.NAME) + "");
-            Logger.d("AppEMAIL", manager.getCachedObject(Constants.EMAIL) + "");
-            Logger.d("AppUSER_ID", manager.getCachedObject(Constants.USER_ID) + "");
-            Logger.d("AppToken", manager.getCachedObject(Constants.TOKEN) + "");
+//            Logger.d("AppNAME", manager.getCachedObject(Constants.NAME) + "");
+//            Logger.d("AppEMAIL", manager.getCachedObject(Constants.EMAIL) + "");
+//            Logger.d("AppUSER_ID", manager.getCachedObject(Constants.USER_ID) + "");
+//            Logger.d("AppToken", manager.getCachedObject(Constants.TOKEN) + "");
         }
 
         volleySingleton = VolleySingleton.getInstance(this);

@@ -20,6 +20,10 @@ public class SharedPreferencesManager {
         return ourInstance;
     }
 
+    public static SharedPreferencesManager getInstance() {
+        return ourInstance;
+    }
+
     private SharedPreferencesManager(Context mContext) {
         this.mContext = mContext;
         initSharedPreferences();

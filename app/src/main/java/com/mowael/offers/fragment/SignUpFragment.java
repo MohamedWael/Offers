@@ -39,6 +39,8 @@ import com.mowael.offers.utilities.Logger;
 import com.mowael.offers.utilities.Service;
 import com.mowael.offers.utilities.SharedPreferencesManager;
 import com.mowael.offers.utilities.SignUpUtility;
+import com.mowael.offers.utilities.Toaster;
+import com.mowael.offers.utilities.UserUtil;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -47,7 +49,6 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -175,7 +176,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
         initComponents(view);
-
+        UserUtil.getInstance().init(getContext());
         return view;
     }
 
@@ -243,7 +244,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
                     if (userName.toCharArray().length >= 6 && userName.toCharArray().length <= 255 &&
                             password.toCharArray().length >= 6 && password.toCharArray().length <= 255
-                            &&!mail.isEmpty()) {
+                            && !mail.isEmpty()) {
                         SignUpUtility signUp = SignUpUtility.newInstance(userName, mail, password);
                         if (!SignUpUtility.isFirstTime()) {
                             signUp.setUserName(userName);
@@ -272,52 +273,53 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                             public void onResponse(JSONObject response) {
                                 Logger.d("response", response.toString());
                                 try {
-                                    APIResponse aPIResponse = gson.fromJson(response.toString(), APIResponse.class);
-                                    if (aPIResponse.isSuccess()) {
-                                        LoginResponse loginResponse = gson.fromJson(response.toString(), LoginResponse.class);
+                                    int responseCode = response.getInt("code");
 
-                                        if (finalUrl.contains(Constants.USER)) {
-                                            loginResponse.getData().getUser().setUserType(Constants.TYPE_USER);
-                                        } else {
-                                            loginResponse.getData().getUser().setUserType(Constants.TYPE_VENDOR);
-                                        }
-//                                        RealmDB.getInstance(getContext()).createOrUpdate(loginResponse.getData().getUser());
+                                    APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
+                                    if (responseCode == 200) {
+                                        LoginResponse loginResponse = gson.fromJson(response.toString(), LoginResponse.class);
+                                        loginResponse.getData().getUser().setUserType(Constants.TYPE_USER);
                                         Logger.d("user", loginResponse.getData().getUser().toString());
-                                        editor.putString(Constants.NAME, loginResponse.getData().getUser().getName());
-                                        editor.putString(Constants.EMAIL, loginResponse.getData().getUser().getEmail());
-                                        editor.putLong(Constants.USER_ID, loginResponse.getData().getUser().getId());
-                                        editor.putBoolean(Constants.HAVE_ACCOUNT, true);
-                                        editor.commit();
+
+                                        UserUtil.getInstance().saveUser(loginResponse.getData().getUser().getName(),
+                                                loginResponse.getData().getUser().getEmail(),
+                                                loginResponse.getData().getUser().getId(),
+                                                loginResponse.getData().getUser().getToken());
+
                                         manager.cacheObject(Constants.NAME, loginResponse.getData().getUser().getName());
                                         manager.cacheObject(Constants.EMAIL, loginResponse.getData().getUser().getEmail());
                                         manager.cacheObject(Constants.TOKEN, loginResponse.getData().getUser().getToken());
                                         manager.cacheObject(Constants.USER_ID, loginResponse.getData().getUser().getId());
                                         manager.cacheObject(Constants.HAVE_ACCOUNT, true);
-                                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                                        Intent intent = new Intent(SignUpFragment.this.getActivity(), MainActivity.class);
                                         intent.putExtra(Constants.IS_COMPANY_PROFILE, false); // <-- this extra is related only to the MainActivity
-                                        getActivity().startActivity(intent);
-                                        getActivity().finish();
-                                        progressBar.setVisibility(View.INVISIBLE);
+//                                        Toaster.getInstance().toast("تم إنشاء الحساب بنجاح");
+                                        SignUpFragment.this.getActivity().startActivity(intent);
+                                        SignUpFragment.this.getActivity().finish();
                                     } else {
                                         String emailMsg = "", passwordMsg = "";
-                                        int responseCode = response.getInt("code");
+//                                        int responseCode = response.getInt("code");
                                         if (response.has("errors")) {
                                             JSONObject errors = response.getJSONObject("errors");
                                             if (errors.has("email")) {
                                                 emailMsg = errors.getString("email");
+                                                Toaster.getInstance().toast(emailMsg);
                                             } else if (errors.has("password")) {
                                                 passwordMsg = errors.getString("password");
+                                                Toaster.getInstance().toast(passwordMsg);
                                             } else {
                                                 ApiError apiError = new ApiError(responseCode);
                                                 Constants.toastMsg(getContext(), apiError.getErrorMsg());
                                             }
                                         }
+
                                         tvNotification.setText(emailMsg + "\n" + passwordMsg);
 //                                        Constants.toastMsg(getContext(), emailMsg + "\n" + passwordMsg);
-                                        progressBar.setVisibility(View.INVISIBLE);
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                } catch (Exception e) {
+//                                    e.printStackTrace();
                                 }
                             }
 

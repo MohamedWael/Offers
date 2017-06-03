@@ -20,12 +20,23 @@ public class ServiceRequest extends JsonObjectRequest {
         super(method, url, jsonRequest, listener, errorListener);
         this.url = url;
         this.jsonRequestBody = jsonRequest;
+//        this.setTag(System.currentTimeMillis()+"");
+        this.setTag(getClassName() + System.currentTimeMillis());
     }
 
     public ServiceRequest(String url, JSONObject jsonRequestBody, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(url, jsonRequestBody, listener, errorListener);
         this.url = url;
         this.jsonRequestBody = jsonRequestBody;
+        this.setTag(getClassName() + System.currentTimeMillis());
+    }
+
+    private static String getClassName() {
+        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+        StackTraceElement relevantTrace = trace[4];
+        String className = relevantTrace.getClassName();
+        int lastIndex = className.lastIndexOf('.');
+        return className.substring(lastIndex + 1);
     }
 
     private static ServiceRequest newInstance(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {

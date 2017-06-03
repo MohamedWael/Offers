@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.mowael.offers.utilities.UserUtil;
 import com.squareup.picasso.Picasso;
 import com.mowael.offers.R;
 import com.mowael.offers.activities.MainActivity;
@@ -103,8 +104,8 @@ public class RVCategoryCompaniesAdapter extends RecyclerView.Adapter<RVCategoryC
 
     private void follow(final Vendor vendor) {
         try {
-            long userID = (long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
-            String token = (String) CacheManager.getInstance().getCachedObject(Constants.TOKEN);
+            long userID = UserUtil.getInstance().getId(); //(long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
+            String token = UserUtil.getInstance().getToken();//(String) CacheManager.getInstance().getCachedObject(Constants.TOKEN);
             if (!token.isEmpty() && userID != 0) {
                 JSONObject body = new JSONObject();
                 body.put(Constants.USER_ID, userID);

@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.gson.Gson;
+import com.mowael.offers.utilities.UserUtil;
 import com.squareup.picasso.Picasso;
 import com.mowael.offers.R;
 import com.mowael.offers.activities.MainActivity;
@@ -206,9 +207,9 @@ public class RVOffersAdapter extends RecyclerView.Adapter<RVOffersAdapter.Offers
 
     private void like(final Feed feed, boolean like) {
         try {
-            long userID = (long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
+            long userID = UserUtil.getInstance().getId();//(long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
             Logger.d(Constants.USER_ID, userID + "");
-            String token = (String) CacheManager.getInstance().getCachedObject(Constants.TOKEN);
+            String token = UserUtil.getInstance().getToken();//(String) CacheManager.getInstance().getCachedObject(Constants.TOKEN);
             Logger.d(Constants.TOKEN, token + "");
             if (!token.isEmpty() && userID != 0) {
                 JSONObject body = new JSONObject();

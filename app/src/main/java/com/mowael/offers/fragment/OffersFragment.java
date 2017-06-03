@@ -25,6 +25,7 @@ import com.mowael.offers.utilities.CacheManager;
 import com.mowael.offers.utilities.Constants;
 import com.mowael.offers.utilities.Logger;
 import com.mowael.offers.utilities.Service;
+import com.mowael.offers.utilities.UserUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -92,7 +93,7 @@ public class OffersFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_offers, container, false);
         setRetainInstance(true);
-        final Long userID = (Long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
+        final Long userID = UserUtil.getInstance().getId();//(Long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
         initComponents(view);
 
         if (mParam1.equals(getString(R.string.stuffInCity)))
