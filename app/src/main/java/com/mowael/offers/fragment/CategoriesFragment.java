@@ -23,6 +23,7 @@ import com.mowael.offers.utilities.ApiError;
 import com.mowael.offers.utilities.Constants;
 import com.mowael.offers.utilities.Logger;
 import com.mowael.offers.utilities.Service;
+import com.mowael.offers.utilities.Toaster;
 
 import org.json.JSONObject;
 
@@ -123,14 +124,14 @@ public class CategoriesFragment extends Fragment {
                     APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
                     if (apiResponse.isSuccess()) {
                         CategoriesResponse categoriesResponse = gson.fromJson(response.toString(), CategoriesResponse.class);
-
-                        final GVCategoriesAdapter categoriesAdapter = new GVCategoriesAdapter(getContext(), categoriesResponse.getData().getCategories());
-                        gvCategories.setAdapter(categoriesAdapter);
-
+                        if (categoriesResponse.getData().getCategories() != null) {
+                            final GVCategoriesAdapter categoriesAdapter = new GVCategoriesAdapter(getContext(), categoriesResponse.getData().getCategories());
+                            gvCategories.setAdapter(categoriesAdapter);
+                        }
                     } else {
                         ApiError apiError = new ApiError(apiResponse.getCode());
                         Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
-                        Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                        Toaster.getInstance().toast( apiError.getErrorMsg());
                     }
                     if (srlRefresh.isRefreshing()) srlRefresh.setRefreshing(false);
                 }

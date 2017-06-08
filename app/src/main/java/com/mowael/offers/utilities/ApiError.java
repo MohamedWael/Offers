@@ -6,7 +6,7 @@ package com.mowael.offers.utilities;
 
 public class ApiError {
 
-    private String errorMsg;
+    private String errorMsg = "";
 
     public ApiError(int errorCode) {
         switch (errorCode) {
@@ -42,6 +42,9 @@ public class ApiError {
                 break;
             case Constants.CODE_DO_NOT_HAVE_PERMISSION:
                 errorMsg = "CODE_DO_NOT_HAVE_PERMISSION".replace("_", " ").toLowerCase();
+                break;
+            default:
+                errorMsg = "no error message specified";
                 break;
         }
         Logger.d("APIError", errorMsg);

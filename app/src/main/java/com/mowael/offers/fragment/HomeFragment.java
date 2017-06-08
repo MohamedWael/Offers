@@ -27,6 +27,7 @@ import com.mowael.offers.R;
 import com.mowael.offers.activities.SearchActivity;
 import com.mowael.offers.adapters.RVCompaniesAdapter;
 import com.mowael.offers.adapters.RVOffersAdapter;
+import com.mowael.offers.dataModel.APIResponse;
 import com.mowael.offers.dataModel.Company;
 import com.mowael.offers.dataModel.offers.OffersResponse;
 import com.mowael.offers.utilities.ApiError;
@@ -156,21 +157,30 @@ public class HomeFragment extends Fragment {
 
     private void getAllOffers(String url) {
         try {
+            final Gson gson = new Gson();
             pbHomeOffers.setVisibility(View.VISIBLE);
             JSONObject body = new JSONObject();
             Service.getInstance(getContext()).getResponse(Request.Method.GET, url, body, new Service.ServiceResponse() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Gson gson = new Gson();
-                    OffersResponse offersResponse = gson.fromJson(response.toString(), OffersResponse.class);
-                    if (offersResponse != null && offersResponse.isSuccess()) {
-                        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), offersResponse.getData().getOffers());
-                        rvOffers.setAdapter(offersAdapter);
-                        if (srlRefresh.isRefreshing()) srlRefresh.setRefreshing(false);
-                    } else {
-                        ApiError apiError = new ApiError(offersResponse.getCode());
-                        Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
-                        Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                    try {
+                        APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
+//                        Toaster.getInstance().toast(apiResponse.isSuccess() + "");
+                        if (apiResponse.isSuccess()) {
+                            OffersResponse offersResponse = gson.fromJson(response.toString(), OffersResponse.class);
+                            if (offersResponse.getData() != null && offersResponse.getData().getOffers() != null) {
+                                RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), offersResponse.getData().getOffers());
+                                rvOffers.setAdapter(offersAdapter);
+                            }
+                            if (srlRefresh.isRefreshing()) srlRefresh.setRefreshing(false);
+                        } else {
+                            ApiError apiError = new ApiError(apiResponse.getCode());
+                            Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
+                            Toaster.getInstance().toast("apiErrorMsg: " +apiError.getErrorMsg());
+                            Toaster.getInstance().toast(apiResponse.getCode());
+                        }
+                    } catch (IllegalArgumentException e) {
+//                        Toaster.getInstance().toast("IllegalArgumentException");
                     }
                     pbHomeOffers.setVisibility(View.GONE);
                 }

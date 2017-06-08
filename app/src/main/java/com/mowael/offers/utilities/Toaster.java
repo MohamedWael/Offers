@@ -1,6 +1,8 @@
 package com.mowael.offers.utilities;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.support.annotation.StringRes;
 import android.widget.Toast;
 
 /**
@@ -19,15 +21,20 @@ public class Toaster {
     }
 
     public void toast(String msg, int length) {
-        Toast.makeText(context, msg, length).show();
+        if (!msg.isEmpty())
+            Toast.makeText(context, msg, length).show();
     }
 
     public void toast(String msg) {
         toast(msg, Toast.LENGTH_LONG);
     }
 
-    public void toast(int stirngRes) {
-        toast(context.getString(stirngRes));
+    public void toast(@StringRes int stirngRes) {
+        try {
+            toast(context.getString(stirngRes));
+        } catch (Resources.NotFoundException e) {
+            toast(stirngRes + "");
+        }
     }
 
 

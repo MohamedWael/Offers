@@ -1,6 +1,7 @@
 
 package com.mowael.offers.dataModel.categories;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
@@ -10,13 +11,16 @@ import com.google.gson.annotations.SerializedName;
 public class CategoriesData {
 
     @SerializedName("categories")
-    private List<Category> mCategories;
+    private ArrayList<Category> mCategories;
 
-    public List<Category> getCategories() {
+    public ArrayList<Category> getCategories() {
+        if (mCategories == null) {
+            mCategories = new ArrayList<>();
+        }
         return mCategories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(ArrayList<Category> categories) {
         mCategories = categories;
     }
 

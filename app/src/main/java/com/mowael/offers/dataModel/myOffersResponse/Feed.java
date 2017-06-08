@@ -12,7 +12,7 @@ import io.realm.annotations.PrimaryKey;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class Feed extends RealmObject implements Comparable<Feed> {
+public class Feed implements Comparable<Feed> {
 
     @PrimaryKey
     @SerializedName("id")

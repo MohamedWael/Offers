@@ -1,9 +1,7 @@
 package com.mowael.offers.activities;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -20,16 +18,13 @@ import com.mowael.offers.fragment.SearchFragment;
 import com.mowael.offers.fragment.SettingsFragment;
 import com.mowael.offers.utilities.CacheManager;
 import com.mowael.offers.utilities.Constants;
-import com.mowael.offers.utilities.Logger;
 import com.mowael.offers.utilities.NetworkStateReceiver;
 import com.mowael.offers.utilities.SharedPreferencesManager;
+import com.mowael.offers.utilities.Toaster;
 
 import java.util.ArrayList;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, NetworkStateReceiver.NetworkStateReceiverListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, NetworkStateReceiver.NetworkStateReceiverListener {
 
     private final int HOME = 100, LIST = 101, LOGO = 102, GRID = 103, SETTING = 104;
     private FrameLayout flMainFragment;
@@ -188,18 +183,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(new CalligraphyContextWrapper(newBase, CalligraphyConfig.get().getAttrId()));
-    }
-
-    @Override
     public void networkAvailable() {
 
     }
 
     @Override
     public void networkUnavailable() {
-        Constants.toastMsg(this, getString(R.string.connection));
+        Toaster.getInstance().toast(getString(R.string.connection));
 //        registerReceiver(NetworkStateReceiver.getInstance(), NetworkStateReceiver.getInstance().getIntentFilter())
     }
 }

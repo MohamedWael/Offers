@@ -21,10 +21,11 @@ import com.mowael.offers.adapters.RVOffersAdapter;
 import com.mowael.offers.dataModel.APIResponse;
 import com.mowael.offers.dataModel.myOffersResponse.MyOffersResponse;
 import com.mowael.offers.utilities.ApiError;
-import com.mowael.offers.utilities.CacheManager;
 import com.mowael.offers.utilities.Constants;
 import com.mowael.offers.utilities.Logger;
+import com.mowael.offers.utilities.LoginService;
 import com.mowael.offers.utilities.Service;
+import com.mowael.offers.utilities.Toaster;
 import com.mowael.offers.utilities.UserUtil;
 
 import org.json.JSONException;
@@ -93,21 +94,27 @@ public class OffersFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_offers, container, false);
         setRetainInstance(true);
-        final Long userID = UserUtil.getInstance().getId();//(Long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
-        initComponents(view);
 
-        if (mParam1.equals(getString(R.string.stuffInCity)))
-            getOffers(Constants.removeLastSlash(Constants.CITIY_OFFERS) + Constants.ADD_USER_ID + userID);
-        else getOffers(Constants.USER_FEEDS + userID);
+        try {
+            final Long userID = UserUtil.getInstance().getId();//(Long) CacheManager.getInstance().getCachedObject(Constants.USER_ID);
+            initComponents(view);
 
-        srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mParam1.equals(getString(R.string.stuffInCity)))
-                    getOffers(Constants.removeLastSlash(Constants.CITIY_OFFERS) + Constants.ADD_USER_ID + userID);
-                else getOffers(Constants.USER_FEEDS + userID);
-            }
-        });
+            if (mParam1.equals(getString(R.string.stuffInCity)))
+                getOffers(Constants.removeLastSlash(Constants.CITIY_OFFERS) + Constants.ADD_USER_ID + userID);
+            else getOffers(Constants.USER_FEEDS + userID);
+
+            srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    if (mParam1.equals(getString(R.string.stuffInCity)))
+                        getOffers(Constants.removeLastSlash(Constants.CITIY_OFFERS) + Constants.ADD_USER_ID + userID);
+                    else getOffers(Constants.USER_FEEDS + userID);
+                }
+            });
+
+        } catch (NullPointerException e) {
+            LoginService.getInstance(getContext(), UserUtil.getInstance().getEmail(), UserUtil.getInstance().getPassword());
+        }
         return view;
     }
 
@@ -151,17 +158,18 @@ public class OffersFragment extends Fragment {
                     APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
                     if (apiResponse.isSuccess()) {
                         MyOffersResponse myOffersResponse = gson.fromJson(response.toString(), MyOffersResponse.class);
-                        RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), myOffersResponse.getData().getFeeds());
-                        rvOffers.setAdapter(offersAdapter);
-
+                        if (myOffersResponse.getData() != null) {
+                            RVOffersAdapter offersAdapter = new RVOffersAdapter(getContext(), myOffersResponse.getData().getFeeds());
+                            rvOffers.setAdapter(offersAdapter);
+                        }
                     } else if (apiResponse.getCode() == Constants.CODE_NOT_FOUND && mParam1.equals(getString(R.string.stuffInCity))) {
-                        Constants.toastMsg(getContext(), getString(R.string.cityError));
+                        Toaster.getInstance().toast(getString(R.string.cityError));
                     } else if (apiResponse.getCode() == Constants.CODE_NOT_FOUND && !mParam1.equals(getString(R.string.stuffInCity))) {
-                        Constants.toastMsg(getContext(), getString(R.string.followingError));
+                        Toaster.getInstance().toast(getString(R.string.followingError));
                     } else {
                         ApiError apiError = new ApiError(apiResponse.getCode());
                         Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
-                        Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                        Toaster.getInstance().toast(apiError.getErrorMsg());
                     }
 
                     if (srlRefresh.isRefreshing()) srlRefresh.setRefreshing(false);

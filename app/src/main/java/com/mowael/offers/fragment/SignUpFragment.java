@@ -309,7 +309,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                                 Toaster.getInstance().toast(passwordMsg);
                                             } else {
                                                 ApiError apiError = new ApiError(responseCode);
-                                                Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                                                Toaster.getInstance().toast(apiError.getErrorMsg());
                                             }
                                         }
 

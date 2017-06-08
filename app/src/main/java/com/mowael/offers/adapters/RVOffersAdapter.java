@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import io.realm.RealmList;
@@ -50,10 +51,10 @@ import io.realm.RealmList;
 public class RVOffersAdapter extends RecyclerView.Adapter<RVOffersAdapter.OffersViewHolder> {
 
     private Context mContext;
-    private RealmList<Feed> feeds;
+    private ArrayList<Feed> feeds;
     private SimpleDateFormat dateFormat;
 
-    public RVOffersAdapter(Context mContext, RealmList<Feed> feeds) {
+    public RVOffersAdapter(Context mContext, ArrayList<Feed> feeds) {
         this.mContext = mContext;
 //        this.feeds = filterOutDatedFeeds(feeds);
         this.feeds = feeds;
@@ -253,7 +254,7 @@ public class RVOffersAdapter extends RecyclerView.Adapter<RVOffersAdapter.Offers
 
     }
 
-    private RealmList<Feed> filterOutDatedFeeds(RealmList<Feed> feeds) {
+    private ArrayList<Feed> filterOutDatedFeeds(ArrayList<Feed> feeds) {
 
         for (Iterator<Feed> iterator = feeds.iterator(); iterator.hasNext(); ) {
             Feed feed = iterator.next();

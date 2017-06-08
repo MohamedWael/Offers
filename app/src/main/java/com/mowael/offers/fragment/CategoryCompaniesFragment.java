@@ -25,6 +25,7 @@ import com.mowael.offers.utilities.CacheManager;
 import com.mowael.offers.utilities.Constants;
 import com.mowael.offers.utilities.Logger;
 import com.mowael.offers.utilities.Service;
+import com.mowael.offers.utilities.Toaster;
 
 import org.json.JSONObject;
 
@@ -92,7 +93,7 @@ public class CategoryCompaniesFragment extends Fragment implements View.OnClickL
         initComponents(view);
         try {
             JSONObject body = new JSONObject();
-            long userID = (long) CacheManager.getInstance().getCachedObject(Constants.USER_ID,0L);
+            long userID = (long) CacheManager.getInstance().getCachedObject(Constants.USER_ID, 0L);
             body.put(Constants.KEY_LIMIT, Constants.LIMIT_VALUE);
             Service.getInstance(getContext()).getResponse(Request.Method.GET, Constants.CATEGORY_VENDORS + categoryID + Constants.ADD_USER_ID + userID, body, new Service.ServiceResponse() {
                 @Override
@@ -102,13 +103,14 @@ public class CategoryCompaniesFragment extends Fragment implements View.OnClickL
                     APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
                     if (apiResponse.isSuccess()) {
                         CategoryVendorsResponse categoryVendorsResponse = gson.fromJson(response.toString(), CategoryVendorsResponse.class);
-                        categoryCompaniesAdapter = new RVCategoryCompaniesAdapter(getContext(), categoryVendorsResponse.getData().getVendors());
-                        rvCategoryCompanies.setAdapter(categoryCompaniesAdapter);
-
+                        if (categoryVendorsResponse.getData() != null) {
+                            categoryCompaniesAdapter = new RVCategoryCompaniesAdapter(getContext(), categoryVendorsResponse.getData().getVendors());
+                            rvCategoryCompanies.setAdapter(categoryCompaniesAdapter);
+                        }
                     } else {
                         ApiError apiError = new ApiError(apiResponse.getCode());
                         Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
-                        Constants.toastMsg(getContext(), apiError.getErrorMsg());
+                        Toaster.getInstance().toast(apiError.getErrorMsg());
                     }
                 }
 

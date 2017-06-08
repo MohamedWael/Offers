@@ -1,5 +1,6 @@
 package com.mowael.offers.dataModel.categories;
 
+import com.google.gson.annotations.SerializedName;
 import com.mowael.offers.dataModel.APIResponse;
 
 /**
@@ -7,6 +8,7 @@ import com.mowael.offers.dataModel.APIResponse;
  */
 
 public class CategoriesResponse extends APIResponse {
+    @SerializedName("data")
     CategoriesData data;
 
     public CategoriesData getData() {

@@ -26,22 +26,25 @@ import com.mowael.offers.utilities.ApiError;
 import com.mowael.offers.utilities.Constants;
 import com.mowael.offers.utilities.Logger;
 import com.mowael.offers.utilities.Service;
+import com.mowael.offers.utilities.Toaster;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import io.realm.RealmList;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends BaseActivity {
 
 
     private RecyclerView rvSearchResult;
     private ProgressBar pbSearchProgress;
     private TextView tvNoResult;
     private RVOffersAdapter offersAdapter;
-    private RealmList<Feed> offerList;
+    private ArrayList<Feed> offerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +120,7 @@ public class SearchActivity extends AppCompatActivity {
                     } else {
                         ApiError apiError = new ApiError(apiResponse.getCode());
                         Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
-                        Constants.toastMsg(SearchActivity.this, apiError.getErrorMsg());
+                        Toaster.getInstance().toast(apiError.getErrorMsg());
                     }
                 }
 
@@ -138,10 +141,5 @@ public class SearchActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(new CalligraphyContextWrapper(newBase, CalligraphyConfig.get().getAttrId()));
     }
 }

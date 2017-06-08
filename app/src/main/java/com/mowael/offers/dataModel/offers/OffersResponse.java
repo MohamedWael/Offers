@@ -1,5 +1,6 @@
 package com.mowael.offers.dataModel.offers;
 
+import com.google.gson.annotations.SerializedName;
 import com.mowael.offers.dataModel.APIResponse;
 
 /**
@@ -7,7 +8,11 @@ import com.mowael.offers.dataModel.APIResponse;
  */
 
 public class OffersResponse extends APIResponse {
+    @SerializedName("data")
     private OffersData data;
+
+    public OffersResponse() {
+    }
 
     public OffersData getData() {
         return data;

@@ -2,7 +2,7 @@ package com.mowael.offers.utilities;
 
 import android.content.Context;
 
-import com.android.volley.Request;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -66,8 +66,9 @@ public class Service implements NetworkStateReceiver.NetworkStateReceiverListene
                     @Override
                     public void onResponse(JSONObject response) {
                         // do anything with response
+                        Logger.d("response", response.toString());
                         serviceResponse.onResponse(response);
-//                        reLogin(response);
+                        reLogin(response);
                     }
 
                     @Override
@@ -87,6 +88,7 @@ public class Service implements NetworkStateReceiver.NetworkStateReceiverListene
                     .getAsJSONObject(new JSONObjectRequestListener() {
                         @Override
                         public void onResponse(JSONObject response) {
+                            Logger.d("response", response.toString());
                             serviceResponse.onResponse(response);
                         }
 
@@ -127,71 +129,75 @@ public class Service implements NetworkStateReceiver.NetworkStateReceiverListene
     }
 
     public void getResponse(final int method, final String url, JSONObject body, final ServiceResponse serviceResponse) throws Exception, JsonSyntaxException {
-        switch (method) {
-            case Request.Method.POST:
-                post(url, body, serviceResponse);
-                break;
-            case Request.Method.GET:
-                get(url, body, serviceResponse);
-                break;
-        }
-
-//        Logger.d("request", volley.uriEncoder(url));
-//        if (body == null) {
-//            body = new JSONObject();
+        Logger.d("url", url);
+        if (body != null) Logger.d("body", body.toString());
+//        switch (method) {
+//            case Request.Method.POST:
+//                post(url, body, serviceResponse);
+//                break;
+//            case Request.Method.GET:
+//                get(url, body, serviceResponse);
+//                break;
 //        }
-//        request = new ServiceRequest(method, volley.uriEncoder(url), body, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                Logger.d("Response", response.toString());
-//                serviceResponse.onResponse(response);
-//                Gson gson = new Gson();
-//                APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
-//                if (apiResponse.getCode() == Constants.CODE_VALIDATION_ERRORS) {
-//                    Logger.d("VALIDATION_ERRORS", "VALIDATION_ERRORS 402");
-//                    String email = SharedPreferencesManager.getInstance(mContext).initSharedPreferences().getString(Constants.EMAIL, "");
-//                    String password = SharedPreferencesManager.getInstance(mContext).initSharedPreferences().getString(Constants.PASSWORD, "");
-//                    LoginService.getInstance(mContext, email, password).reLogIn();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-////            private boolean cached = false;
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                serviceResponse.onErrorResponse(error);
-//                String volleyErrorStr = error.toString();
-//                if (volleyErrorStr.contains("com.android.volley.TimeoutError") && numberOfRetryingToGetResponse <= TRYING_LIMIT) {
-//                    Logger.e("if", volleyErrorStr);
-////                    getResponse(method, url, body, serviceResponse);
-//                    volley.addToRequestQueue(request);
-////                    if (!cached) {
-////                        cacheRequest(request, cached);
-////                        cached = true;
-////                    }
-//                    numberOfRetryingToGetResponse++;
-//                } else if (volleyErrorStr.contains("com.android.volley.NoConnectionError")) {
-//                    Logger.e("elseIf", volleyErrorStr);
-//                    Toaster.getInstance().toastShort(R.string.connection);
-////                    dialogUtil.showMessage(mContext.getString(R.string.connection));
-//                    serviceResponse.updateUIOnNetworkUnavailable(mContext.getString(R.string.connection));
-////                    if (!cached) cacheRequest(request);
-//                } else {
-//                    Logger.e("volleyErrorStr", volleyErrorStr);
-//
-//                    Toaster.getInstance().toastShort(R.string.connectionError);
-////                    dialogUtil.showMessage(mContext.getString(R.string.connectionError));
-//                }
-//                Logger.d("VolleyError", error.toString());
-//            }
-//        }) {
-//            @Override
-//            public byte[] getBody() {
-////                Logger.d("body", body.toString());
-//                return super.getBody();
-//            }
-//        };
-//        volley.addToRequestQueue(request);
+
+        Logger.d("request", volley.uriEncoder(url));
+        if (body == null) {
+            body = new JSONObject();
+        }
+        request = new ServiceRequest(method, volley.uriEncoder(url), body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Logger.d("Response", response.toString());
+                try {
+                    int responseCode = response.getInt("code");
+                    if (responseCode == 200) {
+
+                    }
+                    serviceResponse.onResponse(response);
+                    reLogin(response);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+//            private boolean cached = false;
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                serviceResponse.onErrorResponse(error);
+                String volleyErrorStr = error.toString();
+                if (volleyErrorStr.contains("com.android.volley.TimeoutError") && numberOfRetryingToGetResponse <= TRYING_LIMIT) {
+                    Logger.e("if", volleyErrorStr);
+//                    getResponse(method, url, body, serviceResponse);
+                    volley.addToRequestQueue(request);
+//                    if (!cached) {
+//                        cacheRequest(request, cached);
+//                        cached = true;
+//                    }
+                    numberOfRetryingToGetResponse++;
+                } else if (volleyErrorStr.contains("com.android.volley.NoConnectionError")) {
+                    Logger.e("elseIf", volleyErrorStr);
+                    Toaster.getInstance().toastShort(R.string.connection);
+//                    dialogUtil.showMessage(mContext.getString(R.string.connection));
+                    serviceResponse.updateUIOnNetworkUnavailable(mContext.getString(R.string.connection));
+//                    if (!cached) cacheRequest(request);
+                } else {
+                    Logger.e("volleyErrorStr", volleyErrorStr);
+
+                    Toaster.getInstance().toastShort(R.string.connectionError);
+//                    dialogUtil.showMessage(mContext.getString(R.string.connectionError));
+                }
+                Logger.d("VolleyError", error.toString());
+            }
+        }) {
+            @Override
+            public byte[] getBody() {
+//                Logger.d("body", body.toString());
+                return super.getBody();
+            }
+        };
+        volley.addToRequestQueue(request);
     }
 
     public static Map<String, String> toMap(String jsonString) throws JSONException {

@@ -59,10 +59,15 @@ public class LoginService {
                         APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
                         if (apiResponse.isSuccess()) {
                             LoginResponse login = gson.fromJson(response.toString(), LoginResponse.class);
-                            editor.putString(Constants.NAME, login.getData().getUser().getName());
-                            editor.putString(Constants.EMAIL, login.getData().getUser().getEmail());
-                            editor.putLong(Constants.USER_ID, login.getData().getUser().getId());
-                            editor.putString(Constants.TOKEN, login.getData().getUser().getToken());
+
+                            UserUtil.getInstance().saveUser(login.getData().getUser().getName(),
+                                    login.getData().getUser().getEmail(),
+                                    login.getData().getUser().getId(),
+                                    login.getData().getUser().getToken());
+//                            editor.putString(Constants.NAME, login.getData().getUser().getName());
+//                            editor.putString(Constants.EMAIL, login.getData().getUser().getEmail());
+//                            editor.putLong(Constants.USER_ID, login.getData().getUser().getId());
+//                            editor.putString(Constants.TOKEN, login.getData().getUser().getToken());
                             Logger.d(Constants.USER_ID, login.getData().getUser().getId() + "");
                             editor.putBoolean(Constants.HAVE_ACCOUNT, true);
                             editor.commit();

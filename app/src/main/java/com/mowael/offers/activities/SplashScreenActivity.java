@@ -18,13 +18,14 @@ import com.mowael.offers.utilities.CacheManager;
 import com.mowael.offers.utilities.Constants;
 import com.mowael.offers.utilities.Logger;
 import com.mowael.offers.utilities.Service;
+import com.mowael.offers.utilities.Toaster;
 
 import org.json.JSONObject;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class SplashScreenActivity extends AppCompatActivity {
+public class SplashScreenActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                         } else {
                             ApiError apiError = new ApiError(apiResponse.getCode());
                             Logger.d(Constants.API_ERROR, apiError.getErrorMsg());
-                            Constants.toastMsg(SplashScreenActivity.this, apiError.getErrorMsg());
+                            Toaster.getInstance().toast(apiError.getErrorMsg());
                         }
                     }
 
@@ -80,10 +81,5 @@ public class SplashScreenActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(new CalligraphyContextWrapper(newBase, CalligraphyConfig.get().getAttrId()));
     }
 }

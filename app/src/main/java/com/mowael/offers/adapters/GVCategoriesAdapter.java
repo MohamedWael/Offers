@@ -29,11 +29,11 @@ import java.util.List;
 public class GVCategoriesAdapter extends BaseAdapter {
 
     private Context mContext;
-    private List<Category> categories;
+    private ArrayList<Category> categories;
     private boolean isCategoriesFragment = true;
     private Intent intent;
 
-    public GVCategoriesAdapter(Context mContext, List<Category> categories) {
+    public GVCategoriesAdapter(Context mContext, ArrayList<Category> categories) {
         this.mContext = mContext;
         this.categories = categories;
     }

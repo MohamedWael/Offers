@@ -15,6 +15,9 @@ public class VendorsData {
     private ArrayList<Vendor> mVendors;
 
     public ArrayList<Vendor> getVendors() {
+        if (mVendors == null) {
+            mVendors = new ArrayList<>();
+        }
         return mVendors;
     }
 

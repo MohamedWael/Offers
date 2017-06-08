@@ -1,12 +1,16 @@
 package com.mowael.offers.dataModel;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by moham on 3/13/2017.
  */
 
 public class APIResponse {
-    private String message;
-    private int code;
+    @SerializedName("message")
+    private String msg;
+    @SerializedName("code")
+    private int mCode;
 
     public APIResponse() {
     }
@@ -16,18 +20,18 @@ public class APIResponse {
     }
 
     public String getMessage() {
-        return message;
+        return msg;
     }
 
     public void setMessage(String message) {
-        this.message = message;
+        this.msg = message;
     }
 
     public int getCode() {
-        return code;
+        return mCode;
     }
 
     public void setCode(int code) {
-        this.code = code;
+        this.mCode = code;
     }
 }

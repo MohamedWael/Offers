@@ -20,7 +20,7 @@ import io.fabric.sdk.android.Fabric;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class OffersGeneralActivity extends AppCompatActivity {
+public class OffersGeneralActivity extends BaseActivity {
 
     private LoginFragment loginFragment;
     private SignUpFragment signUpFragment;
@@ -81,10 +81,5 @@ public class OffersGeneralActivity extends AppCompatActivity {
 //            accountSettingFragment.onActivityResult(requestCode, resultCode, data);
 //        }
 
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(new CalligraphyContextWrapper(newBase, CalligraphyConfig.get().getAttrId()));
     }
 }

@@ -57,6 +57,10 @@ public class UserUtil {
         return prefs.getPrefs().getLong(Constants.USER_ID, -1);
     }
 
+    public String getPassword(){
+        return prefs.getPrefs().getString(Constants.PASSWORD, "");
+    }
+
     public boolean isHaveAccount() {
         return prefs.getPrefs().getBoolean(Constants.HAVE_ACCOUNT, false);
     }

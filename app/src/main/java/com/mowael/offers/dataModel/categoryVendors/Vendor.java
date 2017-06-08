@@ -4,6 +4,8 @@ package com.mowael.offers.dataModel.categoryVendors;
 import com.google.gson.annotations.SerializedName;
 import com.mowael.offers.dataModel.myOffersResponse.Feed;
 
+import java.util.ArrayList;
+
 import javax.annotation.Generated;
 
 import io.realm.RealmList;
@@ -11,7 +13,7 @@ import io.realm.RealmObject;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
-public class Vendor extends RealmObject {
+public class Vendor {
 
     @SerializedName("brochure_image")
     private String mBrochureImage;
@@ -24,7 +26,7 @@ public class Vendor extends RealmObject {
     @SerializedName("name")
     private String mName;
     @SerializedName("offers")
-    private RealmList<Feed> offers;
+    private ArrayList<Feed> offers;
     private int followed;
 
     public String getBrochureImage() {
@@ -67,11 +69,11 @@ public class Vendor extends RealmObject {
         mName = name;
     }
 
-    public RealmList<Feed> getOffers() {
+    public ArrayList<Feed> getOffers() {
         return offers;
     }
 
-    public void setOffers(RealmList<Feed> offers) {
+    public void setOffers(ArrayList<Feed> offers) {
         this.offers = offers;
     }
 

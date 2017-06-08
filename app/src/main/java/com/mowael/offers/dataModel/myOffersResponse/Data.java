@@ -3,6 +3,8 @@ package com.mowael.offers.dataModel.myOffersResponse;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 import javax.annotation.Generated;
 
 import io.realm.RealmList;
@@ -12,12 +14,12 @@ import io.realm.RealmList;
 public class Data {
 
     @SerializedName("feeds")
-    private RealmList<Feed> mFeeds;
+    private ArrayList<Feed> mFeeds;
 
     @SerializedName("offers")
-    private RealmList<Feed> offers;
+    private ArrayList<Feed> offers;
 
-    public RealmList<Feed> getFeeds() {
+    public ArrayList<Feed> getFeeds() {
         if (mFeeds == null) {
             return offers;
         }

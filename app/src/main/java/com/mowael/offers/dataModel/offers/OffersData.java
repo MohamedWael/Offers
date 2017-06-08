@@ -1,24 +1,28 @@
 
 package com.mowael.offers.dataModel.offers;
 
-import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 import com.mowael.offers.dataModel.myOffersResponse.Feed;
 
-import io.realm.RealmList;
+import java.util.ArrayList;
+
+import javax.annotation.Generated;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
 public class OffersData {
 
     @SerializedName("offers")
-    private RealmList<Feed> mOffers;
+    private ArrayList<Feed> mOffers;
 
-    public RealmList<Feed> getOffers() {
+    public ArrayList<Feed> getOffers() {
+        if (mOffers == null) {
+            mOffers = new ArrayList<>();
+        }
         return mOffers;
     }
 
-    public void setOffers(RealmList<Feed> offers) {
+    public void setOffers(ArrayList<Feed> offers) {
         mOffers = offers;
     }
 

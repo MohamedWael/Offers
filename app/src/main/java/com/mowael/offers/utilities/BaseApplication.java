@@ -24,7 +24,7 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Logger.d("Application", "Created");
+        UserUtil.getInstance().init(getApplicationContext());
         Toaster.getInstance().setContext(getApplicationContext());
         TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_KEY, Constants.TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));

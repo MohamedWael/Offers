@@ -175,6 +175,21 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
         }
     }
 
+    private void setupUser() {
+        if (user != null) {
+            etUserName.setText(UserUtil.getInstance().getUserName());
+            etEmail.setText(UserUtil.getInstance().getEmail());
+            cities.add(user.getCity());
+            spinnerAdapter.notifyDataSetChanged();
+            getCities();
+            if (!user.getImage().isEmpty())
+                Picasso.with(getContext()).load(volley.uriEncoder(user.getImage())).error(R.drawable.profile_avatar_placeholder_large)
+                        .placeholder(R.drawable.profile_avatar_placeholder_large).into(ivAccountPhoto);
+            else
+                Picasso.with(getContext()).load(R.drawable.profile_avatar_placeholder_large).into(ivAccountPhoto);
+        }
+    }
+
     private void getCities() {
         try {
             Service.getInstance(getContext()).getResponse(Request.Method.GET, Constants.GET_CITIES, new JSONObject(), new Service.ServiceResponse() {
@@ -353,6 +368,7 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        setupUser();
                         showProgressBar(false);
                     }
 
