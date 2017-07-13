@@ -38,8 +38,8 @@ android {
         applicationId "com.mowael.offers"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 3
-        versionName 'OffersReleaseBeta'
+        versionCode 4
+        versionName 'OffersReleaseB'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         signingConfig signingConfigs.offer_release

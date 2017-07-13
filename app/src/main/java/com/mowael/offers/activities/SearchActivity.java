@@ -1,8 +1,6 @@
 package com.mowael.offers.activities;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -32,10 +30,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import io.realm.RealmList;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SearchActivity extends BaseActivity {
 
@@ -73,26 +67,27 @@ public class SearchActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_menu, menu);
-
         MenuItem searchItem = menu.findItem(R.id.search);
-
-        SearchView searchView = null;
         if (searchItem != null) {
-            searchView = (SearchView) searchItem.getActionView();
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String s) {
-                    if (offerList != null) offerList.clear();
-                    search(s);
-                    return true;
-                }
+            SearchView searchView = (SearchView) searchItem.getActionView();
+            if (searchView != null)
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        if (offerList != null) offerList.clear();
+                        search(s);
+                        return true;
+                    }
 
-                @Override
-                public boolean onQueryTextChange(String s) {
-                    if (!s.equals("")) search(s);
-                    return true;
-                }
-            });
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        if (!s.equals("")) search(s);
+                        return true;
+                    }
+                });
+            else {
+                Toaster.getInstance().toast("search view = null");
+            }
         }
 
         return super.onCreateOptionsMenu(menu);

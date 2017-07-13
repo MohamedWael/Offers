@@ -100,6 +100,9 @@ public class Feed implements Comparable<Feed> {
     }
 
     public String getPrice() {
+        if (mPrice == null) {
+            mPrice = "";
+        }
         return mPrice;
     }
 

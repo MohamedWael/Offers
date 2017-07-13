@@ -75,6 +75,7 @@ public final class Constants {
     public static final String REGEX_Mail = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
 
     public static final String API_Base_URL = "http://api.sunmediaeg.com/offer/public/api/";
+//    public static final String API_Base_URL = "http://maguedfathey.me/offer/public/api/";
     public static final String USER = API_Base_URL + "user/";
     public static final String USER_UPDATE = USER + "update";
     public static final String USER2 = API_Base_URL + "user";
