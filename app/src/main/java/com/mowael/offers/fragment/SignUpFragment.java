@@ -266,6 +266,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                         body.put(Constants.NAME, signUp.getUserName());
                         body.put(Constants.EMAIL, signUp.getEmail());
                         body.put(Constants.PASSWORD, signUp.getPassword());
+                        body.put(Constants.CITY, cityId);
 //                        body.put(Constants._METHOD, Constants._METHOD_POST);
                         String url = "";
                         if (mParam1.equals(Constants.USER)) {
