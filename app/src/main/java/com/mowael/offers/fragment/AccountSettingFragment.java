@@ -1,10 +1,9 @@
 package com.mowael.offers.fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +64,7 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
     private ArrayList<String> cities;
     private ArrayAdapter<String> spinnerAdapter;
     private int cityId;
+    private Service service;
 
 
     public AccountSettingFragment() {
@@ -126,6 +126,9 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
         body = new JSONObject();
         ivAccountPhoto.setOnClickListener(this);
         btnModifyAccountData.setOnClickListener(this);
+
+        service = Service.getInstance(getContext());
+
     }
 
     private void setupUser(User user) {
@@ -226,8 +229,15 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
         return editText.getText().toString();
     }
 
-    private void showProgressBar(boolean show) {
-        pbAccountSetting.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+    private void showProgressBar(final boolean show) {
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                pbAccountSetting.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+
+            }
+        });
     }
 
 
@@ -275,7 +285,7 @@ public class AccountSettingFragment extends Fragment implements View.OnClickList
                             body.put(Constants.IMAGE, image);
                             Logger.d("Image", image + "Image");
 
-                            Service.getInstance(getContext()).getResponse(Request.Method.POST, Constants.USER_UPDATE, body, new Service.ServiceResponse() {
+                            service.getResponse(Request.Method.POST, Constants.USER_UPDATE, body, new Service.ServiceResponse() {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     Gson gson = new Gson();
