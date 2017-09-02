@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -30,6 +29,7 @@ import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
 import com.mowael.offers.R;
 import com.mowael.offers.activities.MainActivity;
+import com.mowael.offers.adapters.CitiesAdapter;
 import com.mowael.offers.dataModel.APIResponse;
 import com.mowael.offers.dataModel.cities.CitiesResponse;
 import com.mowael.offers.dataModel.cities.City;
@@ -39,6 +39,7 @@ import com.mowael.offers.utilities.ApiError;
 import com.mowael.offers.utilities.CacheManager;
 import com.mowael.offers.utilities.Constants;
 import com.mowael.offers.utilities.Logger;
+import com.mowael.offers.utilities.OffersCitesUtil;
 import com.mowael.offers.utilities.Service;
 import com.mowael.offers.utilities.SharedPreferencesManager;
 import com.mowael.offers.utilities.SignUpUtility;
@@ -87,8 +88,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private String secret;
     private CacheManager manager;
     private Spinner sCities;
-    private ArrayList<String> cities;
-    private ArrayAdapter<String> spinnerAdapter;
+    private ArrayList<City> cities;
+//    private ArrayAdapter<String> spinnerAdapter;
 
     private int cityId = 1;
 //    private com.sunmediaeg.offers.utilities.TwitterLoginButton btnTwitterLogin;
@@ -211,11 +212,41 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
         sCities = (Spinner) v.findViewById(R.id.sCities);
         cities = new ArrayList<>();
-        spinnerAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, cities);
+//        spinnerAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, cities);
 
-        sCities.setAdapter(spinnerAdapter);
+        final CitiesAdapter citiesAdapter = new CitiesAdapter(getContext(), R.layout.spinner_item);
 
-        getCities();
+        OffersCitesUtil citesUtil = new OffersCitesUtil() {
+            @Override
+            public void onCitesArrive(ArrayList<City> cities) {
+                SignUpFragment.this.cities.addAll(cities);
+                citiesAdapter.addAll(cities);
+                citiesAdapter.notifyDataSetChanged();
+                sCities.setSelection(0);
+                cityId = cities.get(0).getId();
+                Logger.d("defailtCityID", cityId + "");
+            }
+        };
+        citesUtil.getCities(getContext());
+        sCities.setAdapter(citiesAdapter);
+
+        sCities.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String currentCity = parent.getItemAtPosition(position).toString();
+                for (City city : SignUpFragment.this.cities) {
+                    if (currentCity.equals(city.getName())) {
+                        cityId = city.getId();
+                        Logger.d("cityId ", cityId + "");
+                    }
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         ibBack.setOnClickListener(this);
         btnFaceBook.setOnClickListener(this);
@@ -225,7 +256,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
 
     }
-
 
 
     @Override
@@ -394,68 +424,4 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
-    private void getCities() {
-        try {
-            Service.getInstance(getContext()).getResponse(Request.Method.GET, Constants.GET_CITIES, new JSONObject(), new Service.ServiceResponse() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    Gson gson = new Gson();
-                    APIResponse apiResponse = gson.fromJson(response.toString(), APIResponse.class);
-                    if (apiResponse.isSuccess()) {
-                        final CitiesResponse citiesResponse = gson.fromJson(response.toString(), CitiesResponse.class);
-
-                        sCities.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                String currentCity = parent.getItemAtPosition(position).toString();
-                                for (City city : citiesResponse.getData().getCities()) {
-                                    if (currentCity.equals(city.getName())) {
-                                        cityId = city.getId();
-                                    }
-                                }
-
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-                            }
-                        });
-
-                        cities.addAll(citiesResponse.getData().getCitiesNames());
-                        spinnerAdapter.notifyDataSetChanged();
-
-                        if (citiesResponse.getData().getCitiesNames().contains(cities.get(0))) {
-                            int cityIndex = citiesResponse.getData().getCitiesNames().indexOf(cities.get(0));
-                            cityId = citiesResponse.getData().getCity(cityIndex).getId();
-                            citiesResponse.getData().getCitiesNames().remove(cities.get(0));
-                        }
-
-                        setDefaultCity(citiesResponse.getData().getCities(), citiesResponse.getData().getCities().get(0).getName());
-                    }
-                }
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toaster.getInstance().toast("فشل فى تحميل المدن حاول فى وقت لاحق");
-                }
-
-                @Override
-                public void updateUIOnNetworkUnavailable(String noInternetMessage) {
-                    Toaster.getInstance().toast(noInternetMessage);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void setDefaultCity(ArrayList<City> cities, String defaultCity) {
-        for (City city : cities) {
-            if (defaultCity.equals(city.getName())) {
-                cityId = city.getId();
-            }
-        }
-    }
 }
